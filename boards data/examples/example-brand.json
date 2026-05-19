@@ -1,0 +1,102 @@
+{
+  "brand_id": "example_brand",
+  "brand_name": "Example Brand",
+  "models": [
+    {
+      "model_id": "example_fast_board",
+      "model_name": "Fast Board",
+      "category": "fish",
+
+      "ideal_conditions": {
+        "wave_size": ["small"],
+        "wave_power": ["weak"]
+      },
+
+      "condition_range": {
+        "min_wave_ft": 1,
+        "min_wave_ft_display": "1 ft",
+        "max_wave_ft": 4,
+        "max_wave_ft_display": "4 ft"
+      },
+
+      "condition_tags": [
+        "small_wave",
+        "weak_wave",
+        "everyday_board"
+      ],
+
+      "surfer_fit_profile": {
+        "level_range": {
+          "min": "lower_intermediate",
+          "max": "upper_intermediate"
+        },
+        "helps_with": [
+          "wave_entry",
+          "speed_generation"
+        ],
+        "requires": [
+          "basic_turn_control"
+        ],
+        "fit_notes": "Designed for surfers improving speed and flow in smaller surf."
+      },
+
+      "performance_traits": {
+        "paddling_ease": 4,
+        "speed_generation": 5,
+        "maneuverability": 3,
+        "stability": 4,
+        "forgiveness": 4
+      },
+
+      "performance_tags": [
+        "fast",
+        "skatey",
+        "forgiving"
+      ],
+
+      "raw_performance_description": "Designed to feel fast, loose and forgiving in weaker surf.",
+
+      "display_description": [
+        "Fast and forgiving in weak surf",
+        "Great for small everyday waves",
+        "Easy speed and flow"
+      ],
+
+      "variants": [
+        {
+          "variant_id": "example_fast_board_standard",
+          "variant_label": "Standard",
+          "construction_type": "pu_polyester",
+
+          "shape_profile": {
+            "tail_shape": "swallow",
+            "rocker": "low"
+          },
+
+          "fin_setup_compatibility": [
+            "twin"
+          ],
+          "recommended_fin_setup": "twin",
+
+          "stock_dimensions": [
+            {
+              "dimension_id": "example_56",
+
+              "length": 5.6,
+              "length_display": "5'6\"",
+
+              "width": 19.75,
+              "width_display": "19 3/4\"",
+
+              "thickness": 2.32,
+              "thickness_display": "2 5/16\"",
+
+              "volume_liters": 28.4,
+              "volume_display": "28.4L"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
