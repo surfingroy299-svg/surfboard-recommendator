@@ -2,19 +2,27 @@
 
 ## 1. Purpose
 
-Defines how the system converts a translated surfer profile into a recommendation direction.
+Defines how the system produces advisory guidance signals from a structured surfer profile.
 
 Answers:
 
-**Given this profile, what should the system do?**
+**Given this profile, what signals should guide the recommendation?**
+
+This layer produces advisory signals — not decisions. The Agent is responsible for the final recommendation. The signals produced here guide that reasoning; they do not replace it.
 
 ---
 
 ## 2. Role in the System
 
-Sits between:
+```
+Surfer Profile (from Translation Layer)
+         ↓
+Decision Layer
+         ↓
+Advisory Signals → Agent  +  Size Calculation Step
+```
 
-Translation Layer → Board Matching Layer
+The Decision Layer consumes the Surfer Profile and produces advisory signals. Those signals are consumed by the Agent (for reasoning) and the Size Calculation Step (specifically the Size Direction signal).
 
 ---
 
@@ -142,8 +150,8 @@ Rules:
 
 ### 10.2 Size Direction
 - keep  
-- lean up  
-- lean down  
+- lean_up  
+- lean_down  
 - split  
 - unclear  
 
@@ -197,9 +205,39 @@ Describes how much user intent was adjusted.
 
 ---
 
-## 11. Direction Scope
+## 10a. Per-Signal Output Format
 
-This layer determines:
+Each signal produced by this layer follows this structure:
+
+```
+signal_name:
+  value:        [signal value from the enum defined per signal above]
+  confidence:   low / medium / high
+  basis:        concise note describing the reasoning behind this signal
+  source_axes:  [list of Surfer Profile axes that contributed to this signal]
+  flags:        [optional — edge case notes, e.g. moderate_challenge_only]
+```
+
+Example:
+
+```
+progression_direction:
+  value: challenge_more
+  confidence: medium
+  basis: User intent leans toward progression, but support/performance signals suggest the challenge should stay moderate.
+  source_axes:
+    - user_intent
+    - support_vs_performance_need
+    - actual_surfing_level
+  flags:
+    - moderate_challenge_only
+```
+
+---
+
+## 11. Signal Scope
+
+This layer advises on:
 
 - direction  
 - allowed range  
@@ -211,6 +249,7 @@ It does NOT:
 - choose models  
 - rank brands  
 - define board attributes  
+- make final recommendation decisions — those belong to the Agent
 
 ---
 
@@ -229,4 +268,4 @@ It does NOT:
 - Produces consistent direction outputs  
 - Handles conflicts deterministically  
 - Supports ambiguity and split states  
-- Outputs remain usable for Board Matching Layer  
+- Advisory signals consumed by: Agent (all 6 signals), Size Calculation Step (Size Direction only), Board Matching Layer (all signals, advisory)  

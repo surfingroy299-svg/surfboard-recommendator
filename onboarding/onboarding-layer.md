@@ -58,6 +58,8 @@ Each category represents a core dimension of the surfer profile and directly imp
   If defined, Primary Use Case overrides Environment for recommendation purposes.  
   If not defined, Environment remains the default baseline.
 
+> **V1 status — Future expansion:** Primary Use Case is not captured by any question in V1. Q7 captures typical environment only, so `usage_mode = override` is architecturally supported but not yet reachable in V1. A dedicated question (or optional follow-up) for use-case override is planned for a future onboarding iteration.
+
 ---
 
 ### 2.5 Current Setup

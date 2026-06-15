@@ -2,13 +2,13 @@
 
 ## 1. Purpose
 
-This file defines how the system interprets onboarding answers and turns them into a structured internal surfer profile.
+This file defines how the system interprets onboarding answers and produces a structured Surfer Profile.
 
-It exists to translate user language into system-understandable meaning.
+The Translation Layer is an additive layer. It enriches raw onboarding answers with structured interpretation — it does not replace them or compress them into a single verdict.
 
 This layer answers only:
 
-**What does this user profile mean?**
+**What does this user's situation mean, based on what they told us?**
 
 It does **not** answer:
 
@@ -18,13 +18,19 @@ It does **not** answer:
 
 ## 2. Role in the System
 
-The system is built in sequential layers:
+```
+Raw Answers (preserved alongside profile)
+         ↓
+Translation Layer
+         ↓
+Surfer Profile  ← schema defined in surfer-profile-schema.md
+         ↓
+Decision Layer  +  Agent  (both consume the profile)
+```
 
-1. Onboarding Layer  
-2. Translation Layer  
-3. Decision Layer  
+The Translation Layer produces a Surfer Profile. Raw onboarding answers are preserved and available to the Agent directly — the profile does not replace them.
 
-This file defines the second stage only.
+This file defines the Translation Layer only.
 
 ---
 
@@ -42,15 +48,15 @@ This file defines the second stage only.
 
 ## 4. Translation Output
 
-Each axis produces:
+The output is a structured **Surfer Profile**. The schema for this artifact is defined in `surfer-profile-schema.md`.
 
-- Why this axis matters  
-- Main inputs  
-- What it interprets  
-- State structure  
-- Confidence  
+Each axis in the profile includes:
+- `state` — axis-specific interpreted fields
+- `confidence` — level / type / basis
+- `evidence` — list of contributing signals, each with source, value, and contribution note
+- `summary` — concise machine-readable interpretation of the axis state
 
-The output is a structured **surfer profile**, not a decision.
+The profile also includes a `meta` section (completeness, coherence, flags) and a `physical` section (height, weight). These are defined in `surfer-profile-schema.md`.
 
 ---
 
@@ -72,7 +78,7 @@ Actual ability based on behavior, not self-perception.
 **State structure**  
 - Band: beginner / intermediate / advanced / pro  
 - Sub-level: lower / mid / upper  
-- Edge flags: leans beginner / leans advanced  
+- Edge flags: leans_beginner / leans_advanced  
 
 **Confidence**  
 Based on:
@@ -88,8 +94,10 @@ Based on:
 Defines real conditions the board must perform in.
 
 **Main inputs**  
-- Environment  
-- Use-case override  
+- Environment (Q7)  
+- Use-case override *(V1 note: not yet captured by onboarding — see below)*
+
+> **V1 limitation:** `usage_mode = override` is supported architecturally but has no corresponding onboarding question in V1. Q7 captures the surfer's typical environment only. The `override` and `variable` modes will remain inferential in V1 and are reserved for a future onboarding expansion where the user can specify a different use case (e.g. travel, bigger waves, specific conditions).
 
 **What it interprets**  
 Wave characteristics and how demanding they are.
@@ -148,8 +156,8 @@ Defines whether the surfer needs help or can handle performance.
 Support vs performance balance.
 
 **State structure**  
-- Position: needs support / balanced / performance-capable  
-- Alignment: aligned / mild gap / strong gap  
+- Position: needs_support / balanced / performance_capable  
+- Alignment: aligned / mild_gap / strong_gap  
 
 **Confidence**  
 Depends on consistency across signals.
@@ -211,6 +219,8 @@ Ambiguity is valid output, not failure.
 
 - Clear, structured profile  
 - No embedded decision logic  
-- Confidence defined  
+- Confidence defined per axis (level / type / basis)  
 - Ambiguity preserved  
-- Ready for decision layer input  
+- Evidence traceable per axis interpretation  
+- Surfer Profile matches the contract defined in `surfer-profile-schema.md`  
+- Profile consumed by both the Decision Layer and the Agent  
