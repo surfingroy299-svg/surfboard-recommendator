@@ -1,0 +1,15 @@
+# OS
+.DS_Store
+
+# Dependencies and build output (any nested app)
+node_modules/
+dist/
+*.tsbuildinfo
+
+# Local tooling
+.vscode/
+.claude/settings.local.json
+.claude/worktrees/
+
+# Earlier, untracked design exploration lives alongside this repo and is not part of the tracked product
+design-exploration/
