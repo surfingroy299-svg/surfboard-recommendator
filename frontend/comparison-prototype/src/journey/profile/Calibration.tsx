@@ -20,6 +20,14 @@ export function Calibration({ derived }: { derived: Derived }) {
 
   const suggestions = useMemo(() => buildSuggestions(derived), [derived])
 
+  // An accepted adjustment can still turn out to be unreachable once the sizing
+  // re-runs. Saying "Updated" next to a note explaining it was not applied
+  // reads as a bug, so the acknowledgement defers to the zone's explanation.
+  const shown =
+    derived.unsatisfiable && response?.kind === 'ok'
+      ? { kind: 'no' as const, text: 'That limit sits outside the range these answers produce — see the note beside the size.' }
+      : response
+
   const submit = (text: string) => {
     const outcome = parseCalibration(text)
     if (!outcome.ok) {
@@ -34,7 +42,7 @@ export function Calibration({ derived }: { derived: Derived }) {
       return
     }
     dispatch({ type: 'addAdjustment', adjustment: outcome.adjustment })
-    const msg = `Updated — ${outcome.adjustment.label.toLowerCase()}.`
+    const msg = `Updated — ${outcome.adjustment.label}.`
     setResponse({ kind: 'ok', text: msg })
     announce(msg)
     setDraft('')
@@ -79,9 +87,9 @@ export function Calibration({ derived }: { derived: Derived }) {
         </button>
       </form>
 
-      {response && (
-        <p className={`calib__response calib__response--${response.kind}`} role="status">
-          {response.text}
+      {shown && (
+        <p className={`calib__response calib__response--${shown.kind}`} role="status">
+          {shown.text}
         </p>
       )}
 
@@ -97,7 +105,7 @@ export function Calibration({ derived }: { derived: Derived }) {
                 onClick={() => {
                   dispatch({ type: 'removeAdjustment', id: a.id })
                   setResponse(null)
-                  announce(`Removed ${a.label.toLowerCase()}.`)
+                  announce(`Removed ${a.label}.`)
                 }}
               >
                 <Icon name="close" size={13} />

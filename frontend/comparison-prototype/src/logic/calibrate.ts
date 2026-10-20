@@ -137,7 +137,9 @@ export function parseCalibration(raw: string): ParseOutcome {
   }
 
   // ── A bare number with no direction is ambiguous; say so rather than guess.
-  if (volume !== null) {
+  const bare = volume ?? (/^\s*\d+(?:\.\d+)?\s*$/.test(text) ? Number(text) : null)
+  if (bare !== null) {
+    const volume = bare
     return {
       ok: false,
       message: `Is ${volume} L a ceiling or a floor? Try "no more than ${volume} L" or "nothing below ${volume} L".`,
@@ -156,6 +158,12 @@ export interface Derived {
   sizeError: string | null
   /** Volume bounds the surfer set by hand, applied over the computed zone. */
   clamped: { min: boolean; max: boolean }
+  /**
+   * Set when a limit the surfer asked for sits entirely outside the computed
+   * range. The limit is not applied: collapsing the range to a single number
+   * would invent a precision the formula does not have (rules section 14).
+   */
+  unsatisfiable: { kind: 'cap' | 'floor'; value: number } | null
 }
 
 let seq = 0
@@ -226,6 +234,7 @@ export function derive(answers: Answers, adjustments: Adjustment[] = []): Derive
       size: null,
       sizeError: 'Height and weight are needed before a size range can be calculated.',
       clamped: { min: false, max: false },
+      unsatisfiable: null,
     }
   }
 
@@ -235,16 +244,25 @@ export function derive(answers: Answers, adjustments: Adjustment[] = []): Derive
   const cap = [...adjustments].reverse().find((a) => a.volumeCap !== undefined)?.volumeCap
   const floor = [...adjustments].reverse().find((a) => a.volumeFloor !== undefined)?.volumeFloor
   const clamped = { min: false, max: false }
-  if (cap !== undefined && cap < size.target_volume.max) {
-    size.target_volume.max = Math.max(cap, size.target_volume.min)
+  let unsatisfiable: Derived['unsatisfiable'] = null
+
+  // A limit that sits past the far end of the range cannot be honoured without
+  // collapsing the range, so it is reported rather than applied.
+  if (cap !== undefined && cap <= size.target_volume.min) {
+    unsatisfiable = { kind: 'cap', value: cap }
+  } else if (cap !== undefined && cap < size.target_volume.max) {
+    size.target_volume.max = cap
     clamped.max = true
   }
-  if (floor !== undefined && floor > size.target_volume.min) {
-    size.target_volume.min = Math.min(floor, size.target_volume.max)
+
+  if (floor !== undefined && floor >= size.target_volume.max) {
+    unsatisfiable = { kind: 'floor', value: floor }
+  } else if (floor !== undefined && floor > size.target_volume.min) {
+    size.target_volume.min = floor
     clamped.min = true
   }
 
-  return { profile, signals, category, size, sizeError: null, clamped }
+  return { profile, signals, category, size, sizeError: null, clamped, unsatisfiable }
 }
 
 /** True when a cap and floor would cross; the UI refuses such a pair. */

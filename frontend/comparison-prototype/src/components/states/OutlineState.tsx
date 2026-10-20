@@ -1,7 +1,8 @@
 import { useMemo } from 'react'
 import { boards } from '../../data/boards'
 import { StateSection } from './StateSection'
-import { OutlineOverlay, TailGlyph, outlineFor } from '../outline/BoardOutline'
+import { OutlineOverlay, TailDetail } from '../outline/BoardOutline'
+import { outlineFor } from '../outline/boardOutlineData'
 import { useComparison } from '../../state/comparisonState'
 
 /**
@@ -25,6 +26,10 @@ export function OutlineState() {
       <div className="outlines">
         <div className="outlines__stage">
           <OutlineOverlay boards={data} focused={state.focusedBoardId} />
+          <figure className="outlines__detail">
+            <TailDetail boards={data} focused={state.focusedBoardId} />
+            <figcaption className="outlines__detailcap mono">Tails, enlarged</figcaption>
+          </figure>
         </div>
 
         <ul className="outlines__legend">
@@ -43,8 +48,7 @@ export function OutlineState() {
             >
               <span className="okey__swatch" aria-hidden="true" />
               <span className="okey__name">{d.label}</span>
-              <TailGlyph data={d} />
-              <span className="okey__tail">{d.tailDisplay}</span>
+              <span className="okey__tail">{d.tailDisplay} tail</span>
               <span className="okey__dims mono">
                 {d.lengthDisplay} × {d.widthDisplay} · {d.volume}
               </span>

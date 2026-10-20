@@ -8,7 +8,7 @@ import { rangeEmphasis, type Derived } from '../../logic/calibrate'
  * put in the output note: where in the range to recommend from.
  */
 export function SizeZone({ derived }: { derived: Derived }) {
-  const { size, signals, profile, clamped } = derived
+  const { size, signals, profile, clamped, unsatisfiable } = derived
 
   if (!size) {
     return (
@@ -36,6 +36,14 @@ export function SizeZone({ derived }: { derived: Derived }) {
           {size.target_length.min_display} – {size.target_length.max_display}
         </span>
       </div>
+
+      {unsatisfiable && (
+        <p className="zone__clamp zone__clamp--warn">
+          {unsatisfiable.kind === 'cap'
+            ? `Your ${unsatisfiable.value} L limit sits below this whole range, so it has not been applied. Lower the weight or lean further toward performance if that is what you meant.`
+            : `Your ${unsatisfiable.value} L floor sits above this whole range, so it has not been applied.`}
+        </p>
+      )}
 
       {(clamped.min || clamped.max) && (
         <p className="zone__clamp">

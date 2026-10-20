@@ -7,6 +7,8 @@
   min-height: 100dvh;
   display: flex;
   padding: clamp(32px, 7vh, 88px) var(--gutter);
+  /* Leaves room for the fixed prototype controls in the lower-left. */
+  padding-bottom: clamp(72px, 7vh, 96px);
 }
 
 .stage--onboarding,
@@ -364,7 +366,9 @@
 
 .profile {
   width: 100%;
-  max-width: var(--container);
+  /* Narrower than the comparison container: the reading column is capped at
+     62ch, so a full-width grid would strand the measurements far to the right. */
+  max-width: 1080px;
   margin: 0 auto;
 }
 
@@ -477,6 +481,10 @@
 .zone__note {
   font-size: var(--fs-12);
   color: var(--ink-3);
+}
+
+.zone__clamp--warn {
+  color: var(--low);
 }
 
 .zone__clamp,
@@ -708,15 +716,19 @@
   position: fixed;
   left: 16px;
   bottom: 16px;
-  z-index: 60;
+  /* Above the page and the top bar (20), but below Inspect (40/41): a demo
+     utility must never float over the product's own modal layer. */
+  z-index: 30;
   display: flex;
   align-items: center;
   gap: 10px;
   padding: 7px 11px;
-  background: color-mix(in srgb, var(--paper) 88%, transparent);
+  /* Opaque rather than translucent, so it reads as a separate layer over the
+     page instead of content bleeding through it. */
+  background: var(--paper-raised);
   border: 1px dashed var(--rule-strong);
   border-radius: var(--radius);
-  backdrop-filter: blur(6px);
+  box-shadow: 0 6px 18px -10px rgba(21, 23, 26, 0.35);
 }
 
 .protoctl__tag {

@@ -507,12 +507,40 @@
 
 .outlines__stage {
   min-width: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: clamp(28px, 5vw, 72px);
 }
 
+.outlines__detail {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.taildetail {
+  display: block;
+  width: clamp(130px, 15vw, 190px);
+  height: auto;
+  /* Must clip: the viewBox is the crop that turns the board into a tail. */
+  overflow: hidden;
+}
+
+.outlines__detailcap {
+  font-size: var(--fs-12);
+  color: var(--ink-3);
+  letter-spacing: 0.04em;
+}
+
+/* The drawing is tall and narrow, so it is bounded by height, not width. */
 .outline {
   display: block;
-  width: 100%;
-  height: auto;
+  width: auto;
+  height: clamp(320px, 54vh, 520px);
+  max-width: 100%;
   overflow: visible;
 }
 
@@ -558,13 +586,13 @@
 
 .okey {
   display: grid;
-  grid-template-columns: auto auto 1fr;
+  grid-template-columns: auto 1fr;
   grid-template-areas:
-    'swatch name name'
-    'glyph tail tail'
-    'dims dims dims';
+    'swatch name'
+    'tail tail'
+    'dims dims';
   align-items: center;
-  gap: 4px 10px;
+  gap: 3px 10px;
   padding-bottom: 16px;
   border-bottom: 1px solid var(--rule);
   transition: opacity var(--dur-2) var(--ease-out);
@@ -600,20 +628,6 @@
   grid-area: name;
   font-size: var(--fs-15);
   font-weight: 500;
-}
-
-.tailglyph {
-  grid-area: glyph;
-  width: 18px;
-  height: 20px;
-  overflow: visible;
-}
-
-.tailglyph path {
-  fill: none;
-  stroke: var(--ink-3);
-  stroke-width: 4;
-  vector-effect: non-scaling-stroke;
 }
 
 .okey__tail {

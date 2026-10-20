@@ -114,13 +114,21 @@ export function interpret(d: Derived): Reading {
   }
 
   // 3 — what you asked for, and what we think it means.
+  //
+  // interpreted_intent already opens with the raw intent under Rule A, so the
+  // two are stitched rather than concatenated: repeating "more speed and flow
+  // on the wave" twice in one sentence reads like a bug.
   const moderation = signals.intent_moderation.value
+  const interpreted = intent.interpreted_intent.replace(/^the stated goal is .*?, but /i, '')
+  const startsWithRaw = interpreted.toLowerCase().startsWith(intent.raw_intent.toLowerCase())
+
   if (moderation === 'preserved') {
     paragraphs.push(`You asked for ${intent.raw_intent}, and nothing in your answers argues against it.`)
+  } else if (startsWithRaw) {
+    const tail = interpreted.slice(intent.raw_intent.length).replace(/^\s*[—-]\s*/, '')
+    paragraphs.push(`You asked for ${intent.raw_intent}. Read against the rest of your answers, ${tail}`)
   } else {
-    paragraphs.push(
-      `You asked for ${intent.raw_intent}. Read against the rest of your answers, that means ${intent.interpreted_intent.replace(/^the stated goal is .*?, but /i, '')}`,
-    )
+    paragraphs.push(`You asked for ${intent.raw_intent}. Read against the rest of your answers, that means ${interpreted}`)
   }
 
   // Challenge — how hard to push.
