@@ -321,7 +321,7 @@ Surfer profile for a user who:
       "evidence": [
         {
           "source": "Q8",
-          "value": "can_link_turns_and_control_direction",
+          "value": "can_link_turns",
           "contribution": "primary signal — places surfer in intermediate-to-upper range"
         },
         {
@@ -347,7 +347,7 @@ Surfer profile for a user who:
       "evidence": [
         {
           "source": "Q7",
-          "value": "mostly_small_weak_waves",
+          "value": "small_weak_waves",
           "contribution": "primary signal — defines baseline wave conditions"
         }
       ],
@@ -395,12 +395,12 @@ Surfer profile for a user who:
       "evidence": [
         {
           "source": "Q6",
-          "value": "more_speed_and_flow",
+          "value": "wants_speed_and_flow",
           "contribution": "supporting signal — goal leans toward performance but not definitively"
         },
         {
           "source": "Q8",
-          "value": "can_link_turns_and_control_direction",
+          "value": "can_link_turns",
           "contribution": "supporting signal — skill level consistent with a balanced position"
         }
       ],
@@ -421,12 +421,12 @@ Surfer profile for a user who:
       "evidence": [
         {
           "source": "Q6",
-          "value": "more_speed_and_flow",
+          "value": "wants_speed_and_flow",
           "contribution": "primary signal — defines stated goal"
         },
         {
           "source": "Q5",
-          "value": "cant_generate_speed_in_weak_waves",
+          "value": "cant_generate_speed_weak_waves",
           "contribution": "reinforcing signal — pain point directly corresponds to stated goal"
         }
       ],

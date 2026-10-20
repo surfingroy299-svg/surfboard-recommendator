@@ -117,10 +117,18 @@ Answer options must map cleanly into system logic.
 ### Answer Template
 
 answers:
-  - label: [user-facing text]  
-    value: [normalized_value]  
-    meaning: [interpretation of the answer]  
-    weight: [optional]
+  - display_label:      [user-facing text shown in the onboarding UI]
+    normalized_value:   [snake_case identifier used throughout the pipeline]
+    meaning:            [what this answer represents; what the system learns from it]
+    signals:            [specific implications for target axes; what the Translation Layer does with this]
+    target_axes:        [which Surfer Profile axes this contributes to, and in what role: primary / supporting]
+    weight:             [diagnostic strength: high / medium / low / — for non-diagnostic inputs]
+
+For structured inputs (Q4 dimensions, Q9 physical data) and routing gates (Q3), the template is adapted:
+- Routing gates define the branching behavior and downstream effects rather than signals and target_axes
+- Structured inputs define fields and their downstream data destinations
+
+Full normalized answer definitions for all 9 questions are in `onboarding-questions.md`.
 
 ---
 

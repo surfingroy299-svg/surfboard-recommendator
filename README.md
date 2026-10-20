@@ -26,12 +26,12 @@ The core design principle is **explainability over accuracy**: every recommendat
 |---|---|
 | Product definition | Complete |
 | Onboarding questions (9 questions) | Complete — display layer only |
-| Answer normalization (value mapping) | Not started |
+| Answer normalization (value mapping) | Complete — normalized values, meanings, signals, axes, weights |
 | Surfer Profile schema | Complete |
-| Translation Layer (logic contract) | Complete — no rules yet |
-| Decision Layer (logic contract) | Complete — no rules yet |
-| Size Calculation Step (contract) | Complete — no formula yet |
-| Board Matching Layer (contract) | Complete — no evaluation rules yet |
+| Translation Layer (logic contract) | Complete — full mapping rules for all 5 axes |
+| Decision Layer (logic contract) | Complete — full mapping rules for all 6 signals |
+| Size Calculation Step (contract + rules) | Complete — formula, GF table, modifiers, calibration assumptions defined |
+| Board Matching Layer (contract + rules) | Complete — 7 dimensions with scoring rules, hard exclusion thresholds, vocabulary mapping, worked example |
 | Agent specification | Not started |
 | Board database | 10 boards (Channel Islands only) |
 | UI / frontend | Not started |
@@ -94,11 +94,13 @@ surfboard-recommendator/
 │   └── onboarding-layer.md        Design principles, answer template, information categories
 │
 ├── logic/
-│   ├── surfer-profile-schema.md   Full schema for the Translation Layer output artifact
-│   ├── translation-layer.md       How onboarding answers map to the 5-axis Surfer Profile
-│   ├── decision-layer.md          How the Surfer Profile maps to 6 advisory signals
-│   ├── size-calculation-step.md   Input/output contract for target volume and length ranges
-│   └── board-matching-layer.md    7 evaluation dimensions, exclusion logic, output schema
+│   ├── surfer-profile-schema.md      Full schema for the Translation Layer output artifact
+│   ├── translation-layer.md          How onboarding answers map to the 5-axis Surfer Profile
+│   ├── decision-layer.md             How the Surfer Profile maps to 6 advisory signals
+│   ├── size-calculation-step.md      Input/output contract for target volume and length ranges
+│   ├── size-calculation-rules.md     Actual formula, GF table, modifiers, evidence status, worked examples
+│   ├── board-matching-layer.md       7 evaluation dimensions, exclusion logic, output schema
+│   └── board-matching-layer-rules.md Per-dimension scoring rules, hard exclusion thresholds, vocabulary mapping, worked example
 │
 └── boards data/
     ├── board-data-schema.md        Schema definition for all board data
@@ -122,7 +124,9 @@ surfboard-recommendator/
 - `translation-layer.md` — 5 axes defined with primary inputs, state structure, and confidence basis
 - `decision-layer.md` — 6 signals with value enums, per-signal output format, constraint hierarchy, conflict resolution
 - `size-calculation-step.md` — full input/output contract including split-size uncertainty handling
+- `size-calculation-rules.md` — Guild Factor table, wave conditions adjustment, board category modifiers (labeled by evidence status), size direction range emphasis, worked examples, and calibration tracking
 - `board-matching-layer.md` — 7 evaluation dimensions, hard exclusion triggers, match_strength aggregation, candidate and excluded-board output schemas
+- `board-matching-layer-rules.md` — per-dimension scoring rules (strong/moderate/weak/unknown), hard exclusion thresholds, vocabulary mapping (expert=advanced), evidence status labels, calibration tracking, worked example
 
 **Board data**
 - `board-data-schema.md` — complete schema definition
@@ -135,27 +139,29 @@ surfboard-recommendator/
 
 **Missing logic (all layers have contracts but no execution rules)**
 
-1. **Answer normalization** — `onboarding-questions.md` has display labels only. Each answer option needs a normalized `value` field (e.g. `loses_speed_easily`) that the Translation Layer can reference as evidence. This is the first implementation prerequisite.
+1. ~~**Answer normalization**~~ — **Complete.** All 9 questions now have fully normalized answer definitions including `normalized_value`, `meaning`, `signals`, `target_axes`, and `weight`.
 
-2. **Translation rules** — The logic that maps normalized answer values to axis states is not written. Example: which Q8 answers, combined with which Q2 selections, produce `band = intermediate, sub_level = upper`?
+2. ~~**Translation rules**~~ — **Complete.** All 5 axes now have full mapping rules including primary inputs, supporting inputs, confidence rules, conflict handling, and worked examples. See `logic/translation-layer.md`.
 
-3. **Size calculation formula** — The volume and length calculation rules are not defined. No weight-to-volume table, no level modifier, no condition adjustment.
+3. ~~**Decision Layer rules**~~ — **Complete.** All 6 signals now have full mapping rules including precedence-ordered triggers, confidence rules, conflict handling, cross-signal consistency rules, and worked examples. See `logic/decision-layer.md`.
 
-4. **Board matching evaluation rules** — The rules that produce `strong / moderate / weak` for each of the 7 evaluation dimensions are not defined. Example: given `actual_surfing_level.band = intermediate` and a board with `level_range.min = lower_intermediate, max = upper_intermediate`, what is the Level Fit result?
+4. ~~**Size calculation formula**~~ — **Complete.** Guild Factor table, wave conditions adjustment, board category modifiers, size direction handling, and worked examples are defined in `logic/size-calculation-rules.md`. All numeric modifiers are labeled by evidence status (evidence-backed / industry-informed assumption / product heuristic).
 
-5. **Agent specification** — Not documented. No prompt structure, context format, output schema, or model selection.
+5. ~~**Board matching evaluation rules**~~ — **Complete.** All 7 dimensions now have scoring rules (strong/moderate/weak/unknown), hard exclusion thresholds, evidence status labeling, vocabulary mapping, and a worked example. See `logic/board-matching-layer-rules.md`.
+
+6. **Agent specification** — Not documented. No prompt structure, context format, output schema, or model selection.
 
 **Missing data**
 
-6. **Board database** — 10 boards from one brand is insufficient for reliable 3-board recommendations across diverse surfer profiles. A minimum of 3–4 brands and 30–40 models is recommended before V1 launch.
+7. **Board database** — 10 boards from one brand is insufficient for reliable 3-board recommendations across diverse surfer profiles. A minimum of 3–4 brands and 30–40 models is recommended before V1 launch.
 
-7. **Shape profile gaps** — Several Channel Islands models have `"unknown"` values for `tail_shape`, `concave`, and `rails`. These affect the Ride Feel / Shape Fit dimension quality.
+8. **Shape profile gaps** — Several Channel Islands models have `"unknown"` values for `tail_shape`, `concave`, and `rails`. These affect the Ride Feel / Shape Fit dimension quality.
 
 **Missing infrastructure**
 
-8. **UI / frontend** — No screens, flows, or components built. A full UX spec and wireframes exist in the project's planning documents.
+9. **UI / frontend** — No screens, flows, or components built. A full UX spec and wireframes exist in the project's planning documents.
 
-9. **Backend / API** — No server, endpoints, or data layer.
+10. **Backend / API** — No server, endpoints, or data layer.
 
 ---
 
