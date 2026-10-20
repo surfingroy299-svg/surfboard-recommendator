@@ -411,9 +411,45 @@ export function decide(p: SurferProfile): DecisionSignals {
     uncertainty_flags,
   }
 
+  reconcileCrossSignals(signals)
+
   // Guarded so the rules can also be exercised outside Vite (see logic fixtures).
   if (typeof import.meta.env !== 'undefined' && import.meta.env.DEV) assertCrossSignalConsistency(p, signals)
   return signals
+}
+
+/**
+ * Section 11.7 states required relationships between signals, but the
+ * per-signal tables in 11.1-11.4 can still produce a pair that breaks one:
+ * a board read as too supportive gives `challenge_more`, while a low-confidence
+ * axis independently pulls the challenge level to `conservative`.
+ *
+ * 11.7 phrases each rule as a constraint on the dependent signal, so that is
+ * what is adjusted here, and the adjustment is recorded in the signal's flags
+ * rather than applied silently.
+ */
+function reconcileCrossSignals(s: DecisionSignals): void {
+  const prog = s.progression_direction.value
+
+  // 11.7.1 — support_more is never progressive.
+  if (prog === 'support_more' && s.challenge_level.value === 'progressive') {
+    s.challenge_level.value = 'balanced'
+    s.challenge_level.flags.push('moderated_for_support_more')
+  }
+
+  // 11.7.2 — challenge_more is never conservative.
+  if (prog === 'challenge_more' && s.challenge_level.value === 'conservative') {
+    s.challenge_level.value = 'balanced'
+    s.challenge_level.basis =
+      'Held at a moderate step: the board is holding this surfer back, but the signals behind that are not strong enough to push harder.'
+    s.challenge_level.flags.push('moderate_challenge_only')
+  }
+
+  // 11.7.3 — redirect requires a category move.
+  if (prog === 'redirect' && (s.category_direction.value === 'keep' || s.category_direction.value === 'split')) {
+    s.category_direction.value = 'lean_change'
+    s.category_direction.flags.push('implied_by_redirect')
+  }
 }
 
 /**

@@ -645,6 +645,18 @@ function translateIntent(
   let interpreted_intent: string
   let intent_gap: IntentGap
 
+  // When the cause is unresolved the direction usually still is, so the
+  // sentence leans on that rather than trailing off. This claims no cause the
+  // steps above did not find.
+  const unresolved =
+    boardFit.state.fit === 'unknown'
+      ? 'this is read from your surfing rather than from a current board'
+      : boardFit.state.direction === 'too_supportive'
+        ? 'the move is toward less board under you, not more'
+        : boardFit.state.direction === 'too_demanding'
+          ? 'the move is toward a board that gives more back'
+          : 'the change is one of character rather than size'
+
   const mechanism =
     boardFit.state.cause === 'category'
       ? 'a different board type is the most likely route'
@@ -652,7 +664,7 @@ function translateIntent(
         ? 'a size change is the most likely route'
         : boardFit.state.cause === 'mixed'
           ? 'both board type and size look involved'
-          : 'the route is not yet clear from the current board alone'
+          : unresolved
 
   if (sharedTheme) {
     // Rule A — aligned pain and goal.

@@ -63,12 +63,7 @@ export function OnboardingStage() {
 
 function Hint({ q }: { q: Question }) {
   if (q.kind === 'multi') {
-    return (
-      <p className="onboarding__hint">
-        Choose up to {q.max}
-        {q.max > 1 ? ' — whichever feel true' : ''}.
-      </p>
-    )
+    return <p className="onboarding__hint">Choose up to {q.max} — whichever ring true.</p>
   }
   if (q.id === 'Q9') return <p className="onboarding__hint">Weight sets the volume. Height fine-tunes the length.</p>
   return null
