@@ -18,6 +18,11 @@
   --tide-soft: #d6e1e8;
   --tide-ink: #163a51;
 
+  /* Comparison keys — one per board, used only where boards are overlaid */
+  --cmp-a: #1e4b68;
+  --cmp-b: #a4572a;
+  --cmp-c: #3f7355;
+
   /* Status (store availability only) */
   --ok: #2f7d4f;
   --low: #b26a1b;

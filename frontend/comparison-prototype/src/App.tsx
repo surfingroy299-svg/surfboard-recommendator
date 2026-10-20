@@ -7,15 +7,22 @@ import { ComparisonProvider, STATE_LABEL, STATE_ORDER, useComparison } from './s
 import type { StateId } from './data/types'
 import { TopBar } from './components/shell/TopBar'
 import { OverviewState } from './components/states/OverviewState'
+import { OutlineState } from './components/states/OutlineState'
 import { ShapeState } from './components/states/ShapeState'
 import { TailFinsState } from './components/states/TailFinsState'
 import { EndNote } from './components/states/EndNote'
 import { InspectOverlay } from './components/inspect/InspectOverlay'
 import { Toast } from './components/ui/Toast'
+import { JourneyProvider, useJourney } from './journey/journeyState'
+import { PrototypeControls } from './journey/PrototypeControls'
+import { IntroStage } from './journey/stages/IntroStage'
+import { OnboardingStage } from './journey/stages/OnboardingStage'
+import { ProfileStage } from './journey/stages/ProfileStage'
+import { MatchingStage } from './journey/stages/MatchingStage'
 
 const TOPBAR_OFFSET = 56
 
-function Experience() {
+function Comparison() {
   const { state } = useComparison()
   const reduced = useReducedMotion()
   const announce = useAnnounce()
@@ -51,11 +58,14 @@ function Experience() {
     [reduced, announce],
   )
 
-  // Deep link on load: #overview / #shape / #tail-fins
+  // The comparison mounts fresh when the journey reaches it, so start at the
+  // top unless a deep link names a section.
   useEffect(() => {
     const hash = window.location.hash.replace('#', '') as StateId
     const el = STATE_ORDER.includes(hash) ? document.getElementById(hash) : null
     if (el) void scrollToElement(el, { offset: TOPBAR_OFFSET, instant: true })
+    else window.scrollTo(0, 0)
+    window.dispatchEvent(new Event('scroll'))
   }, [])
 
   useEffect(() => {
@@ -72,6 +82,7 @@ function Experience() {
       <TopBar activeState={activeState} onNavigate={goTo} />
       <main id="comparison" className="page">
         <OverviewState />
+        <OutlineState />
         <ShapeState />
         <TailFinsState />
         <EndNote />
@@ -82,12 +93,31 @@ function Experience() {
   )
 }
 
+function Stage() {
+  const { state } = useJourney()
+  switch (state.stage) {
+    case 'intro':
+      return <IntroStage />
+    case 'onboarding':
+      return <OnboardingStage />
+    case 'profile':
+      return <ProfileStage />
+    case 'matching':
+      return <MatchingStage />
+    case 'comparison':
+      return <Comparison />
+  }
+}
+
 export function App() {
   return (
     <LiveRegionProvider>
-      <ComparisonProvider>
-        <Experience />
-      </ComparisonProvider>
+      <JourneyProvider>
+        <ComparisonProvider>
+          <Stage />
+          <PrototypeControls />
+        </ComparisonProvider>
+      </JourneyProvider>
     </LiveRegionProvider>
   )
 }

@@ -1,10 +1,11 @@
 import { createContext, useContext, useMemo, useReducer, useRef, type Dispatch, type ReactNode, type RefObject } from 'react'
 import type { BoardId, BoardView, StateId } from '../data/types'
 
-export const STATE_ORDER: readonly StateId[] = ['overview', 'shape', 'tail-fins']
+export const STATE_ORDER: readonly StateId[] = ['overview', 'outline', 'shape', 'tail-fins']
 
 export const STATE_LABEL: Record<StateId, string> = {
   overview: 'Overview',
+  outline: 'Outline',
   shape: 'Shape',
   'tail-fins': 'Tail & Fins',
 }

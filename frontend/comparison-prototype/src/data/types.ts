@@ -9,7 +9,7 @@ export type BoardSlot = 'A' | 'B' | 'C'
 export type BoardView = 'deck' | 'side' | 'bottom'
 /** Asset-level views: the three canonical views plus an optional prepared tail crop. */
 export type BoardAssetView = BoardView | 'tail'
-export type StateId = 'overview' | 'shape' | 'tail-fins'
+export type StateId = 'overview' | 'outline' | 'shape' | 'tail-fins'
 
 /** Qualitative level on the shared relative scale. Never rendered as a number. */
 export type Level = 1 | 2 | 3 | 4 | 5

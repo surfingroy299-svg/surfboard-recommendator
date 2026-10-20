@@ -496,6 +496,165 @@
   transform: scaleY(1.15);
 }
 
+/* ───────────────────────── 02 Outline ───────────────────────── */
+
+.outlines {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 300px);
+  gap: clamp(24px, 4vw, 64px);
+  align-items: center;
+}
+
+.outlines__stage {
+  min-width: 0;
+}
+
+.outline {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+/* The tail is the alignment reference, so it is drawn rather than implied. */
+.outline__datum {
+  stroke: var(--rule-strong);
+  stroke-width: 1;
+  stroke-dasharray: 3 5;
+  vector-effect: non-scaling-stroke;
+}
+
+.outline__board path {
+  fill: none;
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+  transition: opacity var(--dur-2) var(--ease-out), stroke-width var(--dur-2) var(--ease-out);
+}
+
+.outline__board[data-board='a'] path {
+  stroke: var(--cmp-a);
+}
+.outline__board[data-board='b'] path {
+  stroke: var(--cmp-b);
+}
+.outline__board[data-board='c'] path {
+  stroke: var(--cmp-c);
+}
+
+.outline__board.is-dim path {
+  opacity: 0.22;
+}
+
+.outline__board.is-focus path {
+  stroke-width: 3.5;
+}
+
+/* Legend: quiet, and keyed by the same colours as the drawing. */
+.outlines__legend {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.okey {
+  display: grid;
+  grid-template-columns: auto auto 1fr;
+  grid-template-areas:
+    'swatch name name'
+    'glyph tail tail'
+    'dims dims dims';
+  align-items: center;
+  gap: 4px 10px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--rule);
+  transition: opacity var(--dur-2) var(--ease-out);
+}
+
+.okey:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.okey[data-emphasis='dim'] {
+  opacity: 0.4;
+}
+
+.okey__swatch {
+  grid-area: swatch;
+  width: 18px;
+  height: 2px;
+  border-radius: 1px;
+}
+
+.okey[data-board='a'] .okey__swatch {
+  background: var(--cmp-a);
+}
+.okey[data-board='b'] .okey__swatch {
+  background: var(--cmp-b);
+}
+.okey[data-board='c'] .okey__swatch {
+  background: var(--cmp-c);
+}
+
+.okey__name {
+  grid-area: name;
+  font-size: var(--fs-15);
+  font-weight: 500;
+}
+
+.tailglyph {
+  grid-area: glyph;
+  width: 18px;
+  height: 20px;
+  overflow: visible;
+}
+
+.tailglyph path {
+  fill: none;
+  stroke: var(--ink-3);
+  stroke-width: 4;
+  vector-effect: non-scaling-stroke;
+}
+
+.okey__tail {
+  grid-area: tail;
+  font-size: var(--fs-13);
+  color: var(--ink-2);
+}
+
+.okey__dims {
+  grid-area: dims;
+  margin-top: 4px;
+  font-size: var(--fs-12);
+  color: var(--ink-3);
+}
+
+.outlines__note {
+  grid-column: 1 / -1;
+  margin-top: 8px;
+  font-size: var(--fs-12);
+  color: var(--ink-3);
+  letter-spacing: 0.02em;
+}
+
+@media (max-width: 860px) {
+  .outlines {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .outlines__legend {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 20px 28px;
+  }
+
+  .okey {
+    border-bottom: 0;
+    padding-bottom: 0;
+    flex: 1 1 160px;
+  }
+}
+
 /* ───────────────────────── 02 Shape ───────────────────────── */
 
 .shape {

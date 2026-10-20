@@ -8,7 +8,7 @@ import { emphasisFor, useComparison } from '../../state/comparisonState'
 export function OverviewState() {
   const { state } = useComparison()
   return (
-    <StateSection id="overview" index={1} title="Overview" lede="Three boards that fit your target zone. Each one rides differently.">
+    <StateSection id="overview" index={1} title="Overview" lede="Three boards on your shortlist. Each one rides differently.">
       <div className="overview">
         {boards.map((board) => (
           <BoardFigure
