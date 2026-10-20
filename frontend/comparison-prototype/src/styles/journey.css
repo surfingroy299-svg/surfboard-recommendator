@@ -684,9 +684,13 @@
 
 .matching {
   width: 100%;
-  max-width: 980px;
+  max-width: 1600px;
   margin: 0 auto;
   text-align: center;
+}
+
+.matching__rack {
+  width: 100%;
 }
 
 .matching__field {

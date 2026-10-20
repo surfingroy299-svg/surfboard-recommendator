@@ -3,6 +3,7 @@ import { motion } from 'motion/react'
 import { useReducedMotion } from '../../hooks/a11y'
 import { buildOutline } from '../../components/outline/outlineGeometry'
 import { useJourney } from '../journeyState'
+import { Quiver } from '../../components/surf/Quiver'
 
 /**
  * SIMULATED. This is a scripted sequence, not a database query.
@@ -38,7 +39,12 @@ export function MatchingStage() {
   const quick = state.seenMatching
   const timings = reduced ? [0, 0, 0, 260] : quick ? [0, 200, 400, 700] : [0, 800, 1600, 2400]
 
+  // Dev-only: ?hold freezes the sequence so the composition can be reviewed
+  // as a still. Never active in a production build.
+  const held = import.meta.env.DEV && new URLSearchParams(window.location.search).has('hold')
+
   useEffect(() => {
+    if (held) return
     const timers = [
       window.setTimeout(() => setBeat(1), timings[1]),
       window.setTimeout(() => setBeat(2), timings[2]),
@@ -72,7 +78,11 @@ export function MatchingStage() {
   return (
     <main className="stage stage--matching" aria-busy="true">
       <div className="matching">
-        <div className="matching__field" aria-hidden="true">
+        <div className="matching__rack">
+          <Quiver />
+        </div>
+
+        <div className="matching__field" aria-hidden="true" style={{ display: 'none' }}>
           {field.map((f) => {
             const visible = beat === 0 ? true : beat === 1 ? f.i % 3 === 1 || f.survives : f.survives
             return (

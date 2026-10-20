@@ -390,6 +390,69 @@
   aspect-ratio: auto !important;
 }
 
+/* ───────────────────────── Board form (generated, rendered as an object) ───────────────────────── */
+
+.bform {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.bform__body {
+  stroke: var(--bform-edge);
+  stroke-width: 1.15;
+  vector-effect: non-scaling-stroke;
+}
+
+.bform__stringer {
+  stroke: var(--bform-edge);
+  stroke-width: 0.8;
+  opacity: 0.55;
+  vector-effect: non-scaling-stroke;
+  fill: none;
+}
+
+.bform__fin {
+  fill: var(--bform-fin);
+  opacity: 0.92;
+}
+
+.bform__shadow {
+  fill: rgba(21, 23, 26, 0.13);
+  filter: blur(5px);
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .bform__shadow {
+    display: none;
+  }
+}
+
+/* ───────────────────────── Quiver rack ───────────────────────── */
+
+.quiver {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.quiver__floor {
+  stroke: var(--rule);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.quiver__contact {
+  fill: rgba(21, 23, 26, 0.17);
+  filter: blur(3px);
+}
+
+.quiver__board {
+  transition: opacity var(--dur-3) var(--ease-out);
+}
+
 /* ───────────────────────── 01 Overview ───────────────────────── */
 
 .overview {
