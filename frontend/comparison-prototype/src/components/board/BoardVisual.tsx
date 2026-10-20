@@ -31,6 +31,13 @@ export function BoardVisual({ boardId, view, emphasis = 'default', crop, classNa
   }, [asset.src])
 
   const flip = view === 'side' && boardAssets[boardId].side.noseDirection === 'left'
+  /**
+   * The side assets were exported rotated 180 degrees: the rocker curves down
+   * and the deck text reads upside down. Nose direction is already handled by
+   * `flip`, so only the vertical axis needs correcting — rocker should rise at
+   * nose and tail, the way the board sits on the water.
+   */
+  const flipY = view === 'side'
   const alt = decorative ? '' : asset.alt
   const classes = `bv bv--${view} bv--${emphasis} bv--${status}${crop || view === 'tail' ? ' bv--crop' : ''} ${className}`.trim()
 
@@ -88,7 +95,11 @@ export function BoardVisual({ boardId, view, emphasis = 'default', crop, classNa
             src={asset.src}
             alt={status === 'missing' ? '' : alt}
             className="bv__img"
-            style={flip ? { transform: 'scaleX(-1)' } : undefined}
+            style={
+              flip || flipY
+                ? { transform: `scale(${flip ? -1 : 1}, ${flipY ? -1 : 1})` }
+                : undefined
+            }
             onLoad={() => setStatus('ready')}
             onError={() => setStatus('missing')}
             draggable={false}

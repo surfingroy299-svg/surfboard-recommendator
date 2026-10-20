@@ -7,12 +7,20 @@ export function ChoiceGroup<T extends string>({
   options,
   value,
   onChange,
+  onCommit,
 }: {
   name: string
   legend: string
   options: AnswerOption[]
   value: T | null
   onChange: (v: T) => void
+  /**
+   * Fired only on a deliberate commit — pointer tap, or Enter/Space on a
+   * focused option. Arrow keys move selection within a radio group and raise
+   * `change` but never `click`, so auto-advance must not hang off onChange or
+   * it fires on every arrow press.
+   */
+  onCommit?: (v: T) => void
 }) {
   return (
     <fieldset className="choices">
@@ -27,6 +35,7 @@ export function ChoiceGroup<T extends string>({
               className="choice__input"
               checked={selected}
               onChange={() => onChange(o.value as T)}
+              onClick={() => onCommit?.(o.value as T)}
             />
             <span className="choice__body">
               <span className="choice__label">{o.label}</span>

@@ -74,11 +74,17 @@
 
 .onboarding {
   width: 100%;
+  /* Text questions read best in a narrow column; the two visual questions
+     (board type, wave conditions) need room for the imagery to do its work. */
   max-width: 680px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
   min-height: calc(100vh - clamp(64px, 14vh, 176px));
+}
+
+.onboarding--wide {
+  max-width: 1040px;
 }
 
 .onboarding__head {
@@ -818,5 +824,182 @@
     right: 10px;
     bottom: 10px;
     justify-content: space-between;
+  }
+}
+
+/* ───────────────────────── Q1 — board type as shape ───────────────────────── */
+
+.btgrid {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.btgrid__shapes {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: clamp(8px, 1.4vw, 20px);
+  align-items: end;
+}
+
+.btcell {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 4px 12px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background var(--dur-1) var(--ease-out);
+}
+
+.btcell:hover {
+  background: var(--paper-raised);
+}
+
+.btcell[data-selected] {
+  background: var(--tide-soft);
+}
+
+/* Boards share a baseline so the length differences between types are real. */
+.btcell__stage {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  width: 100%;
+  height: clamp(140px, 26vh, 230px);
+}
+
+.btcell__board {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  width: 100%;
+}
+
+.btcell__board .bform {
+  width: auto;
+  height: 100%;
+  max-width: 100%;
+}
+
+.btcell__label {
+  font-size: var(--fs-14);
+  color: var(--ink-2);
+  text-align: center;
+  transition: color var(--dur-1) var(--ease-out);
+}
+
+.btcell:hover .btcell__label,
+.btcell[data-selected] .btcell__label {
+  color: var(--ink);
+}
+
+.btcell__stage,
+.btcell__label {
+  pointer-events: none;
+}
+
+.choice__input:focus-visible ~ .btcell__stage,
+.btcell:focus-within {
+  outline: 2px solid var(--tide);
+  outline-offset: 2px;
+  border-radius: var(--radius);
+}
+
+.btgrid__plain {
+  margin-top: 26px;
+  padding-top: 18px;
+  border-top: 1px solid var(--rule);
+}
+
+.choice--compact {
+  padding: 11px 2px;
+  border-bottom: 0;
+}
+
+.choice--compact:first-of-type {
+  border-top: 0;
+}
+
+/* ───────────────────────── Q8 — the ability ladder ───────────────────────── */
+
+.ladder {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.rung {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 118px 1fr auto;
+  align-items: center;
+  gap: 18px;
+  padding: 11px 2px;
+  border-bottom: 1px solid var(--rule);
+  cursor: pointer;
+  transition: color var(--dur-1) var(--ease-out);
+}
+
+.rung:first-of-type {
+  border-top: 1px solid var(--rule);
+}
+
+.rung[data-blocked] {
+  cursor: not-allowed;
+}
+
+.rung[data-blocked] .rung__label {
+  color: var(--ink-3);
+}
+
+.rung__index {
+  font-size: var(--fs-12);
+  color: var(--rule-strong);
+  transition: color var(--dur-1) var(--ease-out);
+}
+
+.rung[data-selected] .rung__index {
+  color: var(--tide);
+}
+
+.rung__glyph {
+  display: block;
+  width: 118px;
+}
+
+.rung__label {
+  font-size: var(--fs-15);
+  line-height: 1.35;
+  color: var(--ink-2);
+  transition: color var(--dur-1) var(--ease-out);
+}
+
+.rung:hover .rung__label,
+.rung[data-selected] .rung__label {
+  color: var(--ink);
+}
+
+@media (max-width: 620px) {
+  .btgrid__shapes {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px 6px;
+  }
+
+  .btcell__stage {
+    height: clamp(110px, 20vh, 160px);
+  }
+
+  .rung {
+    grid-template-columns: auto 66px 1fr auto;
+    gap: 12px;
+  }
+
+  .rung__glyph {
+    width: 66px;
   }
 }

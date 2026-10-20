@@ -1,17 +1,27 @@
 import { useEffect, useRef, useState } from 'react'
+import { useReducedMotion } from '../../hooks/a11y'
 import { isAnswered, maxFor, toggleCapped, type Answers } from '../../logic/answers'
 import { questionById, type Question } from '../../logic/questions'
 import { useAnswerPatch, useJourney } from '../journeyState'
 import { ChoiceGroup } from '../onboarding/ChoiceGroup'
+import { BoardTypeGrid } from '../onboarding/BoardTypeGrid'
+import { SkillLadder } from '../onboarding/SkillLadder'
 import { MultiChoiceGroup } from '../onboarding/MultiChoiceGroup'
 import { DimensionsFields } from '../onboarding/DimensionsFields'
 import { PhysicalFields } from '../onboarding/PhysicalFields'
 import { Progress } from '../onboarding/Progress'
 
 /** One question per screen. Answers persist, so Back is lossless. */
+/** Dwell before a single-select question advances itself, in ms. */
+const ADVANCE_MS = 280
+/** Q7 is four photographs to compare, so it is given longer to be read. */
+const ADVANCE_MS_PHOTO = 900
+
 export function OnboardingStage() {
   const { state, dispatch, visible } = useJourney()
   const patch = useAnswerPatch()
+  const reduced = useReducedMotion()
+  const advanceTimer = useRef<number | undefined>(undefined)
   const id = visible[Math.min(state.step, visible.length - 1)]
   const q = questionById[id]
   const headingRef = useRef<HTMLHeadingElement>(null)
@@ -25,9 +35,24 @@ export function OnboardingStage() {
   const answered = isAnswered(state.answers, id)
   const last = state.step >= visible.length - 1
 
+  // Cancel any pending advance when the question changes or the stage unmounts,
+  // so a fast Back never lands the surfer a question further on than they chose.
+  useEffect(() => () => window.clearTimeout(advanceTimer.current), [])
+  useEffect(() => {
+    window.clearTimeout(advanceTimer.current)
+  }, [id])
+
+  const commit = (delay: number) => {
+    window.clearTimeout(advanceTimer.current)
+    advanceTimer.current = window.setTimeout(() => dispatch({ type: 'next' }), reduced ? 0 : delay)
+  }
+
+  // The two visual questions get a wider column; the rest stay a reading width.
+  const wide = id === 'Q1' || id === 'Q7'
+
   return (
     <main className="stage stage--onboarding">
-      <div className="onboarding">
+      <div className={`onboarding${wide ? ' onboarding--wide' : ''}`}>
         <header className="onboarding__head">
           <Progress step={state.step} total={visible.length} />
           <p className="eyebrow">
@@ -40,7 +65,7 @@ export function OnboardingStage() {
         </header>
 
         <div className="onboarding__body">
-          <QuestionBody q={q} answers={state.answers} patch={patch} />
+          <QuestionBody q={q} answers={state.answers} patch={patch} commit={commit} />
         </div>
 
         <footer className="onboarding__foot">
@@ -73,20 +98,21 @@ function QuestionBody({
   q,
   answers,
   patch,
+  commit,
 }: {
   q: Question
   answers: Answers
   patch: (p: Partial<Answers>) => void
+  commit: (delay: number) => void
 }) {
   switch (q.id) {
     case 'Q1':
       return (
-        <ChoiceGroup
-          name="Q1"
-          legend={q.prompt}
+        <BoardTypeGrid
           options={q.kind === 'single' ? q.options : []}
           value={answers.Q1}
           onChange={(v) => patch({ Q1: v })}
+          onCommit={() => commit(ADVANCE_MS)}
         />
       )
     case 'Q3':
@@ -97,6 +123,7 @@ function QuestionBody({
           options={q.kind === 'single' ? q.options : []}
           value={answers.Q3}
           onChange={(v) => patch({ Q3: v })}
+          onCommit={() => commit(ADVANCE_MS)}
         />
       )
     case 'Q7':
@@ -107,6 +134,7 @@ function QuestionBody({
           options={q.kind === 'single' ? q.options : []}
           value={answers.Q7}
           onChange={(v) => patch({ Q7: v })}
+          onCommit={() => commit(ADVANCE_MS_PHOTO)}
         />
       )
     case 'Q2':
@@ -122,9 +150,7 @@ function QuestionBody({
       )
     case 'Q8':
       return (
-        <MultiChoiceGroup
-          name="Q8"
-          legend={q.prompt}
+        <SkillLadder
           options={q.kind === 'multi' ? q.options : []}
           values={answers.Q8}
           max={maxFor('Q8') ?? 3}
