@@ -1,6 +1,8 @@
 # Surfboard Recommendator
 
-An explainable surfboard recommendation system for intermediate surfers. This repository contains the full product definition, system architecture, and logic layer specifications. **The system is not yet implemented** — this is a documentation and architecture repository.
+An explainable surfboard recommendation system for intermediate surfers. This repository contains the full product definition, system architecture, logic layer specifications and rules, a board database, and an interactive frontend prototype of the comparison experience.
+
+**The recommendation pipeline is specified but not yet wired into a running system.** The frontend prototype is real and runnable; it is driven by static mock data rather than by the logic layers. See [How to run](#how-to-run) and [What is real versus simulated](#what-is-real-versus-simulated).
 
 ---
 
@@ -25,7 +27,7 @@ The core design principle is **explainability over accuracy**: every recommendat
 | Layer | Status |
 |---|---|
 | Product definition | Complete |
-| Onboarding questions (9 questions) | Complete — display layer only |
+| Onboarding questions (9 questions) | Complete |
 | Answer normalization (value mapping) | Complete — normalized values, meanings, signals, axes, weights |
 | Surfer Profile schema | Complete |
 | Translation Layer (logic contract) | Complete — full mapping rules for all 5 axes |
@@ -34,14 +36,16 @@ The core design principle is **explainability over accuracy**: every recommendat
 | Board Matching Layer (contract + rules) | Complete — 7 dimensions with scoring rules, hard exclusion thresholds, vocabulary mapping, worked example |
 | Agent specification | Not started |
 | Board database | 10 boards (Channel Islands only) |
-| UI / frontend | Not started |
+| Comparison experience spec | Complete — `comparison-experience-spec.md` |
+| UI / frontend | Comparison prototype built — `frontend/comparison-prototype`, static mock data |
+| Logic layers wired into the frontend | Not started |
 | Backend / API | Not started |
 
 ---
 
 ## System Architecture
 
-The system is built as a sequential pipeline of discrete layers. Each layer has a clearly defined role and a documented input/output contract. No layer is implemented yet.
+The system is built as a sequential pipeline of discrete layers. Each layer has a clearly defined role and a documented input/output contract. Every layer through Board Matching now has execution rules documented; none is implemented in code yet.
 
 ```
 Onboarding (9 questions)
@@ -88,9 +92,11 @@ Output: 2–3 boards with explanations and honest tradeoffs
 surfboard-recommendator/
 │
 ├── product-definition.md          Problem, target user, output format, scope, success criteria
+├── comparison-experience-spec.md  UX specification for the comparison experience prototype
+├── claude-build-prompt.md         Build brief that accompanies the specification above
 │
 ├── onboarding/
-│   ├── onboarding-questions.md    9 questions with answer options (display layer)
+│   ├── onboarding-questions.md    9 questions with fully normalized answer definitions
 │   └── onboarding-layer.md        Design principles, answer template, information categories
 │
 ├── logic/
@@ -102,12 +108,25 @@ surfboard-recommendator/
 │   ├── board-matching-layer.md       7 evaluation dimensions, exclusion logic, output schema
 │   └── board-matching-layer-rules.md Per-dimension scoring rules, hard exclusion thresholds, vocabulary mapping, worked example
 │
-└── boards data/
-    ├── board-data-schema.md        Schema definition for all board data
-    ├── brands/
-    │   └── channel_islands.json    10 Channel Islands models (V1 database)
-    └── examples/
-        └── example-brand.json      Template for adding new brands
+├── boards data/
+│   ├── board-data-schema.md       Schema definition for all board data
+│   ├── brands/
+│   │   └── channel_islands.json   10 Channel Islands models (V1 database)
+│   └── examples/
+│       └── example-brand.json     Template for adding new brands
+│
+├── frontend/
+│   └── comparison-prototype/      Interactive comparison experience (React + Vite)
+│                                  See its own README for assets and architecture
+│
+└── design-exploration/            Project history, kept separate from the active product
+    ├── concepts/ · research/      Early concept work and reference research
+    ├── directions/                Three explored directions, each with ux / visual /
+    │                              technical models and an assessment
+    ├── decisions/                 Round reviews and the final comparison
+    ├── shared/mock-data/          Scenario and board data used by the explorations
+    ├── screenshots/               Review screenshots
+    └── prototypes/app/            Source of the three direction prototypes
 ```
 
 ---
@@ -133,55 +152,92 @@ surfboard-recommendator/
 - `channel_islands.json` — 10 boards (CI 2.Pro, Two Happy, Fever, NeckBeard 3, Better Everyday, Dumpster Diver 2, G Skate, Happy Traveler, CI Pro Step Up, CI Mid)
 - `example-brand.json` — template for adding new brands
 
+**Experience**
+- `comparison-experience-spec.md` — UX specification for the comparison experience: interaction model, the three comparison states, Inspect, contextual assistant, asset strategy, phasing
+- `frontend/comparison-prototype/` — the built prototype of that specification: three comparison states, focus and Inspect interactions, scripted assistant, static mock data
+- `design-exploration/` — three explored directions with their models, assessments and reviews, retained as project history
+
 ---
 
 ## What Is Not Yet Implemented
 
-**Missing logic (all layers have contracts but no execution rules)**
+**Missing logic**
 
-1. ~~**Answer normalization**~~ — **Complete.** All 9 questions now have fully normalized answer definitions including `normalized_value`, `meaning`, `signals`, `target_axes`, and `weight`.
+1. **Agent specification** — Not documented. No prompt structure, context format, output schema, or model selection.
 
-2. ~~**Translation rules**~~ — **Complete.** All 5 axes now have full mapping rules including primary inputs, supporting inputs, confidence rules, conflict handling, and worked examples. See `logic/translation-layer.md`.
-
-3. ~~**Decision Layer rules**~~ — **Complete.** All 6 signals now have full mapping rules including precedence-ordered triggers, confidence rules, conflict handling, cross-signal consistency rules, and worked examples. See `logic/decision-layer.md`.
-
-4. ~~**Size calculation formula**~~ — **Complete.** Guild Factor table, wave conditions adjustment, board category modifiers, size direction handling, and worked examples are defined in `logic/size-calculation-rules.md`. All numeric modifiers are labeled by evidence status (evidence-backed / industry-informed assumption / product heuristic).
-
-5. ~~**Board matching evaluation rules**~~ — **Complete.** All 7 dimensions now have scoring rules (strong/moderate/weak/unknown), hard exclusion thresholds, evidence status labeling, vocabulary mapping, and a worked example. See `logic/board-matching-layer-rules.md`.
-
-6. **Agent specification** — Not documented. No prompt structure, context format, output schema, or model selection.
+2. **Execution code** — Every layer through Board Matching has documented rules, but none has been implemented in code. The frontend prototype does not call them.
 
 **Missing data**
 
-7. **Board database** — 10 boards from one brand is insufficient for reliable 3-board recommendations across diverse surfer profiles. A minimum of 3–4 brands and 30–40 models is recommended before V1 launch.
+3. **Board database** — 10 boards from one brand is insufficient for reliable 3-board recommendations across diverse surfer profiles. A minimum of 3–4 brands and 30–40 models is recommended before V1 launch.
 
-8. **Shape profile gaps** — Several Channel Islands models have `"unknown"` values for `tail_shape`, `concave`, and `rails`. These affect the Ride Feel / Shape Fit dimension quality.
+4. **Shape profile gaps** — Several Channel Islands models have `"unknown"` values for `tail_shape`, `concave`, and `rails`. These affect the Ride Feel / Shape Fit dimension quality.
 
 **Missing infrastructure**
 
-9. **UI / frontend** — No screens, flows, or components built. A full UX spec and wireframes exist in the project's planning documents.
+5. **Onboarding and profile UI** — The comparison experience is built; the onboarding flow and profile interpretation screens that precede it are not.
 
-10. **Backend / API** — No server, endpoints, or data layer.
+6. **Backend / API** — No server, endpoints, or data layer.
 
 ---
 
 ## Recommended Implementation Order
 
-1. **Answer normalization** — Add `value` fields to every answer option in `onboarding-questions.md`. These normalized values become the evidence trail throughout the pipeline. Everything downstream depends on this.
+1. **Implement the documented layers in code** — Translation, Decision and Size Calculation all have complete rules. Build them against the worked examples in `size-calculation-rules.md` and the conflict cases in `translation-layer.md`.
 
-2. **Translation rules** — Write the logic that maps Q1–Q9 normalized values to the 5 Surfer Profile axis states. Start with Actual Surfing Level (Q8 is the primary signal) and Pain Points / User Intent (Q5, Q6).
+2. **Build the onboarding and profile interpretation UI** — The questions, their normalized values and the profile schema are all specified; `comparison-experience-spec.md` §4 defines the profile screen.
 
-3. **Size calculation formula** — Define the weight-to-volume lookup rules and modifiers (level, conditions, support/performance position). Test independently with sample physical profiles.
+3. **Agent specification** — Define what context the agent receives, what output format it produces, and what model powers it.
 
-4. **Board matching evaluation rules** — Define the per-dimension scoring rules for all 7 dimensions. Start with Level Fit and Size Fit (the most objective) then move to Condition Fit, Intent Fit, and Ride Feel.
+4. **Board database expansion** — Add 2–3 more brands with full model data before any end-to-end testing is meaningful.
 
-5. **Agent specification** — Define what context the agent receives, what output format it produces, and what model powers it.
+5. **Backend / API** — Wire the pipeline layers into a runnable system.
 
-6. **Board database expansion** — Add 2–3 more brands with full model data before any end-to-end testing is meaningful.
+---
 
-7. **Backend / API** — Wire the pipeline layers into a runnable system.
+<a id="how-to-run"></a>
 
-8. **UI** — Build the onboarding flow and recommendation output screens.
+## How to Run
+
+The interactive comparison prototype:
+
+```bash
+npm install --prefix frontend/comparison-prototype
+```
+
+```bash
+npm run dev --prefix frontend/comparison-prototype
+```
+
+Then open http://localhost:5179.
+
+```bash
+npm run build --prefix frontend/comparison-prototype
+```
+
+`build` runs a TypeScript project build and then Vite, so it typechecks as well as bundles. See `frontend/comparison-prototype/README.md` for board assets, data files and architecture notes.
+
+The prototypes under `design-exploration/` are historical reference and are not maintained.
+
+---
+
+<a id="what-is-real-versus-simulated"></a>
+
+## What Is Real Versus Simulated
+
+The prototype is honest about its own boundaries, and so is this table.
+
+| Area | Status |
+|---|---|
+| Product definition, logic rules, board schema | **Real** — the specifications in this repository |
+| Channel Islands board data | **Real** — 10 models with sourced specifications |
+| Comparison, Inspect, focus and navigation interactions | **Real** — fully implemented in the prototype |
+| The three compared boards (Board A / B / C) | **Placeholder** — deliberately distinct archetypes; final models not yet selected |
+| Board imagery | **Temporary** — reference product images; licensing must be cleared before public use |
+| Surfer profile shown in the prototype | **Fixed demo scenario** — one reference surfer, not computed from the logic layers |
+| Sizing shown in the prototype | **Mock** — the Size Calculation Step is specified but not wired in |
+| Store availability, Contact seller, Directions, Save board | **Simulated** — no inventory integration exists |
+| The in-Inspect assistant | **Scripted** — fixed answers per board; no model is called |
 
 ---
 
