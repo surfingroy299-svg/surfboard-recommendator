@@ -10,6 +10,7 @@ dist/
 .vscode/
 .claude/settings.local.json
 .claude/worktrees/
+.claude/skills/
 
-# Earlier, untracked design exploration lives alongside this repo and is not part of the tracked product
-design-exploration/
+# design-exploration/ is tracked as project history (see its README). Only its
+# build output is excluded, which the node_modules/ and dist/ rules above already do.

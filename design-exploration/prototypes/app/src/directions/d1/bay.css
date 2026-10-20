@@ -1,0 +1,132 @@
+/* Direction 01 — The Shaping Bay. Independent visual system (bay- prefix). */
+.bay-root {
+  --bay-plaster: #efe6d8;
+  --bay-wood: #c89b6c;
+  --bay-umber: #4a3b2c;
+  --bay-teal: #2e6e65;
+  --bay-slate: #2f3230;
+  --bay-chalk: #f8f5ec;
+  --bay-ink: #2a241c;
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
+  background: #171310;
+  font-family: 'Inter', sans-serif;
+}
+.bay-canvas { position: absolute; inset: 0; }
+.bay-canvas canvas { touch-action: none; }
+
+.bay-top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 18px;
+  padding: 14px 20px;
+  color: var(--bay-plaster);
+  pointer-events: none;
+  z-index: 5;
+}
+.bay-top a { pointer-events: auto; }
+.bay-back { color: #b7a98f; text-decoration: none; font-size: 13px; }
+.bay-station { font: 600 17px 'Fraunces', serif; }
+.bay-hint { font-size: 12px; color: #a6987e; margin-left: auto; }
+
+.bay-rack {
+  position: absolute;
+  left: 18px;
+  top: 64px;
+  width: 240px;
+  z-index: 5;
+  color: var(--bay-ink);
+}
+.bay-rack-label { font: 600 11px 'Inter'; letter-spacing: 0.16em; text-transform: uppercase; color: #b7a98f; margin-bottom: 8px; }
+.bay-tag {
+  background: var(--bay-plaster);
+  border-left: 4px solid var(--bay-teal);
+  padding: 8px 10px;
+  margin-bottom: 8px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.45);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 2px 8px;
+}
+.bay-tag.is-focus { border-left-color: var(--bay-wood); background: #fff8ec; }
+.bay-tag-name { font: 600 13.5px 'Fraunces', serif; background: none; border: none; padding: 0; cursor: pointer; text-align: left; color: var(--bay-ink); }
+.bay-tag-name em { font-style: normal; color: #b7a98f; font: 700 10px 'Inter'; margin-right: 4px; }
+.bay-tag-role { grid-column: 1; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--bay-teal); }
+.bay-tag-actions { grid-row: 1 / span 2; display: flex; gap: 6px; align-items: center; }
+.bay-check, .bay-cross { width: 26px; height: 26px; border: 1.5px solid #b9ab90; background: none; cursor: pointer; font-size: 13px; color: #b9ab90; }
+.bay-check.is-on { background: var(--bay-teal); border-color: var(--bay-teal); color: var(--bay-chalk); }
+.bay-cross { color: #a05a3c; border-color: #cbb39e; }
+.bay-cross:disabled { opacity: 0.35; cursor: not-allowed; }
+.bay-swapnote { background: #fff8ec; border-left: 4px solid var(--bay-wood); padding: 8px 10px; font-size: 12px; line-height: 1.5; box-shadow: 0 3px 8px rgba(0,0,0,0.45); }
+.bay-swapnote button { margin-top: 6px; font: 600 11px 'Inter'; background: none; border: 1px solid #b9ab90; padding: 3px 8px; cursor: pointer; }
+
+.bay-board {
+  position: absolute;
+  right: 18px;
+  top: 64px;
+  width: 300px;
+  background: var(--bay-slate);
+  color: var(--bay-chalk);
+  padding: 16px 18px 18px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+  border: 6px solid #5b4632;
+  z-index: 5;
+  font-size: 13px;
+  line-height: 1.55;
+}
+.bay-board-title { font: 600 18px 'Fraunces', serif; margin-bottom: 4px; }
+.bay-board-role { font: 500 10px 'Inter'; letter-spacing: 0.14em; text-transform: uppercase; color: #9fd0c5; margin-left: 6px; }
+.bay-board-why { color: #ded9cb; font-style: italic; font-family: 'Fraunces', serif; }
+.bay-chalkline { font-family: 'IBM Plex Mono', monospace; font-size: 12px; margin-top: 8px; color: #cfe6df; font-variant-numeric: tabular-nums; }
+.bay-chalk-size { font-weight: 700; }
+.bay-flagline { color: #e8c27a; font-size: 11.5px; }
+.bay-adv { color: #aee0c9; margin: 8px 0 0; }
+.bay-trade { color: #e0b39e; margin: 2px 0 0; }
+.bay-hotspot-note { border-top: 1px dashed #6b6a5f; margin-top: 10px; padding-top: 8px; color: #f2eee0; font-family: 'Fraunces', serif; font-style: italic; }
+.bay-gaps { color: #9a978c; font-size: 11px; margin-top: 8px; }
+.bay-delta { display: flex; gap: 10px; padding: 4px 0; border-bottom: 1px dashed #565a55; }
+.bay-delta-key { width: 120px; color: #b8c9c0; font-family: 'IBM Plex Mono', monospace; font-size: 11px; }
+.bay-board-note { color: #9a978c; font-size: 11px; margin-top: 8px; }
+.bay-exit { margin-top: 10px; background: none; border: 1px solid #6b6a5f; color: var(--bay-chalk); font: 600 11px 'Inter'; padding: 4px 10px; cursor: pointer; }
+
+.bay-hotspot {
+  min-width: 34px;
+  height: 24px;
+  padding: 0 8px;
+  border-radius: 999px;
+  border: 2px solid var(--bay-teal);
+  background: rgba(239, 230, 216, 0.92);
+  color: var(--bay-teal);
+  font: 600 8.5px 'Inter';
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+.bay-hotspot:hover { background: var(--bay-teal); color: var(--bay-chalk); }
+
+.bay-foot {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 20px;
+  color: #8b7f6a;
+  font-size: 11px;
+  z-index: 5;
+}
+.bay-honesty { color: #6f6555; }
+
+.bay-fallback { background: var(--bay-plaster); }
+.bay-fallback .bay-top { color: var(--bay-ink); position: static; }
+.bay-fallback-body { padding: 20px; color: var(--bay-ink); }
+.bay-fallback-body .bay-rack, .bay-fallback-body .bay-board { position: static; width: auto; max-width: 420px; margin-bottom: 16px; }
+
+:focus-visible { outline: 2px solid var(--bay-teal); outline-offset: 2px; }

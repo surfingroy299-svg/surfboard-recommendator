@@ -1,0 +1,992 @@
+{
+ "_source": "boards data/brands/channel_islands.json \u2014 REAL PRODUCT DATA, verbatim subset (5 of 10 models). Extracted 2026-07-22.",
+ "brand": "Channel Islands",
+ "models": [
+  {
+   "model_id": "ci_better_everyday",
+   "model_name": "Better Everyday",
+   "category": "groveler",
+   "ideal_conditions": {
+    "wave_size": [
+     "small"
+    ],
+    "wave_power": [
+     "weak",
+     "moderate"
+    ]
+   },
+   "condition_range": {
+    "min_wave_ft": 1,
+    "min_wave_ft_display": "1 ft",
+    "max_wave_ft": 5,
+    "max_wave_ft_display": "5 ft"
+   },
+   "condition_tags": [
+    "small_wave",
+    "groveler",
+    "everyday_board",
+    "quad",
+    "fun"
+   ],
+   "surfer_fit_profile": {
+    "level_range": {
+     "min": "beginner_intermediate",
+     "max": "advanced"
+    },
+    "helps_with": [
+     "speed_generation_in_weak_surf",
+     "loose_turns",
+     "small_wave_fun"
+    ],
+    "requires": [
+     "basic_surfing_ability"
+    ],
+    "fit_notes": "2025 evolution of the Happy Everyday. Five fin boxes with quad as stock setup. The relaxed hip and swallow tail give a loose, skatey feel suited to weak everyday surf."
+   },
+   "performance_traits": {
+    "paddling_ease": 5,
+    "speed_generation": 4,
+    "maneuverability": 4,
+    "stability": 4,
+    "forgiveness": 4
+   },
+   "performance_tags": [
+    "small_wave",
+    "quad",
+    "skatey",
+    "fun",
+    "loose",
+    "everyday"
+   ],
+   "display_description": [
+    "2025 evolution of the Happy Everyday \u2014 smoother bottom turns, looser off the top.",
+    "Five fin boxes with quad as stock; swallow tail adds bite in weak surf.",
+    "Wide size range suits everyone from beginners to advanced surfers chasing fun in small waves."
+   ],
+   "variant_label": "PU",
+   "construction_type": "pu_polyester",
+   "shape_profile": {
+    "tail_shape": "swallow",
+    "rocker": "medium_with_flip_at_tail",
+    "concave": "unknown",
+    "rails": "unknown"
+   },
+   "fin_setup_compatibility": [
+    "single",
+    "twin",
+    "thruster",
+    "quad",
+    "5_fin",
+    "bonzer"
+   ],
+   "recommended_fin_setup": "quad",
+   "stock_dimensions": [
+    {
+     "dimension_id": "ci_be_54",
+     "length": 5.4,
+     "length_display": "5'4\"",
+     "width": 18.25,
+     "width_display": "18 1/4\"",
+     "thickness": 2.125,
+     "thickness_display": "2 1/8\"",
+     "volume_liters": 22.3,
+     "volume_display": "22.3L"
+    },
+    {
+     "dimension_id": "ci_be_55",
+     "length": 5.5,
+     "length_display": "5'5\"",
+     "width": 18.5,
+     "width_display": "18 1/2\"",
+     "thickness": 2.1875,
+     "thickness_display": "2 3/16\"",
+     "volume_liters": 23.6,
+     "volume_display": "23.6L"
+    },
+    {
+     "dimension_id": "ci_be_56",
+     "length": 5.6,
+     "length_display": "5'6\"",
+     "width": 18.75,
+     "width_display": "18 3/4\"",
+     "thickness": 2.25,
+     "thickness_display": "2 1/4\"",
+     "volume_liters": 24.9,
+     "volume_display": "24.9L"
+    },
+    {
+     "dimension_id": "ci_be_57",
+     "length": 5.7,
+     "length_display": "5'7\"",
+     "width": 19.0,
+     "width_display": "19\"",
+     "thickness": 2.3125,
+     "thickness_display": "2 5/16\"",
+     "volume_liters": 26.3,
+     "volume_display": "26.3L"
+    },
+    {
+     "dimension_id": "ci_be_58",
+     "length": 5.8,
+     "length_display": "5'8\"",
+     "width": 19.25,
+     "width_display": "19 1/4\"",
+     "thickness": 2.375,
+     "thickness_display": "2 3/8\"",
+     "volume_liters": 27.8,
+     "volume_display": "27.8L"
+    },
+    {
+     "dimension_id": "ci_be_59",
+     "length": 5.9,
+     "length_display": "5'9\"",
+     "width": 19.5,
+     "width_display": "19 1/2\"",
+     "thickness": 2.4375,
+     "thickness_display": "2 7/16\"",
+     "volume_liters": 29.3,
+     "volume_display": "29.3L"
+    },
+    {
+     "dimension_id": "ci_be_510",
+     "length": 5.1,
+     "length_display": "5'10\"",
+     "width": 19.75,
+     "width_display": "19 3/4\"",
+     "thickness": 2.5,
+     "thickness_display": "2 1/2\"",
+     "volume_liters": 30.8,
+     "volume_display": "30.8L"
+    },
+    {
+     "dimension_id": "ci_be_511",
+     "length": 5.11,
+     "length_display": "5'11\"",
+     "width": 20.0,
+     "width_display": "20\"",
+     "thickness": 2.5625,
+     "thickness_display": "2 9/16\"",
+     "volume_liters": 32.4,
+     "volume_display": "32.4L"
+    },
+    {
+     "dimension_id": "ci_be_60",
+     "length": 6.0,
+     "length_display": "6'0\"",
+     "width": 20.25,
+     "width_display": "20 1/4\"",
+     "thickness": 2.625,
+     "thickness_display": "2 5/8\"",
+     "volume_liters": 34.1,
+     "volume_display": "34.1L"
+    },
+    {
+     "dimension_id": "ci_be_61",
+     "length": 6.1,
+     "length_display": "6'1\"",
+     "width": 20.5,
+     "width_display": "20 1/2\"",
+     "thickness": 2.625,
+     "thickness_display": "2 5/8\"",
+     "volume_liters": 35.0,
+     "volume_display": "35.0L"
+    },
+    {
+     "dimension_id": "ci_be_62",
+     "length": 6.2,
+     "length_display": "6'2\"",
+     "width": 20.625,
+     "width_display": "20 5/8\"",
+     "thickness": 2.75,
+     "thickness_display": "2 3/4\"",
+     "volume_liters": 37.3,
+     "volume_display": "37.3L"
+    },
+    {
+     "dimension_id": "ci_be_63",
+     "length": 6.3,
+     "length_display": "6'3\"",
+     "width": 20.75,
+     "width_display": "20 3/4\"",
+     "thickness": 2.75,
+     "thickness_display": "2 3/4\"",
+     "volume_liters": 38.1,
+     "volume_display": "38.1L"
+    },
+    {
+     "dimension_id": "ci_be_64",
+     "length": 6.4,
+     "length_display": "6'4\"",
+     "width": 21.0,
+     "width_display": "21\"",
+     "thickness": 2.875,
+     "thickness_display": "2 7/8\"",
+     "volume_liters": 40.8,
+     "volume_display": "40.8L"
+    }
+   ]
+  },
+  {
+   "model_id": "ci_g_skate",
+   "model_name": "G Skate",
+   "category": "hybrid",
+   "ideal_conditions": {
+    "wave_size": [
+     "small",
+     "medium"
+    ],
+    "wave_power": [
+     "weak",
+     "moderate"
+    ]
+   },
+   "condition_range": {
+    "min_wave_ft": 1,
+    "min_wave_ft_display": "1 ft",
+    "max_wave_ft": 10,
+    "max_wave_ft_display": "10 ft"
+   },
+   "condition_tags": [
+    "small_wave",
+    "hybrid",
+    "skatey",
+    "fun",
+    "versatile"
+   ],
+   "surfer_fit_profile": {
+    "level_range": {
+     "min": "intermediate",
+     "max": "advanced"
+    },
+    "helps_with": [
+     "generating_speed_on_flat_sections",
+     "skatey_turns",
+     "having_fun_in_mixed_conditions"
+    ],
+    "requires": [
+     "basic_shortboard_ability"
+    ],
+    "fit_notes": "Gudauskas brothers collaboration. Ride 3\u20136 inches shorter than your CI Pro at the same thickness. The 2+1 setup gives the free feel of a twin with added control from the trailer."
+   },
+   "performance_traits": {
+    "paddling_ease": 4,
+    "speed_generation": 4,
+    "maneuverability": 4,
+    "stability": 3,
+    "forgiveness": 3
+   },
+   "performance_tags": [
+    "skatey",
+    "fast",
+    "twin",
+    "fun",
+    "short",
+    "hybrid"
+   ],
+   "display_description": [
+    "Gudauskas brothers hybrid \u2014 fast, skatey, and built for pure stoke.",
+    "Shortened rail lines and forward wide point create a loose, playful feel.",
+    "2+1 setup blends twin fin freedom with thruster control."
+   ],
+   "variant_label": "PU",
+   "construction_type": "pu_polyester",
+   "shape_profile": {
+    "tail_shape": "swallow",
+    "rocker": "low_entry",
+    "concave": "single_to_double",
+    "rails": "contemporary_shortboard"
+   },
+   "fin_setup_compatibility": [
+    "2_plus_1",
+    "thruster"
+   ],
+   "recommended_fin_setup": "2_plus_1",
+   "stock_dimensions": [
+    {
+     "dimension_id": "ci_gs_52",
+     "length": 5.2,
+     "length_display": "5'2\"",
+     "width": 18.75,
+     "width_display": "18 3/4\"",
+     "thickness": 2.3125,
+     "thickness_display": "2 5/16\"",
+     "volume_liters": 25.3,
+     "volume_display": "25.3L"
+    },
+    {
+     "dimension_id": "ci_gs_54",
+     "length": 5.4,
+     "length_display": "5'4\"",
+     "width": 19.0,
+     "width_display": "19\"",
+     "thickness": 2.375,
+     "thickness_display": "2 3/8\"",
+     "volume_liters": 27.2,
+     "volume_display": "27.2L"
+    },
+    {
+     "dimension_id": "ci_gs_56",
+     "length": 5.6,
+     "length_display": "5'6\"",
+     "width": 19.25,
+     "width_display": "19 1/4\"",
+     "thickness": 2.4375,
+     "thickness_display": "2 7/16\"",
+     "volume_liters": 29.1,
+     "volume_display": "29.1L"
+    },
+    {
+     "dimension_id": "ci_gs_58",
+     "length": 5.8,
+     "length_display": "5'8\"",
+     "width": 19.625,
+     "width_display": "19 5/8\"",
+     "thickness": 2.5,
+     "thickness_display": "2 1/2\"",
+     "volume_liters": 31.4,
+     "volume_display": "31.4L"
+    },
+    {
+     "dimension_id": "ci_gs_510",
+     "length": 5.1,
+     "length_display": "5'10\"",
+     "width": 20.0,
+     "width_display": "20\"",
+     "thickness": 2.625,
+     "thickness_display": "2 5/8\"",
+     "volume_liters": 34.5,
+     "volume_display": "34.5L"
+    },
+    {
+     "dimension_id": "ci_gs_60",
+     "length": 6.0,
+     "length_display": "6'0\"",
+     "width": 20.5,
+     "width_display": "20 1/2\"",
+     "thickness": 2.75,
+     "thickness_display": "2 3/4\"",
+     "volume_liters": 38.0,
+     "volume_display": "38.0L"
+    },
+    {
+     "dimension_id": "ci_gs_62",
+     "length": 6.2,
+     "length_display": "6'2\"",
+     "width": 21.0,
+     "width_display": "21\"",
+     "thickness": 2.875,
+     "thickness_display": "2 7/8\"",
+     "volume_liters": 41.5,
+     "volume_display": "41.5L"
+    },
+    {
+     "dimension_id": "ci_gs_64",
+     "length": 6.4,
+     "length_display": "6'4\"",
+     "width": 21.375,
+     "width_display": "21 3/8\"",
+     "thickness": 3.0,
+     "thickness_display": "3\"",
+     "volume_liters": 45.2,
+     "volume_display": "45.2L"
+    },
+    {
+     "dimension_id": "ci_gs_66",
+     "length": 6.6,
+     "length_display": "6'6\"",
+     "width": 21.75,
+     "width_display": "21 3/4\"",
+     "thickness": 3.0,
+     "thickness_display": "3\"",
+     "volume_liters": 47.2,
+     "volume_display": "47.2L"
+    }
+   ]
+  },
+  {
+   "model_id": "ci_two_happy",
+   "model_name": "Two Happy",
+   "category": "shortboard",
+   "ideal_conditions": {
+    "wave_size": [
+     "small",
+     "medium"
+    ],
+    "wave_power": [
+     "weak",
+     "moderate"
+    ]
+   },
+   "condition_range": {
+    "min_wave_ft": 1,
+    "min_wave_ft_display": "1 ft",
+    "max_wave_ft": 6,
+    "max_wave_ft_display": "6 ft"
+   },
+   "condition_tags": [
+    "everyday_board",
+    "small_wave",
+    "forgiving",
+    "versatile"
+   ],
+   "surfer_fit_profile": {
+    "level_range": {
+     "min": "lower_intermediate",
+     "max": "upper_intermediate"
+    },
+    "helps_with": [
+     "speed_generation",
+     "wave_entry",
+     "flow_through_turns"
+    ],
+    "requires": [
+     "basic_turn_control"
+    ],
+    "fit_notes": "More user-friendly version of the Happy. Fuller rails and a wider tail block reward surfers who are building confidence in their surfing. Good daily driver for intermediates."
+   },
+   "performance_traits": {
+    "paddling_ease": 4,
+    "speed_generation": 4,
+    "maneuverability": 3,
+    "stability": 4,
+    "forgiveness": 4
+   },
+   "performance_tags": [
+    "fast",
+    "flow",
+    "forgiving",
+    "accessible",
+    "everyday"
+   ],
+   "display_description": [
+    "A more accessible version of the Happy \u2014 same speed and flow, friendlier feel.",
+    "Fuller rails and wider tail block make it easier to paddle and accelerate.",
+    "Ideal daily driver for intermediate surfers in everyday surf."
+   ],
+   "variant_label": "PU",
+   "construction_type": "pu_polyester",
+   "shape_profile": {
+    "tail_shape": "unknown",
+    "rocker": "medium",
+    "concave": "double",
+    "rails": "full_medium_to_full"
+   },
+   "fin_setup_compatibility": [
+    "single",
+    "twin",
+    "thruster",
+    "quad",
+    "5_fin",
+    "bonzer"
+   ],
+   "recommended_fin_setup": "thruster",
+   "stock_dimensions": [
+    {
+     "dimension_id": "ci_two_happy_58",
+     "length": 5.8,
+     "length_display": "5'8\"",
+     "width": 18.25,
+     "width_display": "18 1/4\"",
+     "thickness": 2.1875,
+     "thickness_display": "2 3/16\"",
+     "volume_liters": 24.1,
+     "volume_display": "24.1L"
+    },
+    {
+     "dimension_id": "ci_two_happy_59",
+     "length": 5.9,
+     "length_display": "5'9\"",
+     "width": 18.375,
+     "width_display": "18 3/8\"",
+     "thickness": 2.25,
+     "thickness_display": "2 1/4\"",
+     "volume_liters": 25.3,
+     "volume_display": "25.3L"
+    },
+    {
+     "dimension_id": "ci_two_happy_510",
+     "length": 5.1,
+     "length_display": "5'10\"",
+     "width": 18.625,
+     "width_display": "18 5/8\"",
+     "thickness": 2.3125,
+     "thickness_display": "2 5/16\"",
+     "volume_liters": 26.7,
+     "volume_display": "26.7L"
+    },
+    {
+     "dimension_id": "ci_two_happy_511",
+     "length": 5.11,
+     "length_display": "5'11\"",
+     "width": 18.875,
+     "width_display": "18 7/8\"",
+     "thickness": 2.375,
+     "thickness_display": "2 3/8\"",
+     "volume_liters": 28.2,
+     "volume_display": "28.2L"
+    },
+    {
+     "dimension_id": "ci_two_happy_60",
+     "length": 6.0,
+     "length_display": "6'0\"",
+     "width": 19.125,
+     "width_display": "19 1/8\"",
+     "thickness": 2.4375,
+     "thickness_display": "2 7/16\"",
+     "volume_liters": 29.7,
+     "volume_display": "29.7L"
+    },
+    {
+     "dimension_id": "ci_two_happy_61",
+     "length": 6.1,
+     "length_display": "6'1\"",
+     "width": 19.25,
+     "width_display": "19 1/4\"",
+     "thickness": 2.5,
+     "thickness_display": "2 1/2\"",
+     "volume_liters": 31.1,
+     "volume_display": "31.1L"
+    },
+    {
+     "dimension_id": "ci_two_happy_62",
+     "length": 6.2,
+     "length_display": "6'2\"",
+     "width": 19.5,
+     "width_display": "19 1/2\"",
+     "thickness": 2.5625,
+     "thickness_display": "2 9/16\"",
+     "volume_liters": 32.7,
+     "volume_display": "32.7L"
+    },
+    {
+     "dimension_id": "ci_two_happy_63",
+     "length": 6.3,
+     "length_display": "6'3\"",
+     "width": 19.875,
+     "width_display": "19 7/8\"",
+     "thickness": 2.625,
+     "thickness_display": "2 5/8\"",
+     "volume_liters": 34.5,
+     "volume_display": "34.5L"
+    },
+    {
+     "dimension_id": "ci_two_happy_64",
+     "length": 6.4,
+     "length_display": "6'4\"",
+     "width": 20.125,
+     "width_display": "20 1/8\"",
+     "thickness": 2.75,
+     "thickness_display": "2 3/4\"",
+     "volume_liters": 37.1,
+     "volume_display": "37.1L"
+    },
+    {
+     "dimension_id": "ci_two_happy_66",
+     "length": 6.6,
+     "length_display": "6'6\"",
+     "width": 20.5,
+     "width_display": "20 1/2\"",
+     "thickness": 2.875,
+     "thickness_display": "2 7/8\"",
+     "volume_liters": 40.4,
+     "volume_display": "40.4L"
+    }
+   ]
+  },
+  {
+   "model_id": "ci_dumpster_diver_2",
+   "model_name": "Dumpster Diver 2",
+   "category": "groveler",
+   "ideal_conditions": {
+    "wave_size": [
+     "small",
+     "medium"
+    ],
+    "wave_power": [
+     "weak",
+     "moderate"
+    ]
+   },
+   "condition_range": {
+    "min_wave_ft": 1,
+    "min_wave_ft_display": "1 ft",
+    "max_wave_ft": 6,
+    "max_wave_ft_display": "6 ft"
+   },
+   "condition_tags": [
+    "small_wave",
+    "groveler",
+    "fish",
+    "wide_nose",
+    "versatile"
+   ],
+   "surfer_fit_profile": {
+    "level_range": {
+     "min": "intermediate",
+     "max": "advanced"
+    },
+    "helps_with": [
+     "paddling_into_weak_waves",
+     "generating_speed_in_gutless_surf",
+     "down_the_line_speed"
+    ],
+    "requires": [
+     "ability_to_generate_speed",
+     "basic_turn_control"
+    ],
+    "fit_notes": "Ride 1 inch shorter than your Happy Everyday. Wider nose and tail with more rocker than the original DD gives it a different character \u2014 more volume up front for paddle power while the subtle concave keeps it lively."
+   },
+   "performance_traits": {
+    "paddling_ease": 5,
+    "speed_generation": 4,
+    "maneuverability": 3,
+    "stability": 4,
+    "forgiveness": 4
+   },
+   "performance_tags": [
+    "groveler",
+    "fish",
+    "small_wave",
+    "paddle_power",
+    "wide"
+   ],
+   "display_description": [
+    "Updated fish-groveler with wider nose and tail and more rocker than the original.",
+    "Subtle single concave keeps speed and response in weak, gutless surf.",
+    "Ride it 1 inch shorter than your everyday board for the right feel."
+   ],
+   "variant_label": "PU",
+   "construction_type": "pu_polyester",
+   "shape_profile": {
+    "tail_shape": "unknown",
+    "rocker": "medium_nose_and_tail",
+    "concave": "subtle_single",
+    "rails": "unknown"
+   },
+   "fin_setup_compatibility": [
+    "thruster"
+   ],
+   "recommended_fin_setup": "thruster",
+   "stock_dimensions": [
+    {
+     "dimension_id": "ci_dd2_54",
+     "length": 5.4,
+     "length_display": "5'4\"",
+     "width": 18.875,
+     "width_display": "18 7/8\"",
+     "thickness": 2.1875,
+     "thickness_display": "2 3/16\"",
+     "volume_liters": 24.1,
+     "volume_display": "24.1L"
+    },
+    {
+     "dimension_id": "ci_dd2_55",
+     "length": 5.5,
+     "length_display": "5'5\"",
+     "width": 19.0,
+     "width_display": "19\"",
+     "thickness": 2.25,
+     "thickness_display": "2 1/4\"",
+     "volume_liters": 25.3,
+     "volume_display": "25.3L"
+    },
+    {
+     "dimension_id": "ci_dd2_56",
+     "length": 5.6,
+     "length_display": "5'6\"",
+     "width": 19.125,
+     "width_display": "19 1/8\"",
+     "thickness": 2.3125,
+     "thickness_display": "2 5/16\"",
+     "volume_liters": 26.5,
+     "volume_display": "26.5L"
+    },
+    {
+     "dimension_id": "ci_dd2_57",
+     "length": 5.7,
+     "length_display": "5'7\"",
+     "width": 19.25,
+     "width_display": "19 1/4\"",
+     "thickness": 2.375,
+     "thickness_display": "2 3/8\"",
+     "volume_liters": 27.8,
+     "volume_display": "27.8L"
+    },
+    {
+     "dimension_id": "ci_dd2_58",
+     "length": 5.8,
+     "length_display": "5'8\"",
+     "width": 19.5,
+     "width_display": "19 1/2\"",
+     "thickness": 2.4375,
+     "thickness_display": "2 7/16\"",
+     "volume_liters": 29.3,
+     "volume_display": "29.3L"
+    },
+    {
+     "dimension_id": "ci_dd2_59",
+     "length": 5.9,
+     "length_display": "5'9\"",
+     "width": 19.75,
+     "width_display": "19 3/4\"",
+     "thickness": 2.5,
+     "thickness_display": "2 1/2\"",
+     "volume_liters": 30.8,
+     "volume_display": "30.8L"
+    },
+    {
+     "dimension_id": "ci_dd2_510",
+     "length": 5.1,
+     "length_display": "5'10\"",
+     "width": 20.0,
+     "width_display": "20\"",
+     "thickness": 2.5625,
+     "thickness_display": "2 9/16\"",
+     "volume_liters": 32.4,
+     "volume_display": "32.4L"
+    },
+    {
+     "dimension_id": "ci_dd2_511",
+     "length": 5.11,
+     "length_display": "5'11\"",
+     "width": 20.25,
+     "width_display": "20 1/4\"",
+     "thickness": 2.625,
+     "thickness_display": "2 5/8\"",
+     "volume_liters": 34.0,
+     "volume_display": "34.0L"
+    },
+    {
+     "dimension_id": "ci_dd2_60",
+     "length": 6.0,
+     "length_display": "6'0\"",
+     "width": 20.5,
+     "width_display": "20 1/2\"",
+     "thickness": 2.6875,
+     "thickness_display": "2 11/16\"",
+     "volume_liters": 35.7,
+     "volume_display": "35.7L"
+    },
+    {
+     "dimension_id": "ci_dd2_61",
+     "length": 6.1,
+     "length_display": "6'1\"",
+     "width": 20.625,
+     "width_display": "20 5/8\"",
+     "thickness": 2.75,
+     "thickness_display": "2 3/4\"",
+     "volume_liters": 37.2,
+     "volume_display": "37.2L"
+    },
+    {
+     "dimension_id": "ci_dd2_62",
+     "length": 6.2,
+     "length_display": "6'2\"",
+     "width": 20.75,
+     "width_display": "20 3/4\"",
+     "thickness": 2.875,
+     "thickness_display": "2 7/8\"",
+     "volume_liters": 39.6,
+     "volume_display": "39.6L"
+    },
+    {
+     "dimension_id": "ci_dd2_63",
+     "length": 6.3,
+     "length_display": "6'3\"",
+     "width": 20.875,
+     "width_display": "20 7/8\"",
+     "thickness": 2.875,
+     "thickness_display": "2 7/8\"",
+     "volume_liters": 40.4,
+     "volume_display": "40.4L"
+    },
+    {
+     "dimension_id": "ci_dd2_64",
+     "length": 6.4,
+     "length_display": "6'4\"",
+     "width": 21.125,
+     "width_display": "21 1/8\"",
+     "thickness": 3.0,
+     "thickness_display": "3\"",
+     "volume_liters": 43.1,
+     "volume_display": "43.1L"
+    }
+   ]
+  },
+  {
+   "model_id": "ci_fever",
+   "model_name": "Fever",
+   "category": "shortboard",
+   "ideal_conditions": {
+    "wave_size": [
+     "small",
+     "medium"
+    ],
+    "wave_power": [
+     "weak",
+     "moderate"
+    ]
+   },
+   "condition_range": {
+    "min_wave_ft": 2,
+    "min_wave_ft_display": "2 ft",
+    "max_wave_ft": 6,
+    "max_wave_ft_display": "6 ft"
+   },
+   "condition_tags": [
+    "everyday_board",
+    "performance",
+    "speed",
+    "forgiving"
+   ],
+   "surfer_fit_profile": {
+    "level_range": {
+     "min": "intermediate",
+     "max": "advanced"
+    },
+    "helps_with": [
+     "generating_speed",
+     "creative_surfing",
+     "pocket_surfing"
+    ],
+    "requires": [
+     "basic_turn_control",
+     "reading_wave_sections"
+    ],
+    "fit_notes": "Designed with Mike Andrews and Patrick Gudauskas. A slightly more parallel outline and forgiving rocker gives it a wider sweet spot than a pure competition board."
+   },
+   "performance_traits": {
+    "paddling_ease": 3,
+    "speed_generation": 4,
+    "maneuverability": 4,
+    "stability": 3,
+    "forgiveness": 3
+   },
+   "performance_tags": [
+    "speed",
+    "creative",
+    "forgiving",
+    "everyday",
+    "zesty"
+   ],
+   "display_description": [
+    "Performance shortboard rooted in Al Merrick's proven designs.",
+    "Flattened nose and tail rocker delivers speed; hip squash tail adds pivot.",
+    "Wider sweet spot makes it accessible for intermediates chasing performance."
+   ],
+   "variant_label": "Standard",
+   "construction_type": "pu_polyester",
+   "shape_profile": {
+    "tail_shape": "hip_squash",
+    "rocker": "flat_nose_and_tail",
+    "concave": "single",
+    "rails": "medium"
+   },
+   "fin_setup_compatibility": [
+    "thruster"
+   ],
+   "recommended_fin_setup": "thruster",
+   "stock_dimensions": [
+    {
+     "dimension_id": "ci_fever_58",
+     "length": 5.8,
+     "length_display": "5'8\"",
+     "width": 18.25,
+     "width_display": "18 1/4\"",
+     "thickness": 2.1875,
+     "thickness_display": "2 3/16\"",
+     "volume_liters": 23.9,
+     "volume_display": "23.9L"
+    },
+    {
+     "dimension_id": "ci_fever_59",
+     "length": 5.9,
+     "length_display": "5'9\"",
+     "width": 18.375,
+     "width_display": "18 3/8\"",
+     "thickness": 2.25,
+     "thickness_display": "2 1/4\"",
+     "volume_liters": 25.1,
+     "volume_display": "25.1L"
+    },
+    {
+     "dimension_id": "ci_fever_510",
+     "length": 5.1,
+     "length_display": "5'10\"",
+     "width": 18.625,
+     "width_display": "18 5/8\"",
+     "thickness": 2.3125,
+     "thickness_display": "2 5/16\"",
+     "volume_liters": 26.5,
+     "volume_display": "26.5L"
+    },
+    {
+     "dimension_id": "ci_fever_511",
+     "length": 5.11,
+     "length_display": "5'11\"",
+     "width": 18.875,
+     "width_display": "18 7/8\"",
+     "thickness": 2.375,
+     "thickness_display": "2 3/8\"",
+     "volume_liters": 27.9,
+     "volume_display": "27.9L"
+    },
+    {
+     "dimension_id": "ci_fever_60",
+     "length": 6.0,
+     "length_display": "6'0\"",
+     "width": 19.125,
+     "width_display": "19 1/8\"",
+     "thickness": 2.4375,
+     "thickness_display": "2 7/16\"",
+     "volume_liters": 29.4,
+     "volume_display": "29.4L"
+    },
+    {
+     "dimension_id": "ci_fever_61",
+     "length": 6.1,
+     "length_display": "6'1\"",
+     "width": 19.25,
+     "width_display": "19 1/4\"",
+     "thickness": 2.5,
+     "thickness_display": "2 1/2\"",
+     "volume_liters": 30.8,
+     "volume_display": "30.8L"
+    },
+    {
+     "dimension_id": "ci_fever_62",
+     "length": 6.2,
+     "length_display": "6'2\"",
+     "width": 19.5,
+     "width_display": "19 1/2\"",
+     "thickness": 2.5625,
+     "thickness_display": "2 9/16\"",
+     "volume_liters": 32.4,
+     "volume_display": "32.4L"
+    },
+    {
+     "dimension_id": "ci_fever_63",
+     "length": 6.3,
+     "length_display": "6'3\"",
+     "width": 19.75,
+     "width_display": "19 3/4\"",
+     "thickness": 2.625,
+     "thickness_display": "2 5/8\"",
+     "volume_liters": 34.0,
+     "volume_display": "34.0L"
+    },
+    {
+     "dimension_id": "ci_fever_64",
+     "length": 6.4,
+     "length_display": "6'4\"",
+     "width": 20.0,
+     "width_display": "20\"",
+     "thickness": 2.75,
+     "thickness_display": "2 3/4\"",
+     "volume_liters": 36.6,
+     "volume_display": "36.6L"
+    }
+   ]
+  }
+ ]
+}

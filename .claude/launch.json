@@ -6,6 +6,12 @@
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "dev", "--prefix", "frontend/comparison-prototype"],
       "port": 5179
+    },
+    {
+      "name": "design-exploration",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev", "--prefix", "design-exploration/prototypes/app"],
+      "port": 5178
     }
   ]
 }
