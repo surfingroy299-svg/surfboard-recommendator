@@ -63,7 +63,10 @@ export interface Reading {
   uncertainty: string | null
   /** Short label for the board direction, e.g. "Groveler". */
   categoryLabel: string
+  /** What that category is for. */
   categoryNote: string
+  /** Present only when the category was a fallback rather than a positive choice. */
+  categoryCaveat: string | null
 }
 
 const key = (band: Band, sub: SubLevel) => `${band}/${sub}`
@@ -156,8 +159,12 @@ export function interpret(d: Derived): Reading {
     challenge,
     uncertainty,
     categoryLabel: CATEGORY_LABEL[d.category],
-    categoryNote: isFallbackCategory(signals)
-      ? 'sized against a standard shortboard, since your answers do not point clearly at one board type'
-      : CATEGORY_NOTE[d.category],
+    // Lead with what the category is. The caveat is still shown when the
+    // category was a fallback, but as a second, quieter line — at this point
+    // in the journey it should not be the first thing read.
+    categoryNote: CATEGORY_NOTE[d.category],
+    categoryCaveat: isFallbackCategory(signals)
+      ? 'Your answers do not single out one board type, so this is the standard baseline.'
+      : null,
   }
 }

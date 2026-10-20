@@ -27,6 +27,7 @@ export function BoardDirection({ derived }: { derived: Derived }) {
       </p>
       <p className="direction__name">{reading.categoryLabel}</p>
       <p className="direction__note">{reading.categoryNote}</p>
+      {reading.categoryCaveat && <p className="direction__caveat">{reading.categoryCaveat}</p>}
     </div>
   )
 }
