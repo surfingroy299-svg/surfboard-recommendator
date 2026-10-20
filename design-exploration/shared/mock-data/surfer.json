@@ -1,0 +1,86 @@
+{
+  "_label": "MOCK surfer (persona invented) — every derived value computed by hand from protected product rules; citations per node; math in derivation.md",
+  "persona": {
+    "_label": "MOCK",
+    "name": "Noa",
+    "blurb": "3 years in, surfs a weak beach break 2x/week, rides a friend's old shortboard, loses speed on everything."
+  },
+  "raw_answers": {
+    "_label": "MOCK selections using REAL normalized values from onboarding/onboarding-questions.md",
+    "Q1": "shortboard",
+    "Q2": ["loses_speed_easily"],
+    "Q3": "does_not_know_dimensions",
+    "Q4": null,
+    "Q5": ["cant_generate_speed_weak_waves"],
+    "Q6": ["wants_speed_and_flow"],
+    "Q7": "small_weak_waves",
+    "Q8": ["can_make_basic_turns", "can_link_turns", "can_link_turns_smoothly"],
+    "Q9": { "height_cm": 175, "weight_kg": 72 }
+  },
+  "profile": {
+    "_source": "REAL RULES — logic/translation-layer.md (axis derivations cited per axis); structure per logic/surfer-profile-schema.md",
+    "meta": {
+      "completeness": { "questions_answered": 8, "questions_total": 9, "skipped": ["Q4"], "skip_reasons": { "Q4": "user_did_not_know_dimensions" } },
+      "coherence": { "assessment": "consistent", "note": null },
+      "flags": [{ "type": "missing_dimensions", "note": "Board dimensions unavailable — fit assessed from feel signals only" }]
+    },
+    "physical": { "height": { "value": 175, "unit": "cm" }, "weight": { "value": 72, "unit": "kg" } },
+    "axes": {
+      "actual_surfing_level": {
+        "state": { "band": "intermediate", "sub_level": "upper", "edge_flags": [] },
+        "confidence": { "level": "high", "type": "consistent_signals", "basis": "Q8 coherent ascending range (basic→link→smooth); Q2 speed signal consistent with intermediate [translation-layer §6.1, §6.3]" },
+        "summary": "Upper-intermediate: links turns smoothly and manages speed through the wave."
+      },
+      "wave_context": {
+        "state": { "conditions": "weak", "usage_mode": "baseline", "perceived_demand_level": "low" },
+        "confidence": { "level": "high", "type": "consistent_signals", "basis": "Q7 small_weak_waves; Q5 cant_generate_speed_weak_waves reinforces [translation-layer §7.1–7.2]" },
+        "summary": "Small, weak waves are the baseline. The board must make its own speed."
+      },
+      "board_fit_mismatch": {
+        "state": { "fit": "limiting", "direction": "too_demanding", "cause": "category", "competing_causes": null, "conflict_explanation": null },
+        "confidence": { "level": "medium", "type": "data_gap", "basis": "No dimensions (Q3 gate); fit from feel signals only. Cause=category per shortboard + weak waves + speed signals [translation-layer §8.5]" },
+        "summary": "Shortboard in weak waves: the category can't self-generate speed there. Size unverifiable without dims."
+      },
+      "support_vs_performance_need": {
+        "state": { "position": "balanced", "alignment": "aligned" },
+        "confidence": { "level": "medium", "type": "consistent_signals", "basis": "Strong perf lean (Q8 high + speed goal) tempered by too_demanding board signal — conservative read: balanced [translation-layer §9.2; judgment note in derivation.md]" },
+        "summary": "Ready for lively equipment, not asking for extremes."
+      },
+      "user_intent": {
+        "state": {
+          "raw_intent": "more speed and flow on the wave",
+          "interpreted_intent": "improve speed and momentum in weak conditions — likely requires a board better suited to generating speed in low-power surf",
+          "intent_gap": "minor"
+        },
+        "confidence": { "level": "high", "type": "consistent_signals", "basis": "Q6 goal and Q5 pain are the same theme [translation-layer §10.2 Rule A]" },
+        "summary": "Wants speed and flow; the system reads it as a board-for-conditions problem, not technique."
+      }
+    }
+  },
+  "signals": {
+    "_source": "REAL RULES — logic/decision-layer.md §11 precedence tables; math in derivation.md",
+    "progression_direction": { "value": "redirect", "confidence": "high", "basis": "Shortboard in weak conditions is a category mismatch. A wave-appropriate category resolves the issue. [§11.1 P3; basis text mirrors the documented example]" },
+    "size_direction": { "value": "keep", "confidence": "high", "basis": "Cause is category, not size — baseline sizing formula applies to the new category. [§11.2 P3]" },
+    "category_direction": { "value": "change_likely", "confidence": "high", "basis": "too_demanding + category → move toward a more forgiving, wave-appropriate category (fish / hybrid / groveler). [§11.3 P3]" },
+    "challenge_level": { "value": "balanced", "confidence": "medium", "basis": "Fit is limiting (mildly wrong), position balanced. [§11.4 P6]" },
+    "intent_moderation": { "value": "partially_moderated", "confidence": "high", "basis": "intent_gap minor — goal kept, cause reframed. [§11.5]" },
+    "uncertainty_flags": ["insufficient_data"],
+    "_uncertainty_note": "axis 3 confidence.type=data_gap → insufficient_data [§11.6]. Presentation rule: 1 flag → note the specific uncertainty; recommendations remain valid."
+  },
+  "size_passes": {
+    "_source": "REAL RULES — logic/size-calculation-rules.md; groveler pass is the documented Example B verbatim; hybrid/shortboard passes computed identically (derivation.md)",
+    "groveler": {
+      "target_volume": { "min": 30.2, "max": 40.8, "note": "Recommended emphasis: middle of range." },
+      "target_length": { "min": 5.325, "min_display": "5'4\"", "max": 5.658, "max_display": "5'8\"", "note": "Volume and length targets may be difficult to satisfy simultaneously in this category. Board Matching Layer should flag if no available size falls within both ranges. [§12.3]" }
+    },
+    "hybrid": {
+      "target_volume": { "min": 29.6, "max": 40.0, "note": "Recommended emphasis: middle of range." },
+      "target_length": { "min": 5.658, "min_display": "5'8\"", "max": 5.992, "max_display": "6'0\"", "note": null }
+    },
+    "shortboard": {
+      "target_volume": { "min": 28.5, "max": 38.5, "note": "Recommended emphasis: middle of range." },
+      "target_length": { "min": 5.658, "min_display": "5'8\"", "max": 5.992, "max_display": "6'0\"", "note": null }
+    },
+    "split_size": { "active": false, "reason": null }
+  }
+}

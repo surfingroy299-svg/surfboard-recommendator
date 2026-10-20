@@ -1,0 +1,140 @@
+{
+  "_label": "Board evaluations hand-run per logic/board-matching-layer-rules.md against surfer.json (math: derivation.md). dimension notes = REAL-rule-derived unless marked. roles, why/advantage/tradeoff copy, replacements, refine chips = PROTOTYPE ASSUMPTION (agent spec does not exist), grounded in the evaluations below.",
+  "primary_set": ["ci_better_everyday", "ci_g_skate", "ci_two_happy"],
+  "pool": ["ci_dumpster_diver_2", "ci_fever"],
+  "boards": {
+    "ci_better_everyday": {
+      "model_name": "Better Everyday",
+      "category": "groveler",
+      "size_pass": "groveler",
+      "match_strength": "strong",
+      "match_average": 2.5,
+      "recommended_size": { "display": "6'1\" · 35.0L", "length_display": "6'1\"", "volume_liters": 35.0, "flag": "Volume-centered pick sits above the length target (5'4\"–5'8\") — flagged per size-calculation §12.3; sizes within the length window fall under the volume window." },
+      "dimension_assessments": {
+        "level_fit": { "result": "strong", "note": "Comfortably within the board's intended range." },
+        "condition_fit": { "result": "strong", "note": "Built for small, weak waves — matches the baseline conditions." },
+        "intent_fit": { "result": "strong", "note": "Directly addresses speed in weak surf (helps_with: speed_generation_in_weak_surf) and the speed-and-flow goal (speed_generation 4/5)." },
+        "requirement_fit": { "result": "unknown", "note": "Requirement 'basic_surfing_ability' not in evaluation vocabulary — cannot assess. We don't guess." },
+        "support_performance_fit": { "result": "moderate", "note": "Support-rich (support 4.3, performance 4.0) for a balanced surfer — bias toward ease over edge." },
+        "size_fit": { "result": "moderate", "note": "5'10\" (30.8L)–6'4\" (40.8L) sit in the volume window; the volume-centered size runs longer than the length target. Honest tension, flagged." },
+        "ride_feel_fit": { "result": "moderate", "note": "Swallow tail + mid rocker read neutral for this profile. Concave and rails: unknown — recorded as data gaps, not guessed." }
+      },
+      "data_gaps": ["concave", "rails", "requirement vocabulary"],
+      "role": "Comfortable Choice",
+      "why": "Your speed problem is a category problem: a shortboard can't make its own speed in weak waves. This is the small-wave workhorse answer — maximum paddle, maximum forgiveness, speed for free.",
+      "advantage": "Easiest wave-catching and the most forgiving ride of the three (paddling 5/5, forgiveness 4/5).",
+      "tradeoff": "The most board underfoot — turns are rounder and less snappy than the other two."
+    },
+    "ci_g_skate": {
+      "model_name": "G Skate",
+      "category": "hybrid",
+      "size_pass": "hybrid",
+      "match_strength": "strong",
+      "match_average": 2.83,
+      "recommended_size": { "display": "5'10\" · 34.5L", "length_display": "5'10\"", "volume_liters": 34.5, "flag": null },
+      "dimension_assessments": {
+        "level_fit": { "result": "strong", "note": "At the entry of the board's range — accessible; upper-intermediate skill means it won't feel out of reach." },
+        "condition_fit": { "result": "strong", "note": "Small-wave hybrid — matches weak, low-power baseline." },
+        "intent_fit": { "result": "strong", "note": "Fast tag + speed on flat sections is the pain point verbatim; speed_generation 4/5 meets the goal." },
+        "requirement_fit": { "result": "unknown", "note": "Requirement 'basic_shortboard_ability' not in evaluation vocabulary — cannot assess." },
+        "support_performance_fit": { "result": "moderate", "note": "Livelier balance (support 3.3, performance 4.0) — right at the edge of 'balanced', leaning playful." },
+        "size_fit": { "result": "strong", "note": "5'10\" (34.5L) lands inside BOTH the volume and length windows — the cleanest size fit in the set." },
+        "ride_feel_fit": { "result": "strong", "note": "Low entry rocker (good for weak waves), single-to-double concave (speed), shortboard-familiar rails. Sketch-level read — labeled." }
+      },
+      "data_gaps": ["requirement vocabulary"],
+      "role": "Best Match",
+      "why": "Fixes the category mismatch without giving up liveliness: it makes speed on flat sections — your exact frustration — and still turns like the boards you're used to.",
+      "advantage": "The cleanest overall fit: only board with size inside both target windows, and the strongest ride-feel read.",
+      "tradeoff": "Less pure paddle and forgiveness than the groveler (stability 3/5) — it asks a little more of you on the entry."
+    },
+    "ci_two_happy": {
+      "model_name": "Two Happy",
+      "category": "shortboard",
+      "size_pass": "shortboard",
+      "match_strength": "strong",
+      "match_average": 2.5,
+      "recommended_size": { "display": "6'2\" · 32.7L", "length_display": "6'2\"", "volume_liters": 32.7, "flag": "Volume-centered pick runs past the 6'0\" length target — flagged per size-calculation §12.3." },
+      "dimension_assessments": {
+        "level_fit": { "result": "strong", "note": "Aimed squarely at intermediates — you're at the top of its range." },
+        "condition_fit": { "result": "strong", "note": "Everyday/small-wave shortboard — holds up in the weak baseline." },
+        "intent_fit": { "result": "strong", "note": "Fast + flow tags; helps speed_generation and flow_through_turns — the stated goal, verbatim." },
+        "requirement_fit": { "result": "unknown", "note": "Requirement 'basic_turn_control' not in evaluation vocabulary — cannot assess." },
+        "support_performance_fit": { "result": "moderate", "note": "Support-leaning for a shortboard (support 4.0, performance 3.5) — forgiving for the family." },
+        "size_fit": { "result": "moderate", "note": "In the volume window at 6'0\"–6'2\"; the centered size just outruns the length target." },
+        "ride_feel_fit": { "result": "moderate", "note": "Double concave helps speed; medium rocker neutral in weak waves; tail shape unknown — data gap, not guessed." }
+      },
+      "data_gaps": ["tail_shape", "requirement vocabulary"],
+      "role": "Progression Option",
+      "why": "Stays in the shortboard family you know, but sized and shaped for real conditions — the 'keep the feel, fix the fit' path.",
+      "advantage": "The most familiar ride of the three — your muscle memory transfers directly.",
+      "tradeoff": "Weakest answer to truly gutless days — it still wants some push from the wave."
+    },
+    "ci_dumpster_diver_2": {
+      "model_name": "Dumpster Diver 2",
+      "category": "groveler",
+      "size_pass": "groveler",
+      "match_strength": "strong",
+      "match_average": 2.57,
+      "recommended_size": { "display": "6'0\" · 35.7L", "length_display": "6'0\"", "volume_liters": 35.7, "flag": "Volume-centered pick sits above the groveler length target — flagged per size-calculation §12.3." },
+      "dimension_assessments": {
+        "level_fit": { "result": "strong", "note": "At the entry of its range; accessible at upper-intermediate." },
+        "condition_fit": { "result": "strong", "note": "Gutless-surf specialist — the baseline conditions verbatim." },
+        "intent_fit": { "result": "strong", "note": "Paddling into weak waves + down-the-line speed address the pain directly." },
+        "requirement_fit": { "result": "strong", "note": "Speed-generation requirement met above threshold (near-match vocabulary mapping — PROTOTYPE ASSUMPTION, see derivation)." },
+        "support_performance_fit": { "result": "moderate", "note": "Paddle-heavy balance (support 4.3, performance 3.5)." },
+        "size_fit": { "result": "moderate", "note": "In the volume window across 5'10\"–6'2\"; centered size exceeds the length target — flagged." },
+        "ride_feel_fit": { "result": "moderate", "note": "Subtle single concave reads neutral for the speed intent; tail and rails unknown — data gaps." }
+      },
+      "data_gaps": ["tail_shape", "rails"],
+      "role": null,
+      "why": "The other groveler answer: same weak-wave job, more glide and paddle, calmer through turns.",
+      "advantage": "Best paddle-to-speed conversion on gutless days (paddling 5/5).",
+      "tradeoff": "Calmer rail-to-rail than the set it joins — less skate, more glide."
+    },
+    "ci_fever": {
+      "model_name": "Fever",
+      "category": "shortboard",
+      "size_pass": "shortboard",
+      "match_strength": "moderate",
+      "match_average": 2.43,
+      "recommended_size": { "display": "6'3\" · 34.0L", "length_display": "6'3\"", "volume_liters": 34.0, "flag": "Volume-centered pick exceeds the length target — flagged per size-calculation §12.3." },
+      "dimension_assessments": {
+        "level_fit": { "result": "strong", "note": "At the entry of its range." },
+        "condition_fit": { "result": "weak", "note": "Performance everyday board — no small-wave design intent; your baseline is weaker than its comfort zone. Kept as evidence, not excluded (soft mismatch)." },
+        "intent_fit": { "result": "strong", "note": "Speed generation and creative surfing meet the stated goal." },
+        "requirement_fit": { "result": "strong", "note": "Wave-section reading requirement met comfortably (near-match vocabulary mapping — PROTOTYPE ASSUMPTION)." },
+        "support_performance_fit": { "result": "moderate", "note": "Performance-leaning (support 3.0, performance 4.0)." },
+        "size_fit": { "result": "moderate", "note": "In the volume window; centered size runs long — flagged." },
+        "ride_feel_fit": { "result": "strong", "note": "Flat rocker (weak-wave friendly), squash-family tail, medium rails — the strongest shape read in the pool. Sketch-level, labeled." }
+      },
+      "data_gaps": [],
+      "role": null,
+      "why": "The performance-lean alternative: keeps a true shortboard feel and your speed goal, at the cost of weak-wave ease.",
+      "advantage": "Most responsive, most creative board in the whole set.",
+      "tradeoff": "Condition fit is honestly weak for your baseline — it needs more wave than your average day gives."
+    }
+  },
+  "replacements": {
+    "_label": "PROTOTYPE ASSUMPTION — deterministic mock of agent replacement reasoning; each entry trait-grounded in the evaluations above",
+    "on_reject": {
+      "ci_better_everyday": { "in": "ci_dumpster_diver_2", "reason": "Same small-wave groveler job — trades some looseness for glide and paddle.", "delta_in": "+ paddle glide", "delta_out": "− skatey looseness" },
+      "ci_g_skate": { "in": "ci_fever", "reason": "Keeps the speed goal with a truer shortboard feel — honest cost: weaker small-wave fit (flagged in its evaluation).", "delta_in": "+ response", "delta_out": "− weak-wave ease" },
+      "ci_two_happy": { "in": "ci_fever", "reason": "Further along the performance line: more creative, more demanding of the wave.", "delta_in": "+ creativity", "delta_out": "− forgiveness" },
+      "ci_dumpster_diver_2": { "in": "ci_better_everyday", "reason": "Back to the everyday groveler: same job, looser feel.", "delta_in": "+ looseness", "delta_out": "− glide" },
+      "ci_fever": { "in": "ci_g_skate", "reason": "Back toward the conditions: small-wave speed with hybrid ease.", "delta_in": "+ weak-wave speed", "delta_out": "− pure shortboard feel" }
+    },
+    "refine_chips": {
+      "easier_paddling": { "in": "ci_dumpster_diver_2", "reason": "Highest paddle rating in the pool (5/5) with wide-nose glide." },
+      "more_forgiving": { "in": "ci_dumpster_diver_2", "reason": "Support-heavy balance: stability 4, forgiveness 4, wide outline." },
+      "more_response": { "in": "ci_fever", "reason": "Performance lean: maneuverability 4, creative-surfing intent — costs weak-wave ease." }
+    }
+  },
+  "trait_phrases": {
+    "_label": "PROTOTYPE ASSUMPTION — qualitative phrasing for 1–5 trait deltas (REAL trait values from boards-source.json); deltas rendered as direction, never as numeric superiority",
+    "paddling_ease": { "plus": "catches waves earlier", "minus": "asks more of your paddle" },
+    "speed_generation": { "plus": "makes its own speed", "minus": "wants wave power" },
+    "maneuverability": { "plus": "quicker rail to rail", "minus": "calmer through turns" },
+    "stability": { "plus": "steadier underfoot", "minus": "livelier underfoot" },
+    "forgiveness": { "plus": "shrugs off mistakes", "minus": "punishes late reactions" }
+  }
+}

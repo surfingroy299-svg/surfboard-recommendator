@@ -1,0 +1,174 @@
+/* Direction 02 — The Measure Room. Independent visual system (mr- prefix). */
+.mr-root {
+  --mr-room: #17191c;
+  --mr-table: #f7f5f0;
+  --mr-ink: #23262b;
+  --mr-blue: #2b59c3;
+  --mr-amber: #d98324;
+  --mr-keep: #1f3d2b;
+  --mr-paper-dim: #e9e6de;
+  min-height: 100vh;
+  background: radial-gradient(120% 90% at 50% 30%, #1d2024 0%, var(--mr-room) 60%);
+  color: var(--mr-ink);
+  font-family: 'Space Grotesk', sans-serif;
+  display: grid;
+  grid-template-rows: 52px 1fr auto;
+  grid-template-columns: 1fr 240px;
+  grid-template-areas: 'head head' 'stage drawer' 'foot foot';
+  overflow: hidden;
+}
+
+.mr-header {
+  grid-area: head;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 0 22px;
+  color: #b9b6ad;
+  border-bottom: 1px solid #26292e;
+  font-size: 13px;
+}
+.mr-back { color: #8e8b83; text-decoration: none; }
+.mr-viewname { font: 700 15px 'Space Grotesk'; letter-spacing: 0.24em; color: #ddd9cf; }
+.mr-context { font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; color: #8e9199; font-variant-numeric: tabular-nums; }
+.mr-viewtab {
+  margin-left: auto;
+  background: #22252a;
+  color: #cfccc3;
+  border: 1px solid #33363c;
+  padding: 6px 12px;
+  font: 500 12px 'Space Grotesk';
+  cursor: pointer;
+}
+
+.mr-stage { grid-area: stage; display: flex; flex-direction: column; align-items: center; justify-content: center; perspective: 1400px; padding: 8px 24px 0; }
+
+.mr-table {
+  background: linear-gradient(180deg, #faf8f3 0%, var(--mr-table) 60%, #efece4 100%);
+  border-radius: 4px;
+  box-shadow: 0 0 110px 16px rgba(247, 245, 240, 0.16), 0 34px 70px rgba(0, 0, 0, 0.55);
+  padding: 38px 46px 26px;
+  transform-style: preserve-3d;
+  max-width: 1300px;
+  width: 100%;
+  min-height: 560px;
+  box-sizing: border-box;
+}
+
+.mr-plates { display: flex; gap: 28px; justify-content: center; align-items: flex-start; }
+
+.mr-plate {
+  background: none;
+  border: none;
+  border-top: 1px solid rgba(35, 38, 43, 0.12);
+  padding: 16px 8px 0;
+  cursor: pointer;
+  transition: filter 0.2s ease;
+}
+.mr-plate.is-focus { filter: drop-shadow(0 16px 22px rgba(35, 38, 43, 0.28)); z-index: 2; }
+.mr-plate.is-dim { opacity: 0.45; }
+
+.mr-svg { display: block; margin: 0 auto; max-width: 100%; height: auto; }
+
+.mr-outline { fill: rgba(43, 89, 195, 0.08); stroke: var(--mr-ink); stroke-width: 1.6; }
+.mr-outline-unknown-tail { stroke-dasharray: none; }
+.mr-outline-unknown-tail { stroke: var(--mr-ink); }
+.mr-stringer { stroke: #a39f93; stroke-width: 0.8; stroke-dasharray: 1 3; }
+.mr-profile { fill: rgba(35, 38, 43, 0.05); stroke: var(--mr-ink); stroke-width: 1.4; stroke-dasharray: 5 4; }
+.mr-gap-label { font: 400 9px 'IBM Plex Mono', monospace; fill: #8e8b83; }
+.mr-rulerline { stroke: var(--mr-blue); stroke-width: 1; stroke-dasharray: 3 3; }
+.mr-datum { stroke: #b4b0a5; stroke-width: 1; }
+
+.mr-title { padding: 10px 6px 12px; border-top: 1px solid #23262b; margin-top: 8px; }
+.mr-title-row { display: flex; align-items: baseline; gap: 8px; }
+.mr-key {
+  font: 700 10px 'IBM Plex Mono';
+  border: 1px solid #c9c5b9;
+  padding: 1px 5px;
+  color: #8e8b83;
+}
+.mr-name { font: 700 15px 'Space Grotesk'; }
+.mr-role { font: 500 10.5px 'Space Grotesk'; letter-spacing: 0.14em; text-transform: uppercase; color: var(--mr-blue); }
+.mr-stamp {
+  font: 700 10px 'Space Grotesk';
+  letter-spacing: 0.18em;
+  color: var(--mr-keep);
+  border: 2px solid var(--mr-keep);
+  padding: 1px 6px;
+  transform: rotate(-4deg);
+}
+.mr-why { font-size: 12px; color: #55524a; line-height: 1.5; margin-top: 5px; max-width: 300px; }
+
+.mr-detail { border-top: 1px solid #ddd9cd; margin-top: 9px; padding-top: 9px; max-width: 300px; }
+.mr-dims { display: flex; align-items: center; gap: 10px; font-family: 'IBM Plex Mono'; font-size: 12px; font-variant-numeric: tabular-nums; }
+.mr-meter { position: relative; flex: 1; height: 14px; background: #eceadf; display: inline-block; }
+.mr-meter-range { position: absolute; top: 0; bottom: 0; background: rgba(43, 89, 195, 0.18); border-left: 1px solid var(--mr-blue); border-right: 1px solid var(--mr-blue); }
+.mr-meter-mark { position: absolute; top: -2px; bottom: -2px; width: 2px; background: var(--mr-ink); }
+.mr-meter-label { position: absolute; right: 4px; top: 0; font-size: 9px; color: #77747a; line-height: 14px; }
+.mr-flag { font-size: 11px; color: var(--mr-amber); margin-top: 6px; line-height: 1.45; }
+.mr-adv { font-size: 12px; color: #274d33; margin-top: 6px; }
+.mr-trade { font-size: 12px; color: #7a3d20; margin-top: 3px; }
+.mr-gaps { font: 400 10.5px 'IBM Plex Mono'; color: #8e8b83; margin-top: 6px; }
+.mr-actions { display: flex; gap: 8px; margin-top: 10px; }
+.mr-actions button {
+  font: 600 11px 'Space Grotesk';
+  background: none;
+  border: 1px solid #b9b5a9;
+  padding: 4px 10px;
+  cursor: pointer;
+  color: var(--mr-ink);
+}
+.mr-actions .mr-reject { color: #93392a; border-color: #c9a79c; }
+.mr-actions button:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.mr-overlay { display: flex; gap: 30px; align-items: center; justify-content: center; }
+.mr-overlay .mr-svg { width: min(760px, 58%); }
+.mr-fill-a { fill: rgba(43, 89, 195, 0.3); stroke: var(--mr-blue); stroke-width: 1.2; mix-blend-mode: multiply; }
+.mr-fill-b { fill: rgba(217, 131, 36, 0.3); stroke: var(--mr-amber); stroke-width: 1.2; mix-blend-mode: multiply; }
+.mr-deltarail { width: 300px; font-size: 12.5px; }
+.mr-deltarail-head { font: 600 13px 'Space Grotesk'; margin-bottom: 12px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.mr-chip-a { color: var(--mr-blue); }
+.mr-chip-b { color: var(--mr-amber); }
+.mr-unstack { margin-left: auto; font: 600 11px 'Space Grotesk'; border: 1px solid #b9b5a9; background: none; padding: 3px 9px; cursor: pointer; }
+.mr-delta { display: flex; gap: 8px; align-items: baseline; padding: 5px 0; border-bottom: 1px dashed #ddd9cd; }
+.mr-delta-dir { font-weight: 700; width: 14px; }
+.mr-delta-dir.is-a { color: var(--mr-blue); }
+.mr-delta-dir.is-b { color: var(--mr-amber); }
+.mr-delta-dir.is-tie { color: #a5a196; }
+.mr-delta-key { font: 500 11px 'IBM Plex Mono'; color: #6d6a61; width: 118px; }
+.mr-delta-phrase { flex: 1; color: #44413a; }
+.mr-delta-note { font-size: 10.5px; color: #8e8b83; margin-top: 10px; line-height: 1.5; }
+
+.mr-ruler { margin-top: 14px; color: #b9b6ad; font-size: 12px; display: flex; align-items: center; gap: 14px; max-width: 900px; width: 100%; }
+.mr-ruler label { display: flex; align-items: center; gap: 10px; font: 500 11px 'IBM Plex Mono'; white-space: nowrap; }
+.mr-ruler input[type='range'] { width: 220px; accent-color: var(--mr-blue); }
+.mr-ruler-readout { font-family: 'IBM Plex Mono'; font-size: 11px; font-variant-numeric: tabular-nums; color: #9a9da4; }
+.mr-ruler-readout em { color: #c8cbd2; font-style: normal; }
+
+.mr-drawer { grid-area: drawer; border-left: 1px solid #26292e; padding: 18px 16px; color: #b9b6ad; }
+.mr-drawer-label { font: 500 10px 'IBM Plex Mono'; letter-spacing: 0.12em; text-transform: uppercase; color: #6d7076; margin-bottom: 12px; }
+.mr-slip {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: #f0ede4;
+  color: var(--mr-ink);
+  border: none;
+  border-left: 3px solid var(--mr-blue);
+  padding: 8px 10px;
+  margin-bottom: 8px;
+  font: 500 12px 'Space Grotesk';
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+}
+.mr-slip-undo { border-left-color: #8e8b83; background: #2a2d32; color: #b9b6ad; }
+.mr-revision { background: #f7f5f0; color: var(--mr-ink); padding: 10px 12px; margin-top: 14px; font-size: 12px; line-height: 1.5; box-shadow: 0 4px 10px rgba(0,0,0,0.4); }
+.mr-revision-title { font: 700 11px 'Space Grotesk'; letter-spacing: 0.1em; color: var(--mr-blue); margin-bottom: 4px; }
+.mr-revision-out { color: #8e8b83; font-size: 11px; margin: 4px 0 0; }
+.mr-exhausted { margin-top: 12px; font-size: 11.5px; color: var(--mr-amber); line-height: 1.5; }
+
+.mr-foot { grid-area: foot; display: flex; justify-content: space-between; gap: 18px; padding: 10px 22px; border-top: 1px solid #26292e; color: #6d7076; font-size: 11px; }
+.mr-legend-dash { color: #8e9199; }
+.mr-keys { font-family: 'IBM Plex Mono'; white-space: nowrap; }
+
+:focus-visible { outline: 2px dashed var(--mr-blue); outline-offset: 2px; }

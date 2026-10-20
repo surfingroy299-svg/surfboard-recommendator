@@ -1,0 +1,180 @@
+/* Direction 03 — The Quiver Deck. Independent visual system (qd- prefix). */
+.qd-root {
+  --qd-sand: #f2e7d3;
+  --qd-coral: #ff5a36;
+  --qd-blue: #173fa6;
+  --qd-lime: #d6f25f;
+  --qd-ink: #191713;
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
+  background: var(--qd-sand);
+  font-family: 'Space Mono', monospace;
+  color: var(--qd-ink);
+}
+.qd-canvas { position: absolute; inset: 0; }
+.qd-canvas canvas { touch-action: none; }
+
+.qd-top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 20px;
+  padding: 16px 22px;
+  z-index: 5;
+  pointer-events: none;
+}
+.qd-top a { pointer-events: auto; }
+.qd-back { color: #8d8067; text-decoration: none; font-size: 13px; }
+.qd-title { font-family: 'Archivo Black', sans-serif; font-size: 20px; letter-spacing: 0.06em; }
+.qd-state {
+  margin-left: auto;
+  font: 700 12px 'Space Mono';
+  background: var(--qd-ink);
+  color: var(--qd-lime);
+  padding: 4px 12px;
+}
+
+.qd-tags {
+  position: absolute;
+  right: 20px;
+  top: 64px;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 244px;
+}
+.qd-tag {
+  background: #fdf9ef;
+  border: 2px solid var(--qd-ink);
+  border-top-width: 8px;
+  padding: 8px 10px;
+  box-shadow: 4px 4px 0 rgba(25, 23, 19, 0.25);
+}
+.qd-tag.is-locked { background: #eef6e4; }
+.qd-tag-head { display: flex; align-items: baseline; gap: 8px; }
+.qd-tag-name { font-family: 'Archivo Black', sans-serif; font-size: 14px; background: none; border: none; padding: 0; cursor: pointer; color: var(--qd-ink); text-align: left; }
+.qd-tag-name em { font-style: normal; font: 700 10px 'Space Mono'; color: #a4977c; margin-right: 2px; }
+.qd-tag-role { font: 700 9px 'Space Mono'; text-transform: uppercase; letter-spacing: 0.08em; color: #6d6353; margin-left: auto; }
+.qd-tag-dims { font: 400 10.5px 'Space Mono'; margin-top: 5px; font-variant-numeric: tabular-nums; }
+.qd-tag-target { display: block; color: #8d8067; font-size: 9.5px; }
+.qd-tag-flag { font-size: 10px; color: #b3541e; margin-top: 3px; }
+.qd-tag-actions { display: flex; gap: 8px; margin-top: 7px; }
+.qd-clamp, .qd-eject {
+  font: 700 10px 'Space Mono';
+  text-transform: uppercase;
+  border: 2px solid var(--qd-ink);
+  background: none;
+  padding: 3px 9px;
+  cursor: pointer;
+  color: var(--qd-ink);
+}
+.qd-clamp.is-on { background: var(--qd-blue); border-color: var(--qd-blue); color: #fff; }
+.qd-eject { border-color: var(--qd-coral); color: var(--qd-coral); }
+.qd-eject:disabled { opacity: 0.35; cursor: not-allowed; }
+
+.qd-facecard {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 96px;
+  width: 560px;
+  background: #fdf9ef;
+  border: 2px solid var(--qd-ink);
+  box-shadow: 6px 6px 0 rgba(25, 23, 19, 0.25);
+  padding: 12px 14px;
+  z-index: 5;
+  font-size: 12.5px;
+  line-height: 1.55;
+}
+.qd-facecard-face { font: 700 10px 'Space Mono'; text-transform: uppercase; letter-spacing: 0.14em; color: #8d8067; }
+.qd-facecard-title { font-family: 'Archivo Black', sans-serif; font-size: 15px; margin: 3px 0 4px; }
+.qd-facecard-row { display: flex; flex-direction: column; gap: 3px; margin-top: 8px; font-size: 12px; }
+.qd-plus { color: #14683f; }
+.qd-minus { color: #a33d18; }
+.qd-facecard-gaps { margin-top: 8px; font-size: 10.5px; color: #8d8067; }
+
+.qd-faceoff {
+  position: absolute;
+  left: 22px;
+  top: 64px;
+  width: 330px;
+  background: #fdf9ef;
+  border: 2px solid var(--qd-ink);
+  box-shadow: 6px 6px 0 rgba(25, 23, 19, 0.25);
+  padding: 12px 14px;
+  z-index: 5;
+}
+.qd-faceoff-head { display: flex; align-items: baseline; gap: 8px; font-family: 'Archivo Black', sans-serif; font-size: 14px; margin-bottom: 10px; }
+.qd-faceoff-head em { font-style: normal; font: 400 11px 'Space Mono'; color: #8d8067; }
+.qd-faceoff-head button { margin-left: auto; font: 700 10px 'Space Mono'; border: 2px solid var(--qd-ink); background: none; padding: 2px 8px; cursor: pointer; }
+.qd-tug { display: grid; grid-template-columns: 104px 60px 1fr; gap: 8px; align-items: center; padding: 4px 0; }
+.qd-tug-label { font-size: 10px; color: #6d6353; }
+.qd-tug-bar { display: flex; height: 10px; border: 1.5px solid var(--qd-ink); }
+.qd-tug-bar i { flex: 1; opacity: 0.25; }
+.qd-tug-bar.is-a i:first-child { opacity: 1; }
+.qd-tug-bar.is-b i:last-child { opacity: 1; }
+.qd-tug-phrase { font-size: 10.5px; }
+.qd-tug-note { font-size: 10px; color: #8d8067; margin-top: 8px; }
+
+.qd-chips {
+  position: absolute;
+  bottom: 54px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  z-index: 5;
+}
+.qd-chips-label { font: 700 11px 'Space Mono'; color: #6d6353; }
+.qd-chip {
+  font: 700 11px 'Space Mono';
+  background: var(--qd-ink);
+  color: var(--qd-lime);
+  border: none;
+  padding: 7px 14px;
+  cursor: pointer;
+  box-shadow: 3px 3px 0 rgba(25, 23, 19, 0.3);
+}
+.qd-chip:hover { background: var(--qd-blue); }
+
+.qd-toast {
+  position: absolute;
+  bottom: 96px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--qd-ink);
+  color: #fdf9ef;
+  padding: 10px 16px;
+  font-size: 12px;
+  max-width: 560px;
+  z-index: 6;
+  box-shadow: 5px 5px 0 rgba(25, 23, 19, 0.3);
+}
+.qd-toast strong { color: var(--qd-lime); }
+.qd-toast button { margin-left: 12px; font: 700 10px 'Space Mono'; background: none; border: 1.5px solid var(--qd-lime); color: var(--qd-lime); padding: 2px 8px; cursor: pointer; }
+.qd-toast-warn { background: #b3541e; }
+
+.qd-foot {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 22px;
+  font-size: 10.5px;
+  color: #8d8067;
+  z-index: 5;
+}
+.qd-honesty { color: #a4977c; }
+
+.qd-fallback { overflow: auto; }
+
+:focus-visible { outline: 3px solid var(--qd-blue); outline-offset: 2px; }
