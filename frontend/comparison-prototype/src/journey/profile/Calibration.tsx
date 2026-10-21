@@ -16,34 +16,46 @@ export function Calibration({ derived }: { derived: Derived }) {
   const { state, dispatch } = useJourney()
   const announce = useAnnounce()
   const [draft, setDraft] = useState('')
-  const [response, setResponse] = useState<{ kind: 'ok' | 'no'; text: string } | null>(null)
+  const [exchange, setExchange] = useState<Turn[] | null>(null)
 
   const suggestions = useMemo(() => buildSuggestions(derived), [derived])
 
   // An accepted adjustment can still turn out to be unreachable once the sizing
-  // re-runs. Saying "Updated" next to a note explaining it was not applied
-  // reads as a bug, so the acknowledgement defers to the zone's explanation.
-  const shown =
-    derived.unsatisfiable && response?.kind === 'ok'
-      ? { kind: 'no' as const, text: 'That limit sits outside the range these answers produce — see the note beside the size.' }
-      : response
+  // re-runs, so the reply defers to the zone's explanation rather than
+  // claiming a change that did not happen.
+  const shown: Turn[] | null =
+    derived.unsatisfiable && exchange && exchange[1]?.kind === 'ok'
+      ? [
+          exchange[0],
+          {
+            who: 'us',
+            kind: 'no',
+            text: 'That limit sits outside the range these answers produce — see the note beside the size.',
+          },
+        ]
+      : exchange
 
   const submit = (text: string) => {
+    const said: Turn = { who: 'you', text }
     const outcome = parseCalibration(text)
+
     if (!outcome.ok) {
-      setResponse({ kind: 'no', text: outcome.message })
+      setExchange([said, { who: 'us', text: outcome.message, kind: 'no' }])
       announce(outcome.message)
       return
     }
     if (wouldInvert(state.adjustments, outcome.adjustment)) {
       const msg = 'That would put the floor above the ceiling. Remove the other limit first.'
-      setResponse({ kind: 'no', text: msg })
+      setExchange([said, { who: 'us', text: msg, kind: 'no' }])
       announce(msg)
       return
     }
+
     dispatch({ type: 'addAdjustment', adjustment: outcome.adjustment })
-    const msg = `Updated — ${outcome.adjustment.label}.`
-    setResponse({ kind: 'ok', text: msg })
+    // State the consequence, not the acknowledgement: "ceiling set" says what
+    // happened to the recommendation, "updated" says only that we heard.
+    const msg = `${CONSEQUENCE[outcome.adjustment.intent](outcome.adjustment.label)}`
+    setExchange([said, { who: 'us', text: msg, kind: 'ok' }])
     announce(msg)
     setDraft('')
   }
@@ -88,9 +100,13 @@ export function Calibration({ derived }: { derived: Derived }) {
       </form>
 
       {shown && (
-        <p className={`calib__response calib__response--${shown.kind}`} role="status">
-          {shown.text}
-        </p>
+        <div className="exchange" role="status">
+          {shown.map((t, i) => (
+            <p key={i} className={`exchange__turn exchange__turn--${t.who}${t.kind ? ` is-${t.kind}` : ''}`}>
+              {t.text}
+            </p>
+          ))}
+        </div>
       )}
 
       {state.adjustments.length > 0 && (
@@ -104,7 +120,7 @@ export function Calibration({ derived }: { derived: Derived }) {
                 aria-label={`Remove: ${a.label}`}
                 onClick={() => {
                   dispatch({ type: 'removeAdjustment', id: a.id })
-                  setResponse(null)
+                  setExchange(null)
                   announce(`Removed ${a.label}.`)
                 }}
               >
@@ -116,6 +132,25 @@ export function Calibration({ derived }: { derived: Derived }) {
       )}
     </section>
   )
+}
+
+interface Turn {
+  who: 'you' | 'us'
+  text: string
+  kind?: 'ok' | 'no'
+}
+
+/**
+ * What changed, phrased as a consequence for the recommendation. The six
+ * intents are unchanged — this only alters how the change is reported.
+ */
+const CONSEQUENCE: Record<string, (label: string) => string> = {
+  volume_cap: (l) => `${l}. The top of your range comes down.`,
+  volume_floor: (l) => `${l}. The bottom of your range comes up.`,
+  more_performance: () => 'Noted — we will aim at the lower part of your range.',
+  more_support: () => 'Noted — we will aim at the upper part of your range.',
+  physical_correction: (l) => `${l}. Re-sized from that.`,
+  category_preference: (l) => `${l}. The range is recalculated for that board type.`,
 }
 
 /** Chips drawn from this profile, so they are always actionable. */

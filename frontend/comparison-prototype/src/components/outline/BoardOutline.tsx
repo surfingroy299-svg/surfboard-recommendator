@@ -5,33 +5,36 @@ import type { BoardId } from '../../data/types'
 const PAD = 22
 
 /**
- * All three outlines overlaid, nose up and aligned at the tail.
+ * All three outlines overlaid, nose right, tails aligned on a left datum.
  *
- * Vertical to match the deck imagery in Overview and Tail & Fins, which is the
- * same view of the board; horizontal reads as a leaf rather than a surfboard.
- * Aligning at the tail puts the boards on a shared baseline, the same
- * convention the Overview columns already use.
+ * Horizontal because a board's long axis is its dominant one and a wide
+ * viewport has room for it: length differences then read along the direction
+ * the eye already travels, as noses reaching different distances to the right,
+ * while width differences read vertically where the outlines separate. Nose
+ * right also matches the Shape state, so the two drawn comparisons finally
+ * share one orientation.
  *
- * Geometry is generated nose-at-origin along +x, so each board is rotated a
- * quarter turn and offset by its own length to bring every tail to one line.
+ * Geometry is generated nose-at-origin along +x, so each board is mirrored to
+ * point the other way; the outline is symmetric about its long axis, so a
+ * mirror is exactly "turn it round".
  */
 export function OutlineOverlay({ boards, focused }: { boards: BoardOutlineData[]; focused: BoardId | null }) {
   const maxL = Math.max(...boards.map((b) => b.spec.px.L))
   const maxW = Math.max(...boards.map((b) => b.spec.px.W))
-  const vbW = maxW + PAD * 2
-  const vbH = maxL + PAD * 2
-  const tailY = PAD + maxL
-  const cx = PAD + maxW / 2
+  const vbW = maxL + PAD * 2
+  const vbH = maxW + PAD * 2
+  const datumX = PAD
+  const cy = vbH / 2
 
   return (
     <svg
       className="outline"
       viewBox={`0 0 ${vbW} ${vbH}`}
       role="img"
-      aria-label={`Outlines of ${boards.map((b) => b.label).join(', ')} overlaid nose-up and aligned at the tail, drawn to relative scale.`}
+      aria-label={`Outlines of ${boards.map((b) => b.label).join(', ')} overlaid nose-right and aligned at the tail, drawn to relative scale.`}
     >
       {/* The tail line is the alignment reference, so it is drawn, not implied. */}
-      <line className="outline__datum" x1={PAD * 0.3} y1={tailY} x2={vbW - PAD * 0.3} y2={tailY} aria-hidden="true" />
+      <line className="outline__datum" x1={datumX} y1={PAD * 0.3} x2={datumX} y2={vbH - PAD * 0.3} aria-hidden="true" />
       {boards.map((b) => {
         const dim = focused !== null && focused !== b.id
         return (
@@ -39,7 +42,7 @@ export function OutlineOverlay({ boards, focused }: { boards: BoardOutlineData[]
             key={b.id}
             className={`outline__board${dim ? ' is-dim' : ''}${focused === b.id ? ' is-focus' : ''}`}
             data-board={b.id}
-            transform={`translate(${cx} ${tailY - b.spec.px.L}) rotate(90)`}
+            transform={`translate(${datumX + b.spec.px.L} ${cy}) scale(-1 1)`}
           >
             <path d={b.spec.path} />
           </g>
@@ -60,11 +63,11 @@ export function OutlineOverlay({ boards, focused }: { boards: BoardOutlineData[]
 export function TailDetail({ boards, focused }: { boards: BoardOutlineData[]; focused: BoardId | null }) {
   const maxW = Math.max(...boards.map((b) => b.spec.px.W))
   const region = Math.max(...boards.map((b) => b.spec.px.L)) * 0.18
-  const pad = 8
-  const vbW = maxW + pad * 2
-  const vbH = region + pad * 2
-  const cx = pad + maxW / 2
-  const tailY = pad + region
+  const pad = 10
+  const vbW = region + pad * 2
+  const vbH = maxW + pad * 2
+  const datumX = pad
+  const cy = vbH / 2
 
   return (
     <svg
@@ -73,7 +76,7 @@ export function TailDetail({ boards, focused }: { boards: BoardOutlineData[]; fo
       role="img"
       aria-label={`Tail shapes enlarged: ${boards.map((b) => `${b.label} ${b.tailDisplay}`).join(', ')}.`}
     >
-      <line className="outline__datum" x1={pad * 0.5} y1={tailY} x2={vbW - pad * 0.5} y2={tailY} aria-hidden="true" />
+      <line className="outline__datum" x1={datumX} y1={pad * 0.4} x2={datumX} y2={vbH - pad * 0.4} aria-hidden="true" />
       {boards.map((b) => {
         const dim = focused !== null && focused !== b.id
         return (
@@ -81,7 +84,7 @@ export function TailDetail({ boards, focused }: { boards: BoardOutlineData[]; fo
             key={b.id}
             className={`outline__board${dim ? ' is-dim' : ''}${focused === b.id ? ' is-focus' : ''}`}
             data-board={b.id}
-            transform={`translate(${cx} ${tailY - b.spec.px.L}) rotate(90)`}
+            transform={`translate(${datumX + b.spec.px.L} ${cy}) scale(-1 1)`}
           >
             <path d={b.spec.path} />
           </g>

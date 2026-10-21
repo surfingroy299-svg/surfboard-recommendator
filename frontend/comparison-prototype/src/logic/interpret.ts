@@ -61,6 +61,13 @@ export interface Reading {
   challenge: string
   /** Present only when the profile is genuinely thin. */
   uncertainty: string | null
+  /**
+   * The reading ends by naming the thing it is least sure of and inviting an
+   * argument about it. A system that states a verdict and waits reads as
+   * final; naming its own weakest claim is what makes calibration feel like
+   * part of the conversation rather than a correction form.
+   */
+  invitation: string
   /** Short label for the board direction, e.g. "Groveler". */
   categoryLabel: string
   /** What that category is for. */
@@ -154,10 +161,23 @@ export function interpret(d: Derived): Reading {
     uncertainty = 'Without your current board’s dimensions we are reading fit from feel alone, so the range stays wide.'
   }
 
+  // Pick the most contestable conclusion we just drew, and offer it up.
+  const invitation =
+    signals.size_direction.value === 'lean_up'
+      ? 'If that reads like more foam than you want under you, say so.'
+      : signals.size_direction.value === 'lean_down'
+        ? 'If that reads like too little board, say so.'
+        : isFallbackCategory(signals)
+          ? 'If you already know the kind of board you want, tell us and we will size for it.'
+          : signals.challenge_level.value === 'progressive'
+            ? 'If that sounds like more board than you are after, say so.'
+            : 'If any of that is off — the size, the direction, your weight — say so now.'
+
   return {
     paragraphs,
     challenge,
     uncertainty,
+    invitation,
     categoryLabel: CATEGORY_LABEL[d.category],
     // Lead with what the category is. The caveat is still shown when the
     // category was a fallback, but as a second, quieter line — at this point

@@ -13,6 +13,7 @@ export function ProfileReading({ derived }: { derived: Derived }) {
       ))}
       <p className="reading__challenge">{reading.challenge}</p>
       {reading.uncertainty && <p className="reading__caveat">{reading.uncertainty}</p>}
+      <p className="reading__invite">{reading.invitation}</p>
     </div>
   )
 }

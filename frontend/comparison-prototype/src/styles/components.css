@@ -614,31 +614,39 @@
 
 .outlines {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(220px, 300px);
-  gap: clamp(24px, 4vw, 64px);
+  grid-template-columns: minmax(0, 1fr) minmax(210px, 280px);
+  gap: clamp(20px, 3vw, 52px);
   align-items: center;
 }
 
 .outlines__stage {
   min-width: 0;
   display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  gap: clamp(28px, 5vw, 72px);
+  flex-direction: column;
+  align-items: stretch;
+  gap: clamp(16px, 2.4vh, 32px);
+}
+
+.outlines__side {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
 }
 
 .outlines__detail {
   margin: 0;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--rule);
 }
 
 .taildetail {
   display: block;
-  width: clamp(130px, 15vw, 190px);
+  width: clamp(96px, 11vw, 140px);
   height: auto;
+  flex: none;
   /* Must clip: the viewBox is the crop that turns the board into a tail. */
   overflow: hidden;
 }
@@ -649,12 +657,11 @@
   letter-spacing: 0.04em;
 }
 
-/* The drawing is tall and narrow, so it is bounded by height, not width. */
+/* Horizontal: the drawing is wide and shallow, so width leads. */
 .outline {
   display: block;
-  width: auto;
-  height: clamp(320px, 54vh, 520px);
-  max-width: 100%;
+  width: 100%;
+  height: auto;
   overflow: visible;
 }
 
@@ -768,6 +775,10 @@
 @media (max-width: 860px) {
   .outlines {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  .outlines__side {
+    gap: 18px;
   }
 
   .outlines__legend {

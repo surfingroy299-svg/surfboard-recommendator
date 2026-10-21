@@ -1382,3 +1382,44 @@
     padding-top: 22vh;
   }
 }
+
+/* ── The reading invites an argument; calibration is where it happens. */
+
+.reading__invite {
+  margin-top: 14px;
+  font-size: var(--fs-15);
+  line-height: 1.5;
+  color: var(--tide-ink);
+}
+
+/* An exchange, not a status line: what you said, then what changed. */
+.exchange {
+  margin-top: 16px;
+  max-width: 56ch;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.exchange__turn {
+  font-size: var(--fs-14);
+  line-height: 1.5;
+}
+
+.exchange__turn--you {
+  color: var(--ink-3);
+  padding-left: 14px;
+  border-left: 2px solid var(--rule-strong);
+}
+
+.exchange__turn--us {
+  color: var(--ink);
+}
+
+.exchange__turn--us.is-ok {
+  color: var(--tide-ink);
+}
+
+.exchange__turn--us.is-no {
+  color: var(--ink-2);
+}

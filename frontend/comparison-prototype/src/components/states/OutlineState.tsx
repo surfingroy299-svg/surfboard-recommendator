@@ -26,13 +26,15 @@ export function OutlineState() {
       <div className="outlines">
         <div className="outlines__stage">
           <OutlineOverlay boards={data} focused={state.focusedBoardId} />
+        </div>
+
+        <div className="outlines__side">
           <figure className="outlines__detail">
             <TailDetail boards={data} focused={state.focusedBoardId} />
             <figcaption className="outlines__detailcap mono">Tails, enlarged</figcaption>
           </figure>
-        </div>
 
-        <ul className="outlines__legend">
+          <ul className="outlines__legend">
           {data.map((d) => (
             <li
               key={d.id}
@@ -53,8 +55,9 @@ export function OutlineState() {
                 {d.lengthDisplay} × {d.widthDisplay} · {d.volume}
               </span>
             </li>
-          ))}
-        </ul>
+            ))}
+          </ul>
+        </div>
 
         <p className="outlines__note mono">
           Length and width to scale · aligned at the tail · curve between those points is drawn, not measured
