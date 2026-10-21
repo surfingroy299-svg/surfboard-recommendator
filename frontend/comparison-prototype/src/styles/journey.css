@@ -1153,3 +1153,232 @@
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+/* ───────────────────────── Intro compositions ─────────────────────────
+   Three variants, compared before one ships. `?intro=a|b|c` in dev. */
+
+.stage--intro.intro--spread,
+.stage--intro.intro--split,
+.stage--intro.intro--detail {
+  padding: 0;
+  align-items: stretch;
+}
+
+.introshot__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  user-select: none;
+}
+
+/* ── A: opening spread. Type set into the quiet region the frame already has. */
+
+.ispread {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+.ispread__media {
+  position: absolute;
+  inset: 0;
+}
+
+.ispread__media .introshot__img {
+  /* Holds the open water at the top of the frame, which is where the type
+     goes — the image was chosen for that space, not cropped to make room. */
+  object-position: center 28%;
+  filter: saturate(0.86) contrast(1.02);
+}
+
+.ispread__text {
+  position: relative;
+  /* Sized in px, not ch: ch resolves against the root size, not the display
+     face, so a ch-based column strangles a headline set this large. */
+  max-width: min(46vw, 580px);
+  padding: clamp(40px, 9vh, 104px) var(--gutter);
+  color: var(--paper);
+}
+
+.eyebrow--onphoto {
+  color: rgba(241, 241, 237, 0.72);
+}
+
+.ispread__title {
+  margin: 18px 0 0;
+  font-family: var(--font-display);
+  font-size: var(--fs-lede);
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+  /* The frame is open water here, not flat colour, so a faint shadow keeps
+     the type readable without laying a scrim over the photograph. */
+  text-shadow: 0 1px 24px rgba(10, 24, 32, 0.4);
+}
+
+.ispread__lede {
+  margin: 18px 0 32px;
+  max-width: 40ch;
+  font-size: var(--fs-17);
+  line-height: 1.5;
+  color: rgba(241, 241, 237, 0.88);
+  text-shadow: 0 1px 18px rgba(10, 24, 32, 0.45);
+}
+
+.ispread__text .btn--primary {
+  background: var(--paper);
+  color: var(--ink);
+  border-color: var(--paper);
+}
+
+.ispread__text .btn--primary:hover {
+  background: #fff;
+}
+
+/* ── B: hard split. Image against a hard edge, type in a column beside it. */
+
+.isplit {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+.isplit__media {
+  position: relative;
+  overflow: hidden;
+}
+
+.isplit__media .introshot__img {
+  object-position: center 40%;
+  filter: saturate(0.88) contrast(1.02);
+}
+
+.isplit__text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(32px, 6vw, 88px);
+  /* px, not ch — see the note on .ispread__text. */
+  max-width: 560px;
+}
+
+.isplit__title {
+  margin: 20px 0 0;
+  font-family: var(--font-display);
+  font-size: var(--fs-display);
+  font-weight: 400;
+  line-height: 1.12;
+  letter-spacing: -0.015em;
+}
+
+.isplit__lede {
+  margin: 20px 0 36px;
+  max-width: 36ch;
+  color: var(--ink-2);
+  font-size: var(--fs-17);
+  line-height: 1.5;
+}
+
+/* ── C: detail at scale. One large image, very small exact type. */
+
+.idetail {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 27vw);
+  align-items: stretch;
+  width: 100%;
+  /* A fixed height, not a minimum: the plate holds a portrait photograph, and
+     an auto-sized row lets the image set its own height and overflow the
+     screen. The crop belongs to the composition, not to the source file. */
+  height: 100vh;
+  height: 100dvh;
+}
+
+.idetail__media {
+  position: relative;
+  overflow: hidden;
+  /* A margin on three sides presents the photograph as a plate on a page
+     rather than as a background. That gesture is most of the art direction. */
+  margin: clamp(20px, 4vh, 54px) 0 clamp(20px, 4vh, 54px) clamp(20px, 3vw, 54px);
+}
+
+.idetail__caption {
+  position: absolute;
+  left: 0;
+  bottom: 10px;
+  padding: 4px 8px;
+  background: rgba(10, 24, 32, 0.38);
+  border-radius: 2px;
+  color: rgba(241, 241, 237, 0.82);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.idetail__media .introshot__img {
+  object-position: center 34%;
+  filter: saturate(0.9) contrast(1.03);
+}
+
+.idetail__rail {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  /* The button sizes to its label; stretched full-rail it becomes the loudest
+     thing on the page, which is the opposite of the intended hierarchy. */
+  align-items: flex-start;
+  padding: clamp(24px, 4vh, 54px) clamp(24px, 3vw, 54px);
+}
+
+.idetail__kicker {
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+/* The scale jump is the point: a large image against small, exact type. */
+.idetail__title {
+  margin: 14px 0 0;
+  font-family: var(--font-display);
+  font-size: var(--fs-display-sm);
+  font-weight: 400;
+  line-height: 1.22;
+  letter-spacing: -0.005em;
+  text-wrap: balance;
+}
+
+.idetail__lede {
+  margin: 14px 0 28px;
+  font-size: var(--fs-14);
+  line-height: 1.55;
+  color: var(--ink-3);
+}
+
+@media (max-width: 860px) {
+  .isplit,
+  .idetail {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: 42vh auto;
+    height: auto;
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+
+  .idetail__media {
+    margin: 0;
+  }
+
+  .isplit__text,
+  .idetail__rail {
+    padding: 28px var(--gutter) 88px;
+    max-width: none;
+  }
+
+  .ispread__text {
+    max-width: none;
+    padding-top: 22vh;
+  }
+}
