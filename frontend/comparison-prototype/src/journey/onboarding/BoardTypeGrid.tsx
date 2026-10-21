@@ -1,6 +1,7 @@
 import { BoardForm } from '../../components/surf/BoardForm'
 import type { FinLayout, TailKind } from '../../components/outline/outlineGeometry'
 import type { AnswerOption, Q1Value } from '../../logic/questions'
+import { commitHandlers } from './commit'
 
 /**
  * Q1 asks which board you ride. A board type *is* a shape, so naming it in
@@ -58,14 +59,18 @@ export function BoardTypeGrid({
           const shape = SHAPES[o.value as Q1Value]!
           const selected = o.value === value
           return (
-            <label key={o.value} className="btcell" data-selected={selected || undefined}>
+            <label
+              key={o.value}
+              className="btcell"
+              data-selected={selected || undefined}
+              {...commitHandlers(o.value as Q1Value, onCommit)}
+            >
               <input
                 type="radio"
                 name="Q1"
                 className="choice__input"
                 checked={selected}
                 onChange={() => onChange(o.value as Q1Value)}
-                onClick={() => onCommit?.(o.value as Q1Value)}
               />
               <span className="btcell__stage">
                 {/* Height carries the real length ratio; boards share a baseline. */}
@@ -83,14 +88,18 @@ export function BoardTypeGrid({
         {plain.map((o) => {
           const selected = o.value === value
           return (
-            <label key={o.value} className="choice choice--compact" data-selected={selected || undefined}>
+            <label
+              key={o.value}
+              className="choice choice--compact"
+              data-selected={selected || undefined}
+              {...commitHandlers(o.value as Q1Value, onCommit)}
+            >
               <input
                 type="radio"
                 name="Q1"
                 className="choice__input"
                 checked={selected}
                 onChange={() => onChange(o.value as Q1Value)}
-                onClick={() => onCommit?.(o.value as Q1Value)}
               />
               <span className="choice__mark" aria-hidden="true" />
               <span className="choice__body">

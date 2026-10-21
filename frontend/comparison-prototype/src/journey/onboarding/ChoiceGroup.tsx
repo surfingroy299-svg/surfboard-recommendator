@@ -1,4 +1,5 @@
 import type { AnswerOption } from '../../logic/questions'
+import { commitHandlers } from './commit'
 
 /** Single choice. Rows with a rule, not cards: the label does the work. */
 export function ChoiceGroup<T extends string>({
@@ -28,14 +29,13 @@ export function ChoiceGroup<T extends string>({
       {options.map((o) => {
         const selected = o.value === value
         return (
-          <label key={o.value} className="choice" data-selected={selected || undefined}>
+          <label key={o.value} className="choice" data-selected={selected || undefined} {...commitHandlers(o.value as T, onCommit)}>
             <input
               type="radio"
               name={name}
               className="choice__input"
               checked={selected}
               onChange={() => onChange(o.value as T)}
-              onClick={() => onCommit?.(o.value as T)}
             />
             <span className="choice__body">
               <span className="choice__label">{o.label}</span>

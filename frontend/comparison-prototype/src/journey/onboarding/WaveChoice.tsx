@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import type { AnswerOption, Q7Value } from '../../logic/questions'
+import { commitHandlers } from './commit'
 
 /**
  * Q7 asks which waves you surf. You recognise your own conditions on sight and
@@ -65,14 +66,13 @@ export function WaveChoice({
         const v = o.value as Q7Value
         const selected = v === value
         return (
-          <label key={v} className="wtile" data-selected={selected || undefined}>
+          <label key={v} className="wtile" data-selected={selected || undefined} {...commitHandlers(v, onCommit)}>
             <input
               type="radio"
               name="Q7"
               className="choice__input"
               checked={selected}
               onChange={() => onChange(v)}
-              onClick={() => onCommit?.(v)}
             />
             <WaveFrame value={v} />
             <span className="wtile__text">
