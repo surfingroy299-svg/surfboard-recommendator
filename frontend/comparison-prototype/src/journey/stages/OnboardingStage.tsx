@@ -6,6 +6,7 @@ import { useAnswerPatch, useJourney } from '../journeyState'
 import { ChoiceGroup } from '../onboarding/ChoiceGroup'
 import { BoardTypeGrid } from '../onboarding/BoardTypeGrid'
 import { SkillLadder } from '../onboarding/SkillLadder'
+import { WaveChoice } from '../onboarding/WaveChoice'
 import { MultiChoiceGroup } from '../onboarding/MultiChoiceGroup'
 import { DimensionsFields } from '../onboarding/DimensionsFields'
 import { PhysicalFields } from '../onboarding/PhysicalFields'
@@ -51,7 +52,7 @@ export function OnboardingStage() {
   const wide = id === 'Q1' || id === 'Q7'
 
   return (
-    <main className="stage stage--onboarding">
+    <main className={`stage stage--onboarding${wide ? ' is-wide' : ''}`}>
       <div className={`onboarding${wide ? ' onboarding--wide' : ''}`}>
         <header className="onboarding__head">
           <Progress step={state.step} total={visible.length} />
@@ -128,9 +129,7 @@ function QuestionBody({
       )
     case 'Q7':
       return (
-        <ChoiceGroup
-          name="Q7"
-          legend={q.prompt}
+        <WaveChoice
           options={q.kind === 'single' ? q.options : []}
           value={answers.Q7}
           onChange={(v) => patch({ Q7: v })}
