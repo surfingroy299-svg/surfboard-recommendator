@@ -17,7 +17,7 @@ import { commitHandlers } from './commit'
  * invented silhouette.
  */
 
-interface Shape {
+export interface Shape {
   lengthFt: number
   widthIn: number
   tail: TailKind
@@ -25,8 +25,8 @@ interface Shape {
   fins: FinLayout
 }
 
-const SHAPES: Partial<Record<Q1Value, Shape>> = {
-  softboard: { lengthFt: 7.0, widthIn: 22, tail: 'round', category: 'mid_length', fins: 'thruster' },
+export const SHAPES: Partial<Record<Q1Value, Shape>> = {
+  softboard: { lengthFt: 7.0, widthIn: 23, tail: 'round', category: 'softboard', fins: 'thruster' },
   funboard: { lengthFt: 7.5, widthIn: 21.5, tail: 'round', category: 'mid_length', fins: 'single' },
   fish: { lengthFt: 5.67, widthIn: 20.75, tail: 'swallow', category: 'fish', fins: 'twin' },
   hybrid: { lengthFt: 5.92, widthIn: 20, tail: 'squash', category: 'hybrid', fins: 'thruster' },

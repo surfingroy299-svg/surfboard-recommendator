@@ -3,18 +3,24 @@ import type { AnswerOption, Q7Value } from '../../logic/questions'
 import { commitHandlers } from './commit'
 
 /**
- * Q7 asks which waves you surf. You recognise your own conditions on sight and
- * cannot easily describe them, so this is the one question where photography
- * does the work that words cannot.
+ * Q7 asks which waves you surf.
  *
- * Every frame carries a person, because a wave without a human in it has no
- * size. That is the whole teaching mechanism here: you compare the water to
- * the people in it, not to an adjective.
+ * The photograph used to be the card and the words were its caption, which got
+ * the hierarchy backwards: you cannot choose between four conditions by
+ * looking at four pretty waves, because what separates them is POWER, and
+ * power does not photograph. "Small and weak" and "small but punchy" look
+ * identical in a frame.
  *
- * The images are documented reference placeholders and are not committed —
- * see /photography/REGISTER.md. When one is missing the tile falls back to a
- * labelled frame rather than anything imitating a photograph, the same honesty
- * the board placeholders use.
+ * So the text decides and the photograph confirms. Each option carries four
+ * readings, every one of which already existed somewhere: a short category
+ * name, the height you would call it, the one-line `hint` the question
+ * definition has always specified (and which this component never rendered),
+ * and the full sentence from the answer definition.
+ *
+ * Every frame still carries a person, because a wave without a human in it has
+ * no size. The images are documented reference placeholders and are not
+ * committed — see /photography/REGISTER.md. When one is missing the tile falls
+ * back to a labelled frame rather than anything imitating a photograph.
  */
 
 const FILE: Record<Q7Value, string> = {
@@ -38,15 +44,25 @@ const FOCUS: Record<Q7Value, string> = {
   variable_conditions: 'center 66%',
 }
 
-/** Short, concrete reading of what the frame shows. */
-const READING: Record<Q7Value, string> = {
-  small_weak_waves: 'Waist high, crumbling',
-  medium_waves_with_push: 'Chest high, clean shoulder',
-  powerful_steep_waves: 'Overhead, lip throwing',
-  variable_conditions: 'No shape to read',
+/** The category, said in two or three words. */
+const NAME: Record<Q7Value, string> = {
+  small_weak_waves: 'Small and weak',
+  medium_waves_with_push: 'Medium, with push',
+  powerful_steep_waves: 'Powerful and steep',
+  variable_conditions: 'Variable',
 }
 
-const base = `${import.meta.env.BASE_URL}photography/`
+/**
+ * Height, where height means something. "Conditions vary" has no height — and
+ * saying one would be the exact error the question warns against, since height
+ * alone does not define power or shape.
+ */
+const SIZE: Record<Q7Value, string | null> = {
+  small_weak_waves: 'Knee to waist',
+  medium_waves_with_push: 'Waist to head',
+  powerful_steep_waves: 'Head high and over',
+  variable_conditions: null,
+}
 
 export function WaveChoice({
   options,
@@ -74,11 +90,16 @@ export function WaveChoice({
               checked={selected}
               onChange={() => onChange(v)}
             />
-            <WaveFrame value={v} />
             <span className="wtile__text">
-              <span className="wtile__reading mono">{READING[v]}</span>
-              <span className="wtile__label">{o.label}</span>
+              <span className="wtile__head">
+                <span className="wtile__name">{NAME[v]}</span>
+                {SIZE[v] && <span className="wtile__size mono">{SIZE[v]}</span>}
+              </span>
+              <span className="wtile__hint">{o.hint}</span>
+              <span className="wtile__desc">{o.label}</span>
             </span>
+            <WaveFrame value={v} />
+            <span className="choice__mark" aria-hidden="true" />
           </label>
         )
       })}
@@ -89,6 +110,7 @@ export function WaveChoice({
 function WaveFrame({ value }: { value: Q7Value }) {
   const [missing, setMissing] = useState(false)
   const file = FILE[value]
+  const base = `${import.meta.env.BASE_URL}photography/`
   return (
     <span className="wtile__frame">
       {missing ? (

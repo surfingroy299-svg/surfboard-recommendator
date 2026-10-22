@@ -17,6 +17,7 @@
  *   Q6  "quicker direction changes, more precise turns, lighter underfoot"
  *   Q8  can link turns and hold a line; he is reaching for smoothness,
  *       so the smoothness rung is not claimed
+ *   Q9  "surfs approximately 2 to 3 times per week", "good general fitness"
  */
 
 import type { Answers } from './answers'
@@ -25,12 +26,12 @@ export const demoAnswers = (): Answers => ({
   Q1: 'hybrid',
   Q2: ['catches_waves_easily', 'feels_stable_comfortable', 'hard_to_turn'],
   Q3: 'knows_dimensions',
-  Q4: { length: '6’2″', volume: '34–37 L', modelBrand: '' },
+  Q4: { length: '6’2″', volume: '34–37 L', volumeExact: null, modelBrand: '' },
   Q5: ['cant_perform_turns'],
   Q5FreeText: '',
   Q6: ['wants_turn_control', 'wants_freedom_to_move'],
   Q6FreeText: '',
   Q7: 'small_weak_waves',
   Q8: 'can_link_turns',
-  Q9: { height: { value: 180, unit: 'cm' }, weight: { value: 80, unit: 'kg' } },
+  Q9: { height: { value: 180, unit: 'cm' }, weight: { value: 80, unit: 'kg' }, fitness: 'weekly' },
 })

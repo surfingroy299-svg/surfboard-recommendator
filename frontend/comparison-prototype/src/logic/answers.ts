@@ -14,14 +14,48 @@ export type WeightUnit = 'kg' | 'lbs'
 
 export interface DimensionsAnswer {
   length: string | null
+  /**
+   * Display string either way — a picked bucket ("31–34 L") or a typed exact
+   * value ("32.4 L"). `translate.ts` passes this straight to the evidence
+   * trail and tests it for presence, so it must stay a non-empty string
+   * whenever the question is answered.
+   */
   volume: string | null
+  /**
+   * The number, when the surfer typed an exact volume; null when they picked a
+   * range. This is what preserves the exact/approximate distinction the
+   * question needs, without changing the shape `volume` has always had.
+   */
+  volumeExact: number | null
   /** Optional free text. V1: not processed by the Translation Layer. */
   modelBrand: string
 }
 
+/** How much the surfer is in the water, roughly. */
+export type Fitness = 'rarely' | 'occasionally' | 'weekly' | 'often' | 'daily'
+
+export const FITNESS_OPTIONS: { value: Fitness; label: string; short: string }[] = [
+  { value: 'rarely', label: 'Rarely or never', short: 'Rarely active' },
+  { value: 'occasionally', label: 'Occasionally', short: 'Occasionally active' },
+  { value: 'weekly', label: '1–2 times a week', short: '1–2 times a week' },
+  { value: 'often', label: '3–5 times a week', short: '3–5 times a week' },
+  { value: 'daily', label: 'Almost every day', short: 'Almost every day' },
+]
+
 export interface PhysicalAnswer {
   height: { value: number | null; unit: HeightUnit }
   weight: { value: number | null; unit: WeightUnit }
+  /**
+   * Collected and shown back in the profile; NOT consumed by the Translation
+   * Layer or the Size Calculation Step, because no document defines a rule for
+   * it — `size-calculation-rules.md` section 8 explicitly leaves fitness as
+   * part of the uncertainty the range width absorbs.
+   *
+   * Optional, so it never gates `isAnswered('Q9')`, and deliberately absent
+   * from `SurferProfile.physical`, which is the sizing input. Putting it there
+   * would invite the next person to index it into the Guild Factor table.
+   */
+  fitness: Fitness | null
 }
 
 export interface Answers {
@@ -50,14 +84,14 @@ export const emptyAnswers = (): Answers => ({
   Q1: null,
   Q2: [],
   Q3: null,
-  Q4: { length: null, volume: null, modelBrand: '' },
+  Q4: { length: null, volume: null, volumeExact: null, modelBrand: '' },
   Q5: [],
   Q5FreeText: '',
   Q6: [],
   Q6FreeText: '',
   Q7: null,
   Q8: null,
-  Q9: { height: { value: null, unit: 'cm' }, weight: { value: null, unit: 'kg' } },
+  Q9: { height: { value: null, unit: 'cm' }, weight: { value: null, unit: 'kg' }, fitness: null },
 })
 
 export type SkipReason = 'user_did_not_know_dimensions' | 'no_regular_board'
@@ -138,6 +172,25 @@ export function toCm(value: number, unit: HeightUnit): number {
 
 export function toKg(value: number, unit: WeightUnit): number {
   return unit === 'kg' ? value : value / 2.2046
+}
+
+/**
+ * Re-express a measurement in another unit.
+ *
+ * Switching the unit has to convert the number, not just relabel it: a surfer
+ * who enters 80 kg and switches to lbs means 176 lbs, not 80. Returning null
+ * for null keeps an unanswered field unanswered.
+ */
+export function convertHeight(value: number | null, from: HeightUnit, to: HeightUnit): number | null {
+  if (value === null || from === to) return value
+  const cm = toCm(value, from)
+  return to === 'cm' ? Math.round(cm) : Math.round((cm / 2.54) * 10) / 10
+}
+
+export function convertWeight(value: number | null, from: WeightUnit, to: WeightUnit): number | null {
+  if (value === null || from === to) return value
+  const kg = toKg(value, from)
+  return to === 'kg' ? Math.round(kg * 10) / 10 : Math.round(kg * 2.2046 * 10) / 10
 }
 
 export function physicalIsValid(p: PhysicalAnswer): boolean {

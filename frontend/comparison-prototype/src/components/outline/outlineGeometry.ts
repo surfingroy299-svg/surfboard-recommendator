@@ -33,6 +33,10 @@ interface Tune {
 
 const CATEGORY_TUNE: Record<string, Tune> = {
   groveler: { widePos: 0.5, noseFull: 0.82, tailW: 0.62 },
+  // A soft-top carries its width further in every direction than a mid-length:
+  // the nose stays full almost to the tip and the tail is broad and round.
+  // Its own key rather than a retune of mid_length, which funboard shares.
+  softboard: { widePos: 0.5, noseFull: 0.97, tailW: 0.76 },
   fish: { widePos: 0.48, noseFull: 0.78, tailW: 0.7 },
   hybrid: { widePos: 0.52, noseFull: 0.7, tailW: 0.56 },
   shortboard: { widePos: 0.55, noseFull: 0.55, tailW: 0.5 },

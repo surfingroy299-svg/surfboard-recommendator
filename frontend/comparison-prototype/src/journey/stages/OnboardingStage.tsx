@@ -194,13 +194,19 @@ function QuestionBody({
   }
 }
 
-/** Optional note. Collapsed by default so it never competes with the options. */
+/**
+ * Optional note. Still collapsed, so it never competes with the options — but
+ * it now says what it is FOR. "Add a note" reads as an afterthought and gets
+ * skipped by exactly the surfer it exists for: the one whose answer is not on
+ * the list. Naming that situation is what makes it findable.
+ */
 function FreeText({ id, value, onChange }: { id: string; value: string; onChange: (v: string) => void }) {
   const [open, setOpen] = useState(value.trim().length > 0)
   if (!open) {
     return (
       <button type="button" className="addnote" onClick={() => setOpen(true)}>
-        Add a note
+        <span className="addnote__q">Can&rsquo;t find the right match?</span>
+        <span className="addnote__a">Tell us more in your own words.</span>
       </button>
     )
   }
@@ -213,6 +219,7 @@ function FreeText({ id, value, onChange }: { id: string; value: string; onChange
         id={`${id}-note`}
         className="field__control field__control--area"
         rows={3}
+        autoFocus
         value={value}
         onChange={(e) => onChange(e.target.value)}
       />

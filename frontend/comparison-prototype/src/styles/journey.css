@@ -260,13 +260,18 @@
   border-radius: 3px;
 }
 
+/* Every selectable row type that carries a mark. Keep this list in step with
+   the components: three separate selected-state bugs have come from a new row
+   type being added and these rules still naming only `.choice`. */
 .choice:hover .choice__mark,
-.rung:hover .choice__mark {
+.rung:hover .choice__mark,
+.wtile:hover .choice__mark {
   border-color: var(--tide);
 }
 
 .choice[data-selected] .choice__mark,
-.rung[data-selected] .choice__mark {
+.rung[data-selected] .choice__mark,
+.wtile[data-selected] .choice__mark {
   border-color: var(--tide);
   background: var(--tide);
   box-shadow: inset 0 0 0 3px var(--paper);
@@ -305,17 +310,49 @@
   outline: none;
 }
 
+/* An offer, not a footnote: it has to be findable by the one surfer whose
+   answer is not on the list, without outweighing the list for everyone else. */
 .addnote {
-  margin-top: 18px;
-  font-size: var(--fs-13);
-  color: var(--ink-3);
-  border-bottom: 1px solid var(--rule-strong);
-  padding-bottom: 1px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 7px;
+  margin-top: 26px;
+  padding: 13px 15px;
+  text-align: left;
+  background: var(--paper-raised);
+  border: 1px dashed var(--rule-strong);
+  border-radius: var(--radius);
+  transition: border-color var(--dur-1) var(--ease-out), background var(--dur-1) var(--ease-out);
 }
 
 .addnote:hover {
+  border-color: var(--tide);
+  background: var(--paper-raised);
+}
+
+.addnote__q {
+  font-size: var(--fs-14);
   color: var(--ink);
-  border-color: var(--ink);
+}
+
+.addnote__a {
+  font-size: var(--fs-14);
+  color: var(--ink-3);
+  text-decoration: underline;
+  text-decoration-color: var(--rule-strong);
+  text-underline-offset: 3px;
+  transition: color var(--dur-1) var(--ease-out), text-decoration-color var(--dur-1) var(--ease-out);
+}
+
+.addnote:hover .addnote__a {
+  color: var(--tide);
+  text-decoration-color: var(--tide);
+}
+
+.addnote:focus-visible {
+  outline: 2px solid var(--tide);
+  outline-offset: 2px;
 }
 
 /* ── Fields */
@@ -387,12 +424,91 @@
   color: var(--low);
 }
 
+/* ── Field head: label on the left, how-to-answer switch on the right */
+
+.field__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 7px;
+}
+
+.field__head .field__label {
+  margin-bottom: 0;
+}
+
+.field__hint {
+  margin-top: 9px;
+  font-size: var(--fs-12);
+  color: var(--ink-3);
+  line-height: 1.5;
+}
+
+.field__unit {
+  flex: none;
+  font-size: var(--fs-13);
+  color: var(--ink-3);
+}
+
+.field__row--split {
+  gap: 8px;
+}
+
+.field__control--num {
+  max-width: 110px;
+}
+
+/* ── Select: the native control, with a drawn chevron so the arrow sits where
+   the type does rather than wherever the platform puts it. */
+
+.select {
+  position: relative;
+  display: block;
+}
+
+.select--narrow {
+  width: 74px;
+}
+
+.select .field__control {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 34px;
+  cursor: pointer;
+}
+
+.select::after {
+  content: '';
+  position: absolute;
+  right: 13px;
+  top: 50%;
+  width: 8px;
+  height: 8px;
+  margin-top: -5px;
+  border-right: 1.5px solid var(--ink-3);
+  border-bottom: 1.5px solid var(--ink-3);
+  transform: rotate(45deg);
+  pointer-events: none;
+  transition: border-color var(--dur-1) var(--ease-out);
+}
+
+.select:hover::after {
+  border-color: var(--ink);
+}
+
 .units {
   display: flex;
   flex: none;
   border: 1px solid var(--rule-strong);
   border-radius: var(--radius);
   overflow: hidden;
+}
+
+.units--mode .units__item {
+  padding: 3px 10px;
+  font-size: 11px;
+  letter-spacing: 0.04em;
 }
 
 .units__item {
@@ -410,6 +526,158 @@
 .units__item[aria-pressed='true'] {
   background: var(--ink);
   color: var(--paper);
+}
+
+/* ── Slider: the quick path to a height or a weight.
+   Drawn as a measuring rule rather than a generic control — a thin track, a
+   square-ish thumb, and the span printed at both ends so the range the
+   question accepts is visible before you touch it. */
+
+.slider {
+  margin-top: 14px;
+}
+
+.slider__input {
+  display: block;
+  width: 100%;
+  height: 22px;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+}
+
+.slider__input::-webkit-slider-runnable-track {
+  height: 2px;
+  background: var(--rule-strong);
+  border-radius: 1px;
+}
+
+.slider__input::-moz-range-track {
+  height: 2px;
+  background: var(--rule-strong);
+  border-radius: 1px;
+}
+
+.slider__input::-webkit-slider-thumb {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 14px;
+  height: 20px;
+  margin-top: -9px;
+  background: var(--paper-raised);
+  border: 1px solid var(--ink);
+  border-radius: 2px;
+  box-shadow: 0 1px 2px rgba(21, 23, 26, 0.18);
+  transition: background var(--dur-1) var(--ease-out), border-color var(--dur-1) var(--ease-out);
+}
+
+.slider__input::-moz-range-thumb {
+  width: 14px;
+  height: 20px;
+  background: var(--paper-raised);
+  border: 1px solid var(--ink);
+  border-radius: 2px;
+  box-shadow: 0 1px 2px rgba(21, 23, 26, 0.18);
+}
+
+.slider__input:hover::-webkit-slider-thumb {
+  border-color: var(--tide);
+}
+
+.slider__input:hover::-moz-range-thumb {
+  border-color: var(--tide);
+}
+
+.slider__input:focus-visible {
+  outline: none;
+}
+
+.slider__input:focus-visible::-webkit-slider-thumb {
+  outline: 2px solid var(--tide);
+  outline-offset: 2px;
+}
+
+.slider__input:focus-visible::-moz-range-thumb {
+  outline: 2px solid var(--tide);
+  outline-offset: 2px;
+}
+
+/* Before the surfer commits, the thumb sits mid-span so the control has a
+   position — but it must not look like an answer, so it reads as a ghost. */
+.slider[data-unset] .slider__input::-webkit-slider-thumb {
+  background: var(--wash);
+  border-color: var(--rule-strong);
+  box-shadow: none;
+}
+
+.slider[data-unset] .slider__input::-moz-range-thumb {
+  background: var(--wash);
+  border-color: var(--rule-strong);
+  box-shadow: none;
+}
+
+.slider__scale {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2px;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: var(--ink-3);
+}
+
+/* ── Fitness: five steps, compact enough to ride along on the physical screen */
+
+.fitness {
+  margin: 0;
+  padding: 22px 0 0;
+  border: 0;
+  border-top: 1px solid var(--rule);
+}
+
+.fitness__row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.fchip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 12px;
+  font-size: var(--fs-13);
+  color: var(--ink-2);
+  background: var(--paper-raised);
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: border-color var(--dur-1) var(--ease-out), background var(--dur-1) var(--ease-out),
+    color var(--dur-1) var(--ease-out);
+}
+
+.fchip:hover {
+  border-color: var(--ink-3);
+  color: var(--ink);
+}
+
+.fchip[data-selected] {
+  background: var(--tide);
+  border-color: var(--tide);
+  color: var(--paper);
+}
+
+.fchip:has(.choice__input:focus-visible) {
+  outline: 2px solid var(--tide);
+  outline-offset: 2px;
+}
+
+/* The five fitness steps want one line; at 620px they wrap to two and the
+   last step strands on its own row. */
+.fields--physical {
+  max-width: 680px;
 }
 
 /* ── Profile */
@@ -1072,25 +1340,54 @@
   gap: clamp(10px, 1.2vw, 16px);
 }
 
+/* A card, because this is now something you read rather than something you
+   look at. The text sits above its photograph and the whole tile carries the
+   selected state, not just the frame. */
 .wtile {
   position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: 9px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-areas:
+    'text mark'
+    'frame frame';
+  align-items: start;
+  gap: 12px;
+  padding: 16px 16px 16px;
+  background: var(--paper-raised);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
   cursor: pointer;
+  transition: border-color var(--dur-2) var(--ease-out), background var(--dur-2) var(--ease-out);
+}
+
+.wtile:hover {
+  border-color: var(--ink-3);
+}
+
+.wtile[data-selected] {
+  border-color: var(--tide);
+  background: var(--paper-raised);
+  box-shadow: inset 0 0 0 1px var(--tide);
+}
+
+.wtile > .choice__mark {
+  grid-area: mark;
+  order: 0;
+  margin-top: 2px;
 }
 
 .wtile__frame {
+  grid-area: frame;
   position: relative;
   display: block;
   overflow: hidden;
   border-radius: var(--radius);
   background: var(--wash);
   /* One ratio for all four: four frames from different shoots only read as a
-     set if the crop is identical. Wide rather than square so all four tiles
-     fit on screen together — this question is a comparison, and you cannot
-     compare what you have to scroll between. */
-  aspect-ratio: 16 / 10;
+     set if the crop is identical. A band rather than a panel — the photograph
+     now supports a decision the text has already made, and it has to stay
+     short enough that all four tiles fit on screen together. */
+  aspect-ratio: 16 / 7;
 }
 
 .wtile__img {
@@ -1128,40 +1425,60 @@
   border-color: var(--tide);
 }
 
-.choice__input:focus-visible ~ .wtile__frame::after {
-  border-color: var(--tide);
+.wtile:has(.choice__input:focus-visible) {
   outline: 2px solid var(--tide);
-  outline-offset: 3px;
+  outline-offset: 2px;
 }
 
 .wtile__text {
+  grid-area: text;
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 5px;
+  min-width: 0;
 }
 
-.wtile__reading {
+/* Name and height share a baseline: the height qualifies the name, it is not
+   a second fact underneath it. */
+.wtile__head {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+}
+
+.wtile__name {
+  font-family: var(--font-display);
+  font-size: var(--fs-22);
+  line-height: 1.1;
+  color: var(--ink);
+}
+
+.wtile__size {
   font-size: var(--fs-12);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  letter-spacing: 0.06em;
   color: var(--ink-3);
   transition: color var(--dur-1) var(--ease-out);
 }
 
-.wtile[data-selected] .wtile__reading {
+.wtile[data-selected] .wtile__size {
   color: var(--tide);
 }
 
-.wtile__label {
-  font-size: var(--fs-15);
+/* The one-line reading. This is the fastest way to tell the four apart, so it
+   sits directly under the name and carries weight. */
+.wtile__hint {
+  font-size: var(--fs-14);
   line-height: 1.4;
   color: var(--ink-2);
-  transition: color var(--dur-1) var(--ease-out);
 }
 
-.wtile:hover .wtile__label,
-.wtile[data-selected] .wtile__label {
-  color: var(--ink);
+/* The full sentence from the answer definition — the tiebreaker, read only by
+   someone still deciding between two. */
+.wtile__desc {
+  font-size: var(--fs-13);
+  line-height: 1.5;
+  color: var(--ink-3);
 }
 
 /* Honest fallback when a reference image is absent — nothing imitating a photo. */
