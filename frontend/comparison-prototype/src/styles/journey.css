@@ -260,13 +260,23 @@
   border-radius: 3px;
 }
 
-.choice:hover .choice__mark {
+.choice:hover .choice__mark,
+.rung:hover .choice__mark {
   border-color: var(--tide);
 }
 
-.choice[data-selected] .choice__mark {
+.choice[data-selected] .choice__mark,
+.rung[data-selected] .choice__mark {
   border-color: var(--tide);
   background: var(--tide);
+  box-shadow: inset 0 0 0 3px var(--paper);
+}
+
+/* Held rungs are asserted by the selection, so their marks are filled too —
+   quietly, since the surfer did not click them. */
+.rung[data-held] .choice__mark {
+  border-color: var(--tide-soft);
+  background: var(--tide-soft);
   box-shadow: inset 0 0 0 3px var(--paper);
 }
 
@@ -282,6 +292,17 @@
 .choice__input:focus-visible + .choice__body ~ .choice__mark {
   outline: 2px solid var(--tide);
   outline-offset: 3px;
+}
+
+/* The ladder's focus ring goes on the whole row: the mark sits at the far
+   right of a wide grid, so a ring around it alone is easy to lose. */
+.rung:focus-within {
+  outline: 2px solid var(--tide);
+  outline-offset: -2px;
+}
+
+.rung:focus-within:not(:focus-visible):not(:has(.choice__input:focus-visible)) {
+  outline: none;
 }
 
 .addnote {
@@ -964,14 +985,6 @@
   border-top: 1px solid var(--rule);
 }
 
-.rung[data-blocked] {
-  cursor: not-allowed;
-}
-
-.rung[data-blocked] .rung__label {
-  color: var(--ink-3);
-}
-
 .rung__index {
   font-size: var(--fs-12);
   color: var(--rule-strong);
@@ -980,6 +993,27 @@
 
 .rung[data-selected] .rung__index {
   color: var(--tide);
+}
+
+.rung[data-held] .rung__index {
+  color: var(--ink-3);
+}
+
+/* A quiet rail down the held rungs: the ladder reads as filled to the
+   selection rather than as one row picked out of six. */
+.rung[data-held]::before,
+.rung[data-selected]::before {
+  content: '';
+  position: absolute;
+  left: -10px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--tide-soft);
+}
+
+.rung[data-selected]::before {
+  background: var(--tide);
 }
 
 .rung__glyph {
@@ -997,6 +1031,14 @@
 .rung:hover .rung__label,
 .rung[data-selected] .rung__label {
   color: var(--ink);
+}
+
+.rung[data-selected] .rung__label {
+  font-weight: 500;
+}
+
+.rung[data-held] .rung__label {
+  color: var(--ink-2);
 }
 
 @media (max-width: 620px) {

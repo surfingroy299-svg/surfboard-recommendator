@@ -3,7 +3,7 @@
  *
  * Routing follows `translation-layer.md` section 5.0.3 and the per-answer
  * definitions in `onboarding-questions.md`. Caps come from each question's
- * declared type (Q2 max 3, Q5 max 2, Q6 max 2, Q8 max 3).
+ * declared type (Q2 max 3, Q5 max 2, Q6 max 2). Q8 is a single-select ladder.
  */
 
 import type { QuestionId, Q1Value, Q2Value, Q3Value, Q5Value, Q6Value, Q7Value, Q8Value } from './questions'
@@ -34,7 +34,15 @@ export interface Answers {
   Q6: Q6Value[]
   Q6FreeText: string
   Q7: Q7Value | null
-  Q8: Q8Value[]
+  /**
+   * The highest rung held consistently. A scalar rather than a one-element
+   * array on purpose: `translate.ts` used to read the whole selected set, and
+   * an array would let `Q8.length === 1` and `largestRungGap(Q8)` keep
+   * compiling as permanent constants — no type error, no failed assertion,
+   * just a quietly different profile. The scalar makes every such site a
+   * compile error instead.
+   */
+  Q8: Q8Value | null
   Q9: PhysicalAnswer
 }
 
@@ -48,7 +56,7 @@ export const emptyAnswers = (): Answers => ({
   Q6: [],
   Q6FreeText: '',
   Q7: null,
-  Q8: [],
+  Q8: null,
   Q9: { height: { value: null, unit: 'cm' }, weight: { value: null, unit: 'kg' } },
 })
 
@@ -108,7 +116,7 @@ export function isAnswered(a: Answers, id: QuestionId): boolean {
     case 'Q7':
       return a.Q7 !== null
     case 'Q8':
-      return a.Q8.length > 0
+      return a.Q8 !== null
     case 'Q9':
       return a.Q9.height.value !== null && a.Q9.weight.value !== null
   }

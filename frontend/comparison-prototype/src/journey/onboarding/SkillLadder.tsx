@@ -1,58 +1,66 @@
 import { WaveGlyph } from '../../components/surf/WaveGlyph'
 import type { AnswerOption, Q8Value } from '../../logic/questions'
+import { commitHandlers } from './commit'
 
 /**
- * Q8 is an ability ladder — the answers run lowest to highest, and the
- * Translation Layer keys band and sub-level off the highest one selected.
- * Nothing in a flat checkbox list shows that.
+ * Q8 is an ability ladder — the answers run lowest to highest, and the rung
+ * the surfer picks sets band and sub-level directly. Nothing in a flat list
+ * shows that ordering, which is why each rung draws the line a surfer takes
+ * across the face: the trajectory *is* the ability.
  *
- * Presented as ascending rungs with the ride line each one describes.
+ * ONE rung is chosen: the highest the surfer holds consistently. That answer
+ * asserts the whole ladder beneath it, so the rungs below the selection are
+ * shown as held rather than as unchosen alternatives — the ladder fills to the
+ * selection. `translate.ts` reads the same implication, so what is drawn and
+ * what is computed agree.
  *
- * Selection stays INDEPENDENT and capped at 3. It deliberately does not
- * auto-fill the rungs below a chosen one: `translate.ts` reads the whole set —
- * `largestRungGap()` lowers confidence when selections skip steps, and a lone
- * selection yields `single_source` — so auto-filling would quietly change the
- * profile the surfer gets.
+ * This replaces an independent multi-select capped at 3. The old component
+ * deliberately refused to auto-fill, because the Translation Layer then read
+ * the whole selected set and auto-filling would have changed confidence
+ * silently. Under single-select the implication IS the meaning, so filling is
+ * now the honest rendering rather than a distortion of it.
  */
 export function SkillLadder({
   options,
-  values,
-  max,
-  onToggle,
+  value,
+  onChange,
+  onCommit,
 }: {
   options: AnswerOption[]
-  values: Q8Value[]
-  max: number
-  onToggle: (v: Q8Value) => void
+  value: Q8Value | null
+  onChange: (v: Q8Value) => void
+  onCommit?: (v: Q8Value) => void
 }) {
-  const atCap = values.length >= max
+  const chosen = value === null ? -1 : options.findIndex((o) => o.value === value)
+
   return (
     <fieldset className="ladder">
-      <legend className="visually-hidden">What usually happens when you catch a wave?</legend>
+      <legend className="visually-hidden">What is the most you can do consistently once you are riding?</legend>
       {options.map((o, i) => {
-        const selected = values.includes(o.value as Q8Value)
-        const blocked = atCap && !selected
+        const selected = o.value === value
         return (
           <label
             key={o.value}
             className="rung"
             data-selected={selected || undefined}
-            data-blocked={blocked || undefined}
+            /* Rungs beneath the selection are implied by it, so they read as
+               held — dimmer than the choice itself, but not as untaken. */
+            data-held={!selected && chosen > i ? '' : undefined}
+            {...commitHandlers(o.value as Q8Value, onCommit)}
           >
             <input
-              type="checkbox"
+              type="radio"
               name="Q8"
               className="choice__input"
               checked={selected}
-              disabled={blocked}
-              onChange={() => onToggle(o.value as Q8Value)}
+              onChange={() => onChange(o.value as Q8Value)}
             />
             <span className="rung__index mono">{String(i + 1).padStart(2, '0')}</span>
             <span className="rung__glyph">
               <WaveGlyph rung={o.value as Q8Value} />
             </span>
             <span className="rung__label">{o.label}</span>
-            <span className="choice__mark choice__mark--box" aria-hidden="true" />
+            <span className="choice__mark" aria-hidden="true" />
           </label>
         )
       })}

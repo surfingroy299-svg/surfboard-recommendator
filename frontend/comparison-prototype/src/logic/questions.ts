@@ -141,17 +141,21 @@ export const QUESTIONS: Question[] = [
     id: 'Q8',
     key: 'skill',
     category: 'Skill',
-    prompt: 'What usually happens when you catch a wave?',
-    kind: 'multi',
-    max: 3,
-    freeText: false,
+    prompt: 'What is the most you can do consistently once you are riding?',
+    kind: 'single',
     options: [
       { value: 'can_stand_ride_straight', label: 'I can stand up and ride straight toward the shore' },
-      { value: 'can_ride_face', label: 'I can ride along the face of the wave' },
-      { value: 'can_make_basic_turns', label: 'I can make basic turns on the wave' },
-      { value: 'can_link_turns', label: 'I can link turns together and control my direction' },
-      { value: 'can_link_turns_smoothly', label: 'I can link turns smoothly and control my speed throughout the wave' },
-      { value: 'can_position_strategically', label: 'I can choose where to take off and consistently position myself well' },
+      { value: 'can_ride_face', label: 'I can angle along the face instead of straight to shore' },
+      { value: 'can_make_basic_turns', label: 'I can turn on the face and change direction when I want to' },
+      { value: 'can_link_turns', label: 'I can link turns together and stay in control of my line' },
+      { value: 'can_link_turns_smoothly', label: 'I can link turns smoothly and hold speed through the whole wave' },
+      // The value still names the underlying ability (reading the wave and
+      // positioning); the label names the observable evidence for it, because a
+      // completed roundhouse IS the positioning claim. The question's purpose is
+      // to read ability "based on actual behavior", and a claimed manoeuvre is
+      // observable where "I position myself well" is self-assessment. See the
+      // note under this answer in onboarding-questions.md.
+      { value: 'can_position_strategically', label: 'I can complete a roundhouse cutback and reconnect with the foam' },
     ],
   },
   {
@@ -166,9 +170,17 @@ export const QUESTIONS: Question[] = [
 export const questionById = Object.fromEntries(QUESTIONS.map((q) => [q.id, q])) as Record<QuestionId, Question>
 
 /**
- * Q8 answers are an ability ladder, lowest to highest. The Translation Layer
- * keys band and sub_level off the HIGHEST selected rung
+ * Q8 answers are an ability ladder, lowest to highest.
+ *
+ * The surfer selects the highest rung they hold consistently, and that single
+ * answer asserts the whole contiguous ladder beneath it — the implied set is
+ * `slice(0, index + 1)`. The selected rung sets band and sub_level directly
  * (translation-layer.md section 6.1).
+ *
+ * Because the implied ladder is contiguous by construction, a skipped rung
+ * cannot be expressed at all. That is why section 6.4's large-gap rule and the
+ * `ambiguous_level` flag are unreachable through this question rather than
+ * merely unused.
  */
 export const Q8_LADDER: Q8Value[] = [
   'can_stand_ride_straight',
@@ -178,6 +190,20 @@ export const Q8_LADDER: Q8Value[] = [
   'can_link_turns_smoothly',
   'can_position_strategically',
 ]
+
+/**
+ * Ladder comparison. "or higher" is a property of the ladder rather than of any
+ * one consumer, so it lives here instead of being re-enumerated per call site —
+ * which is how `can_position_strategically` came to be missing from one of them.
+ */
+export function rungAtLeast(answer: Q8Value | null, floor: Q8Value): boolean {
+  return answer !== null && Q8_LADDER.indexOf(answer) >= Q8_LADDER.indexOf(floor)
+}
+
+/** How many rungs the answer asserts, counting the one selected. 0 when unanswered. */
+export function rungsHeld(answer: Q8Value | null): number {
+  return answer === null ? 0 : Q8_LADDER.indexOf(answer) + 1
+}
 
 /** Q4 dropdown choices. Prototype ranges — the document specifies the fields, not the increments. */
 export const BOARD_LENGTH_OPTIONS: string[] = [

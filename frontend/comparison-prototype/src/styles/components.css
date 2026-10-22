@@ -454,20 +454,23 @@
   transition: stroke var(--dur-1) var(--ease-out);
 }
 
-.wglyph__takeoff {
-  fill: var(--ink-3);
-  transition: fill var(--dur-1) var(--ease-out);
-}
-
-/* The chosen rung's line is the one that should read. */
+/* The chosen rung's line is the one that should read. `.rung` is listed
+   alongside `.choice` because the skill ladder is not a `.choice` row — which
+   is why this highlight silently never fired there. */
 .choice[data-selected] .wglyph__ride,
-.choice:hover .wglyph__ride {
+.choice:hover .wglyph__ride,
+.rung[data-selected] .wglyph__ride,
+.rung:hover .wglyph__ride {
   stroke: var(--tide);
 }
 
-.choice[data-selected] .wglyph__takeoff,
-.choice:hover .wglyph__takeoff {
-  fill: var(--tide);
+/* Rungs the selection implies: held, but not the claim itself. */
+.rung[data-held] .wglyph__ride {
+  stroke: var(--ink-3);
+}
+
+.rung[data-held] .wglyph__face {
+  stroke: var(--rule);
 }
 
 /* ───────────────────────── Quiver rack ───────────────────────── */

@@ -31,6 +31,6 @@ export const demoAnswers = (): Answers => ({
   Q6: ['wants_turn_control', 'wants_freedom_to_move'],
   Q6FreeText: '',
   Q7: 'small_weak_waves',
-  Q8: ['can_ride_face', 'can_make_basic_turns', 'can_link_turns'],
+  Q8: 'can_link_turns',
   Q9: { height: { value: 180, unit: 'cm' }, weight: { value: 80, unit: 'kg' } },
 })

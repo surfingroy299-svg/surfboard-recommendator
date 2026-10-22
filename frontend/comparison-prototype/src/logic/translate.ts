@@ -12,7 +12,7 @@
 
 import type { Answers } from './answers'
 import { skipReasons, toCm, toKg, visibleQuestionIds } from './answers'
-import { Q8_LADDER, type Q2Value, type Q5Value, type Q6Value, type Q8Value } from './questions'
+import { rungAtLeast, rungsHeld, type Q2Value, type Q5Value, type Q6Value, type Q8Value } from './questions'
 import {
   escalateFit,
   type Alignment,
@@ -37,7 +37,7 @@ import {
 
 // ───────────────────────── Axis 1 — Actual Surfing Level (section 6)
 
-/** Section 6.1: the highest-selected Q8 rung sets band and sub_level. */
+/** Section 6.1: the selected Q8 rung sets band and sub_level. */
 const LEVEL_BY_RUNG: Record<Q8Value, { band: Band; sub_level: SubLevel }> = {
   can_stand_ride_straight: { band: 'beginner', sub_level: 'lower' },
   can_ride_face: { band: 'beginner', sub_level: 'upper' },
@@ -55,38 +55,20 @@ const LEVEL_CORROBORATING_Q5: Q5Value[] = [
   'struggles_to_catch_waves_consistently',
 ]
 
-/** Q8 selections that place a paddling struggle in conflict with high skill (section 6.4). */
-const HIGH_RUNGS: Q8Value[] = ['can_link_turns_smoothly', 'can_position_strategically']
-
-function rungIndexes(q8: Q8Value[]): number[] {
-  return q8.map((v) => Q8_LADDER.indexOf(v)).sort((a, b) => a - b)
-}
-
 /**
- * Largest step between consecutive selected rungs. 1 is contiguous.
- *
- * Section 6.4 treats skipped rungs as a signal. Both worked examples skip two
- * or more rungs, so a gap of 3+ is read as the "large unexplained gap" that
- * drops confidence to low; a single skipped rung is treated as the minor
- * tension section 6.3 maps to medium.
+ * Section 6.4's large-gap rule and the `ambiguous_level` flag are UNREACHABLE,
+ * not forgotten. Q8 is a single-select ladder: the answer names the highest
+ * rung held and asserts the contiguous ladder beneath it, so a skipped rung
+ * cannot be expressed. `largestRungGap()` lived here to detect that case and
+ * has been removed rather than left to return a constant 1.
  */
-function largestRungGap(q8: Q8Value[]): number {
-  const idx = rungIndexes(q8)
-  let gap = 1
-  for (let i = 1; i < idx.length; i++) gap = Math.max(gap, idx[i] - idx[i - 1])
-  return gap
-}
 
 function translateLevel(a: Answers): Axis<LevelState> {
   const evidence: Evidence[] = []
-  const selected = a.Q8
-  const highest = selected.reduce<Q8Value | null>(
-    (best, v) => (best === null || Q8_LADDER.indexOf(v) > Q8_LADDER.indexOf(best) ? v : best),
-    null,
-  )
+  const top = a.Q8
 
   // Q8 is never gated, so a missing answer is an edge case only.
-  if (!highest) {
+  if (!top) {
     return {
       state: { band: 'intermediate', sub_level: 'lower', edge_flags: [] },
       confidence: { level: 'low', type: 'insufficient_data', basis: 'No skill signals were provided.' },
@@ -95,23 +77,25 @@ function translateLevel(a: Answers): Axis<LevelState> {
     }
   }
 
-  const { band, sub_level } = LEVEL_BY_RUNG[highest]
+  const { band, sub_level } = LEVEL_BY_RUNG[top]
+  // One statement was made, so one entry is recorded. Materialising the implied
+  // rungs as separate entries would read as separate answers and fabricate
+  // claims the surfer never made individually.
   evidence.push({
     source: 'Q8',
-    value: highest,
-    contribution: 'primary signal — highest selected skill sets band and sub-level',
+    value: top,
+    contribution:
+      'primary signal — the highest ability claimed sets band and sub-level; the rungs below it are implied by the answer',
   })
-  for (const v of selected) {
-    if (v === highest) continue
-    evidence.push({ source: 'Q8', value: v, contribution: 'supporting signal — confirms the ladder below the highest skill' })
-  }
 
   const edge_flags: LevelState['edge_flags'] = []
-  // Section 6.1: leans_advanced when the top two rungs are both selected.
-  if (selected.includes('can_position_strategically') && selected.includes('can_link_turns_smoothly')) {
-    edge_flags.push('leans_advanced')
-  }
-  if (highest === 'can_stand_ride_straight' || highest === 'can_ride_face') edge_flags.push('leans_beginner')
+  // Section 6.1: the top of intermediate, reaching into advanced. The former
+  // two-rung conjunction is vacuous under single-select — the top rung implies
+  // the one below it — which would make the flag a synonym for band=advanced
+  // and make interpret.ts's "close to the next level up" false for someone who
+  // is already there.
+  if (top === 'can_link_turns_smoothly') edge_flags.push('leans_advanced')
+  if (top === 'can_stand_ride_straight' || top === 'can_ride_face') edge_flags.push('leans_beginner')
 
   const corroboratingQ2 = a.Q2.filter((v) => LEVEL_CORROBORATING_Q2.includes(v))
   const corroboratingQ5 = a.Q5.filter((v) => LEVEL_CORROBORATING_Q5.includes(v))
@@ -122,21 +106,22 @@ function translateLevel(a: Answers): Axis<LevelState> {
     evidence.push({ source: 'Q5', value: v, contribution: 'supporting signal — consistent with the inferred level' })
   }
 
-  const gap = largestRungGap(selected)
+  // Section 6.3. Confidence turns on CORROBORATION, not count: the implied
+  // ladder is always coherent, so the only open question is whether anything
+  // else in the answers agrees with it.
+  //
+  // Branch order matters. The old chain tested "one selection" above
+  // corroboration, which under single-select would always match and would make
+  // `high` unreachable for every surfer — taking challenge_level.confidence
+  // down with it (decide.ts).
   const paddleStruggle =
     a.Q2.includes('struggles_to_catch_waves') || a.Q5.includes('struggles_to_catch_waves_consistently')
-  const highSkill = HIGH_RUNGS.includes(highest)
+  const highSkill = rungAtLeast(top, 'can_link_turns_smoothly')
   const corroborated = corroboratingQ2.length + corroboratingQ5.length > 0
+  const impliesRange = rungsHeld(top) >= 2
 
   let confidence: Confidence
-  if (gap >= 3) {
-    // Section 6.4 — large skill gap.
-    confidence = {
-      level: 'low',
-      type: 'conflicting_signals',
-      basis: 'Selected skills skip several steps of the ladder, so the level reading is uncertain.',
-    }
-  } else if (highSkill && paddleStruggle) {
+  if (highSkill && paddleStruggle) {
     // Section 6.4 — do NOT lower the band; the barrier is board or conditions.
     confidence = {
       level: 'medium',
@@ -144,29 +129,26 @@ function translateLevel(a: Answers): Axis<LevelState> {
       basis:
         'Skill answers and reported trouble catching waves pull in different directions. Band held at the skill answer — a paddling barrier is more likely board or conditions than ability.',
     }
-  } else if (selected.length === 1) {
-    confidence = {
-      level: 'medium',
-      type: 'single_source',
-      basis: 'One skill answer selected, with no second signal to confirm it.',
-    }
-  } else if (gap === 2) {
-    confidence = {
-      level: 'medium',
-      type: 'conflicting_signals',
-      basis: 'Selected skills skip a step of the ladder.',
-    }
-  } else if (corroborated) {
+  } else if (corroborated && impliesRange) {
     confidence = {
       level: 'high',
       type: 'consistent_signals',
-      basis: 'Skill answers form a continuous range and the board-feel answers agree with that level.',
+      basis: 'Your skill answer covers a continuous range and the board-feel answers agree with that level.',
     }
-  } else {
+  } else if (corroborated) {
+    // The bottom rung is the one answer that implies nothing beneath it, so it
+    // cannot reach `high` however well the feel answers agree.
     confidence = {
       level: 'medium',
       type: 'consistent_signals',
-      basis: 'Skill answers are coherent, but nothing else in the answers confirms the level.',
+      basis: 'The board-feel answers agree with this level, but the lowest rung on its own is a thin skill signal.',
+    }
+  } else {
+    // schema: "Only one answer contributed to this axis" — literally true here.
+    confidence = {
+      level: 'medium',
+      type: 'single_source',
+      basis: 'The skill answer is the only signal for this level; nothing in the other answers confirms it.',
     }
   }
 
@@ -365,7 +347,9 @@ function translateBoardFit(a: Answers, level: Axis<LevelState>): Axis<BoardFitSt
     (a.Q2.includes('loses_speed_easily') && a.Q1 === 'shortboard' && a.Q7 === 'small_weak_waves')
   const tooSupportive =
     (supportiveBoard && midPlus && (a.Q2.includes('hard_to_turn') || a.Q5.includes('cant_perform_turns'))) ||
-    (supportiveBoard && (a.Q8.includes('can_link_turns') || a.Q8.includes('can_link_turns_smoothly'))) ||
+    // Sections 6.4 and 8 both say "can_link_turns OR HIGHER". Enumerating the
+    // rungs by hand is what dropped can_position_strategically from this test.
+    (supportiveBoard && rungAtLeast(a.Q8, 'can_link_turns')) ||
     (a.Q2.includes('feels_stable_comfortable') &&
       (a.Q6.includes('wants_freedom_to_move') || a.Q6.includes('wants_speed_and_flow')))
 
@@ -492,7 +476,7 @@ function translateSupportPerformance(
   if (a.Q5.includes('struggles_to_catch_waves_consistently')) moderateSupport.push('struggles_to_catch_waves_consistently')
 
   // Section 9.1 — signals toward performance_capable.
-  const highRung = a.Q8.includes('can_link_turns_smoothly') || a.Q8.includes('can_position_strategically')
+  const highRung = rungAtLeast(a.Q8, 'can_link_turns_smoothly')
   const performanceGoal = a.Q6.includes('wants_speed_and_flow') || a.Q6.includes('wants_freedom_to_move')
   if (highRung && performanceGoal) strongPerformance.push('skill_and_goal')
   if (boardFit.state.direction === 'too_supportive') moderatePerformance.push('too_supportive')
@@ -738,9 +722,10 @@ function buildMeta(a: Answers, axes: SurferProfile['axes']): SurferProfile['meta
   if (contradictoryFeel) {
     flags.push({ type: 'conflicting_feel_signals', note: 'Board feel selections contradict each other' })
   }
-  if (a.Q8.length >= 2 && largestRungGap(a.Q8) >= 3) {
-    flags.push({ type: 'ambiguous_level', note: 'Skill selections skip several steps of the ladder' })
-  }
+  // `ambiguous_level` is no longer raised from Q8: a single-select ladder cannot
+  // express a skipped rung, so the condition it detected is now unreachable
+  // rather than unhandled. The flag keeps its other two triggers (mixed wave
+  // conditions, a strong intent/ability gap) and decide.ts still tests for it.
   const noProgressionSignal =
     a.Q6.length === 1 && a.Q6[0] === 'wants_progression' && a.Q5.every((v) => v === 'feels_stuck')
   if (noProgressionSignal) {
@@ -749,7 +734,7 @@ function buildMeta(a: Answers, axes: SurferProfile['axes']): SurferProfile['meta
   const limitedSignals = [
     a.Q1 === 'unsure',
     a.Q3 === 'does_not_know_dimensions',
-    a.Q8.length === 1 && Q8_LADDER.indexOf(a.Q8[0]) <= 1,
+    a.Q8 === 'can_stand_ride_straight',
     a.Q5.every((v) => v === 'feels_stuck') && a.Q6.every((v) => v === 'wants_progression'),
   ].filter(Boolean).length
   if (limitedSignals >= 2) {

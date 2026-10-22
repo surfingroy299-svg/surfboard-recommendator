@@ -49,7 +49,7 @@ export function OnboardingStage() {
   }
 
   // The two visual questions get a wider column; the rest stay a reading width.
-  const wide = id === 'Q1' || id === 'Q7'
+  const wide = id === 'Q1' || id === 'Q7' || id === 'Q8'
 
   return (
     <main className={`stage stage--onboarding${wide ? ' is-wide' : ''}`}>
@@ -90,6 +90,9 @@ export function OnboardingStage() {
 function Hint({ q }: { q: Question }) {
   if (q.kind === 'multi') {
     return <p className="onboarding__hint">Choose up to {q.max} — whichever ring true.</p>
+  }
+  if (q.id === 'Q8') {
+    return <p className="onboarding__hint">Pick the highest one that is true most of the time — we assume everything below it.</p>
   }
   if (q.id === 'Q9') return <p className="onboarding__hint">Weight sets the volume. Height fine-tunes the length.</p>
   return null
@@ -150,10 +153,10 @@ function QuestionBody({
     case 'Q8':
       return (
         <SkillLadder
-          options={q.kind === 'multi' ? q.options : []}
-          values={answers.Q8}
-          max={maxFor('Q8') ?? 3}
-          onToggle={(v) => patch({ Q8: toggleCapped(answers.Q8, v, maxFor('Q8') ?? 3) })}
+          options={q.kind === 'single' ? q.options : []}
+          value={answers.Q8}
+          onChange={(v) => patch({ Q8: v })}
+          onCommit={() => commit(ADVANCE_MS)}
         />
       )
     case 'Q5':
