@@ -684,9 +684,10 @@
 
 .profile {
   width: 100%;
-  /* Narrower than the comparison container: the reading column is capped at
-     62ch, so a full-width grid would strand the measurements far to the right. */
-  max-width: 1080px;
+  /* Wider than before: the main column now carries the reading, the facts,
+     the two told-us blocks and the conversation, and the recommendation is a
+     card rather than two lines of measurement. */
+  max-width: 1180px;
   margin: 0 auto;
 }
 
@@ -706,13 +707,23 @@
 
 .profile__grid {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(260px, 340px);
-  gap: clamp(32px, 6vw, 96px);
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 380px);
+  gap: clamp(32px, 4.5vw, 72px);
   margin-top: clamp(32px, 6vh, 64px);
   align-items: start;
 }
 
 .profile__main {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 44px;
+}
+
+/* The reading stays at a reading measure even though the column is wider —
+   prose does not get easier to read by getting longer. Everything below it is
+   structured, so it uses the full column. */
+.reading {
   max-width: 62ch;
 }
 
@@ -875,22 +886,37 @@
 
 /* ── Calibration */
 
+/* A panel rather than a trailing section: this is a place you go to argue,
+   and it should look like somewhere, not like the end of the page. */
 .calib {
-  margin-top: 44px;
-  padding-top: 28px;
-  border-top: 1px solid var(--rule);
+  padding: 26px 26px 24px;
+  background: var(--wash);
+  border-radius: var(--radius-lg);
+}
+
+.calib__head {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.calib__icon {
+  flex: none;
+  margin-top: 3px;
+  color: var(--tide);
 }
 
 .calib__title {
   font-family: var(--font-display);
   font-size: var(--fs-22);
   font-weight: 400;
+  line-height: 1.2;
 }
 
 .calib__lede {
   margin-top: 4px;
   font-size: var(--fs-14);
-  color: var(--ink-3);
+  color: var(--ink-2);
 }
 
 .calib__chips {
@@ -904,7 +930,43 @@
   display: flex;
   gap: 8px;
   margin-top: 14px;
-  max-width: 520px;
+}
+
+/* What it can change, available before you have guessed wrong. */
+.calib__can {
+  margin-top: 14px;
+}
+
+.calib__cansum {
+  display: inline-block;
+  font-size: var(--fs-13);
+  color: var(--ink-3);
+  cursor: pointer;
+  list-style: none;
+}
+
+.calib__cansum::-webkit-details-marker {
+  display: none;
+}
+
+.calib__cansum::before {
+  content: '+ ';
+  color: var(--rule-strong);
+}
+
+.calib__can[open] .calib__cansum::before {
+  content: '\2013 ';
+}
+
+.calib__cansum:hover {
+  color: var(--ink);
+}
+
+.calib__canchips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 11px;
 }
 
 .calib__input {
@@ -924,21 +986,6 @@
   box-shadow: 0 0 0 3px var(--tide-soft);
 }
 
-.calib__response {
-  margin-top: 12px;
-  font-size: var(--fs-14);
-  line-height: 1.5;
-  max-width: 56ch;
-}
-
-.calib__response--ok {
-  color: var(--tide-ink);
-}
-
-.calib__response--no {
-  color: var(--ink-2);
-}
-
 .calib__list {
   display: flex;
   flex-wrap: wrap;
@@ -949,12 +996,17 @@
 .calib__item {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 6px 8px 6px 11px;
+  gap: 7px;
+  padding: 6px 8px 6px 10px;
   background: var(--tide-soft);
   color: var(--tide-ink);
   border-radius: 999px;
   font-size: var(--fs-12);
+}
+
+.calib__itemtick {
+  flex: none;
+  opacity: 0.75;
 }
 
 .calib__remove {
@@ -1751,34 +1803,447 @@
   color: var(--tide-ink);
 }
 
-/* An exchange, not a status line: what you said, then what changed. */
+/* An exchange, not a status line: what you said, then what changed — and the
+   turns before that, which the old version deleted. Capped in height so a long
+   conversation scrolls inside the panel instead of pushing the page down. */
 .exchange {
-  margin-top: 16px;
-  max-width: 56ch;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 10px;
+  max-height: 290px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
-.exchange__turn {
+.exchange:not(:empty) {
+  margin-top: 18px;
+}
+
+.turn__text {
   font-size: var(--fs-14);
   line-height: 1.5;
+  margin: 0;
 }
 
-.exchange__turn--you {
+/* What you said: set as a quotation, indented from what answers it. */
+.turn--you .turn__text {
   color: var(--ink-3);
-  padding-left: 14px;
+  padding-left: 13px;
   border-left: 2px solid var(--rule-strong);
 }
 
-.exchange__turn--us {
+.turn--us .turn__text {
+  position: relative;
+  padding: 11px 13px;
+  background: var(--paper-raised);
+  border-radius: var(--radius);
   color: var(--ink);
 }
 
-.exchange__turn--us.is-ok {
+.turn--us.is-ok .turn__text {
+  color: var(--tide-ink);
+  box-shadow: inset 2px 0 0 var(--tide);
+}
+
+.turn--us.is-no .turn__text {
+  color: var(--ink-2);
+  box-shadow: inset 2px 0 0 var(--rule-strong);
+}
+
+/* The capability chips ride under the refusal, where attention already is. */
+.turn__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 9px;
+  padding-left: 2px;
+}
+
+/* ───────────────────────────────────────────────────────── Profile: the facts
+   What we have on you. A ledger, not cards: one rule-separated line per fact,
+   so six facts scan in one pass and the two that are drawn stand out against
+   the four that are set. */
+
+.facts__title,
+.told__title,
+.dirn__name {
+  font-family: var(--font-display);
+  font-weight: 400;
+}
+
+.facts__title {
+  font-size: var(--fs-22);
+  line-height: 1.2;
+  margin-bottom: 4px;
+}
+
+.facts__list {
+  margin: 0;
+}
+
+.fact {
+  position: relative;
+  display: grid;
+  grid-template-columns: 148px minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 16px;
+  padding: 13px 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+.fact:first-of-type {
+  border-top: 1px solid var(--rule);
+}
+
+.fact[data-muted] .fact__value {
+  color: var(--ink-3);
+}
+
+.fact__key {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: var(--fs-12);
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.fact__icon {
+  flex: none;
+  color: var(--tide);
+  opacity: 0.85;
+}
+
+.fact__val {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 3px 10px;
+  margin: 0;
+  min-width: 0;
+}
+
+.fact__value {
+  font-size: var(--fs-17);
+  line-height: 1.3;
+  color: var(--ink);
+}
+
+.fact__note {
+  font-size: var(--fs-13);
+  color: var(--ink-3);
+  line-height: 1.4;
+}
+
+/* The two drawn facts. Small, but the same marks the questions used — you
+   recognise your own answer rather than reading a description of it. */
+.fact__fig {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 74px;
+  height: 30px;
+}
+
+.facts__glyph {
+  width: 70px;
+  height: auto;
+}
+
+.facts__glyph .wglyph__ride {
+  stroke: var(--tide);
+}
+
+.facts__board {
+  width: 74px;
+  height: auto;
+}
+
+/* Edit affordances stay quiet until the row is approached: six pencils in a
+   column would read as an unfinished form. */
+.fact__edit,
+.told__edit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: var(--radius);
+  color: var(--ink-3);
+  opacity: 0;
+  transition: opacity var(--dur-1) var(--ease-out), color var(--dur-1) var(--ease-out),
+    background var(--dur-1) var(--ease-out);
+}
+
+.fact:hover .fact__edit,
+.told__block:hover .told__edit,
+.fact__edit:focus-visible,
+.told__edit:focus-visible {
+  opacity: 1;
+}
+
+.fact__edit:hover,
+.told__edit:hover {
+  color: var(--tide);
+  background: var(--wash);
+}
+
+.fact__edit:focus-visible,
+.told__edit:focus-visible {
+  outline: 2px solid var(--tide);
+  outline-offset: 1px;
+}
+
+/* ──────────────────────────────── Profile: what is in the way, what is wanted
+   Two halves of one comparison. A board recommendation is the distance between
+   them, so they sit side by side and are marked as opposites — one blocked,
+   one open. */
+
+.told {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.told__block {
+  position: relative;
+  padding: 20px 20px 22px;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-lg);
+  background: var(--paper-raised);
+}
+
+.told__block[data-kind='block'] {
+  border-top: 2px solid var(--rule-strong);
+}
+
+.told__block[data-kind='aim'] {
+  border-top: 2px solid var(--tide);
+}
+
+.told__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.told__title {
+  font-size: var(--fs-22);
+  line-height: 1.1;
+}
+
+.told__block[data-kind='aim'] .told__title {
   color: var(--tide-ink);
 }
 
-.exchange__turn--us.is-no {
+.told__lede {
+  margin-top: 2px;
+  font-size: var(--fs-12);
+  letter-spacing: 0.04em;
+  color: var(--ink-3);
+}
+
+.told__items {
+  margin: 15px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.told__item {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  font-size: var(--fs-15);
+  line-height: 1.4;
+  color: var(--ink);
+}
+
+/* A short bar, not a dot: struck through for what blocks, pointing for what
+   is wanted. */
+.told__bullet {
+  flex: none;
+  width: 14px;
+  height: 2px;
+  margin-top: 8px;
+  background: var(--rule-strong);
+}
+
+.told__block[data-kind='aim'] .told__bullet {
+  background: var(--tide);
+}
+
+.told__empty {
+  margin-top: 15px;
+  font-size: var(--fs-14);
+  color: var(--ink-3);
+}
+
+.told__quote {
+  margin: 16px 0 0;
+  padding-top: 14px;
+  border-top: 1px dashed var(--rule-strong);
+}
+
+.told__quote blockquote {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--fs-17);
+  line-height: 1.45;
   color: var(--ink-2);
+}
+
+.told__quote blockquote::before {
+  content: '\201C';
+}
+
+.told__quote blockquote::after {
+  content: '\201D';
+}
+
+.told__quotenote {
+  margin-top: 7px;
+  font-size: var(--fs-12);
+  color: var(--ink-3);
+  line-height: 1.45;
+}
+
+/* ─────────────────────────────────────────────── Profile: the recommendation
+   One card, because it is one answer: a kind of board, this big, for this
+   reason. It stays on screen while you read and argue — a correction whose
+   result is off-screen is a form submission. */
+
+.profile__side {
+  position: sticky;
+  top: 24px;
+  /* Bounded, so the volume range and its clamp notices cannot be stranded
+     below the fold on a short viewport or when split sizing adds rows. */
+  max-height: calc(100vh - 48px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.dirn {
+  padding: 24px 24px 22px;
+  background: var(--paper-raised);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 18px 40px -34px rgba(21, 23, 26, 0.5);
+}
+
+.dirn__name {
+  margin-top: 12px;
+  font-size: var(--fs-display-sm);
+  line-height: 1.1;
+  letter-spacing: -0.008em;
+}
+
+.dirn__note {
+  margin-top: 7px;
+  font-size: var(--fs-14);
+  line-height: 1.5;
+  color: var(--ink-2);
+}
+
+.dirn__fig {
+  margin: 20px 0 0;
+}
+
+.dirboard {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.dirn__cap {
+  margin-top: 10px;
+  font-size: 10px;
+  line-height: 1.5;
+  letter-spacing: 0.04em;
+  color: var(--ink-3);
+}
+
+.dirn .zone {
+  margin-top: 18px;
+}
+
+.dirn__why {
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid var(--rule);
+  font-size: var(--fs-13);
+  line-height: 1.55;
+  color: var(--ink-2);
+}
+
+.dirn__whykey {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.dirn__caveat {
+  margin-top: 10px;
+  font-size: var(--fs-12);
+  line-height: 1.5;
+  color: var(--ink-3);
+}
+
+/* Correcting one answer, rather than walking the whole flow. */
+.onboarding__editing {
+  font-size: var(--fs-12);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--tide);
+}
+
+@media (max-width: 920px) {
+  .told {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .fact {
+    grid-template-columns: 1fr auto auto;
+    gap: 6px 12px;
+  }
+
+  .fact__key {
+    grid-column: 1 / -1;
+  }
+
+  /* This block is appended after the stage's own 920px rules, so it has to
+     repeat the un-stick rather than rely on it: a sticky card with its own
+     scroller is wrong on a phone, where the card already leads the page. */
+  .profile__side {
+    position: static;
+    max-height: none;
+    overflow: visible;
+  }
+
+  /* Edit affordances reveal on hover, which a touch screen does not have. */
+  .fact__edit,
+  .told__edit {
+    opacity: 1;
+  }
+
+  /* The emphasis marker competes with the value for one line at 375px; let it
+     drop rather than breaking "80.3 L" across lines. */
+  .zone__row {
+    flex-wrap: wrap;
+  }
+
+  .zone__value {
+    white-space: nowrap;
+  }
+
+  .emph {
+    margin-left: 0;
+    width: 100%;
+    padding-left: 68px;
+  }
 }

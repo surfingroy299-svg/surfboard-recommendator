@@ -59,8 +59,15 @@ const CATEGORY_WORDS: { re: RegExp; category: BoardCategory; name: string }[] = 
   { re: /\b(shortboard|performance board)\b/i, category: 'shortboard', name: 'shortboard' },
 ]
 
-const UNRECOGNISED =
-  'That one is outside what this prototype can adjust. It can change the volume ceiling or floor, push the profile toward performance or toward support, correct your height or weight, or size for a different board type.'
+/**
+ * Copy only — the six intents below are unchanged.
+ *
+ * This used to recite all six in one 210-character sentence on every miss. The
+ * UI now offers them as six buttons under the refusal, which is both faster to
+ * read and self-evidently the complete set, so the sentence only has to say
+ * that this one is not among them.
+ */
+const UNRECOGNISED = 'That one is outside what I can change. Here is what I can do:'
 
 /**
  * Parse one calibration request. Deliberately conservative: a sentence that

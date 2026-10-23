@@ -69,10 +69,16 @@ export interface BoardFormProps {
   className?: string
   /** Names the board for assistive tech; omit when a surrounding control names it. */
   label?: string
+  /**
+   * Nose up (a board in a rack, which is how the Q1 grid compares lengths) or
+   * nose right (how every other drawn board in the product sits). A board is
+   * nearly 4:1, so the choice is mostly about which axis has room.
+   */
+  orient?: 'up' | 'right'
   children?: ReactNode
 }
 
-/** One board, nose up, in its own SVG. */
+/** One board, in its own SVG. */
 export function BoardForm({
   lengthFt,
   widthIn,
@@ -81,12 +87,14 @@ export function BoardForm({
   fins = 'thruster',
   className = '',
   label,
+  orient = 'up',
 }: BoardFormProps) {
   const uid = useId().replace(/:/g, '')
   const spec = buildOutline(lengthFt, widthIn, tail, category)
   const { L, W } = spec.px
-  const vbW = W + PAD * 2
-  const vbH = L + PAD * 2
+  const up = orient === 'up'
+  const vbW = (up ? W : L) + PAD * 2
+  const vbH = (up ? L : W) + PAD * 2
 
   return (
     <svg
@@ -100,8 +108,15 @@ export function BoardForm({
       <defs>
         <RailGradient id={`rail-${uid}`} />
       </defs>
-      {/* Geometry runs along +x from the nose, so a quarter turn stands it nose-up. */}
-      <g transform={`translate(${vbW / 2} ${PAD}) rotate(90)`}>
+      {/* Geometry runs along +x FROM THE NOSE, so it draws nose-left untouched:
+          a quarter turn stands it nose-up, a mirror points it nose-right. */}
+      <g
+        transform={
+          up
+            ? `translate(${vbW / 2} ${PAD}) rotate(90)`
+            : `translate(${L + PAD} ${vbH / 2}) scale(-1 1)`
+        }
+      >
         <BoardBody spec={spec} fins={fins} gradientId={`rail-${uid}`} />
       </g>
     </svg>

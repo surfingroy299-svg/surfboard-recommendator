@@ -11,7 +11,7 @@
  */
 
 import { createContext, useCallback, useContext, useMemo, useReducer, type Dispatch, type ReactNode } from 'react'
-import { emptyAnswers, visibleQuestionIds, type Answers } from '../logic/answers'
+import { emptyAnswers, isAnswered, visibleQuestionIds, type Answers } from '../logic/answers'
 import { addAdjustment, derive, newAdjustmentId, type Adjustment, type Derived } from '../logic/calibrate'
 import { demoAnswers } from '../logic/demoAnswers'
 import type { QuestionId } from '../logic/questions'
@@ -26,6 +26,11 @@ export interface JourneyState {
   adjustments: Adjustment[]
   /** Lets a revisit of the matching sequence run short rather than in full. */
   seenMatching: boolean
+  /**
+   * Set when onboarding was entered to correct ONE answer from the profile.
+   * The next commit returns there instead of walking the rest of the flow.
+   */
+  returnToProfile: boolean
 }
 
 export type JourneyAction =
@@ -34,6 +39,7 @@ export type JourneyAction =
   | { type: 'next' }
   | { type: 'back' }
   | { type: 'goToStep'; step: number }
+  | { type: 'editAnswer'; question: QuestionId }
   | { type: 'skipToRecommendation' }
   | { type: 'restart' }
   | { type: 'reviseProfile' }
@@ -49,6 +55,7 @@ const initial: JourneyState = {
   step: 0,
   adjustments: [],
   seenMatching: false,
+  returnToProfile: false,
 }
 
 function reducer(state: JourneyState, action: JourneyAction): JourneyState {
@@ -65,26 +72,45 @@ function reducer(state: JourneyState, action: JourneyAction): JourneyState {
 
     case 'next': {
       const visible = visibleQuestionIds(state.answers)
+      if (state.returnToProfile) {
+        // Correcting one answer can OPEN a question that was previously
+        // skipped — answering Q3 "yes" reveals Q4. Returning straight to the
+        // profile would leave Q4 blank while Q3 claims the dimensions are
+        // known, which reads as a thin profile without ever saying why.
+        const unanswered = visible.find((id) => !isAnswered(state.answers, id))
+        if (unanswered) return { ...state, step: visible.indexOf(unanswered) }
+        return { ...state, stage: 'profile', returnToProfile: false }
+      }
       if (state.step >= visible.length - 1) return { ...state, stage: 'profile' }
       return { ...state, step: state.step + 1 }
     }
 
     case 'back': {
+      // In edit mode Back means "leave it as it was", not "the previous
+      // question" — the surfer came here from the profile, not through it.
+      if (state.returnToProfile) return { ...state, stage: 'profile', returnToProfile: false }
       if (state.step === 0) return { ...state, stage: 'intro' }
       return { ...state, step: state.step - 1 }
+    }
+
+    case 'editAnswer': {
+      const visible = visibleQuestionIds(state.answers)
+      const at = visible.indexOf(action.question)
+      return { ...state, stage: 'onboarding', step: Math.max(0, at), returnToProfile: true }
     }
 
     case 'goToStep':
       return { ...state, step: Math.max(0, action.step) }
 
     case 'skipToRecommendation':
-      return { ...state, stage: 'profile', answers: demoAnswers(), adjustments: [], step: 0 }
+      return { ...state, stage: 'profile', answers: demoAnswers(), adjustments: [], step: 0, returnToProfile: false }
 
     case 'restart':
       return { ...initial, answers: emptyAnswers() }
 
     case 'reviseProfile':
-      return { ...state, stage: 'onboarding', step: 0 }
+      // A full pass from the top, as distinct from editAnswer's single fix.
+      return { ...state, stage: 'onboarding', step: 0, returnToProfile: false }
 
     case 'addAdjustment':
       return {

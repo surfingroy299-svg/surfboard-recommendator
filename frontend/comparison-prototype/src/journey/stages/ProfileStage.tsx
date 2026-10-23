@@ -1,23 +1,36 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import { useJourney } from '../journeyState'
-import { BoardDirection, ProfileReading } from '../profile/ProfileReading'
-import { SizeZone } from '../profile/SizeZone'
+import { ProfileReading } from '../profile/ProfileReading'
+import { BoardDirection } from '../profile/BoardDirection'
+import { ProfileFacts } from '../profile/ProfileFacts'
+import { WhatYouTold } from '../profile/WhatYouTold'
 import { Calibration } from '../profile/Calibration'
+import { interpret } from '../../logic/interpret'
+import type { QuestionId } from '../../logic/questions'
 
 /**
  * "Here's what we understood about you" — the structure in
- * comparison-experience-spec.md section 4, with calibration in between the
- * reading and the confirmation.
+ * comparison-experience-spec.md section 4.
+ *
+ * Reading order is the argument: the claim, then the facts it rests on, then
+ * the answers it read, then the way to argue with it. The recommendation sits
+ * alongside the whole column and stays on screen while you read and type,
+ * because calibration only works if you can SEE the numbers move — a
+ * correction whose result is off-screen is a form submission.
  */
 export function ProfileStage() {
-  const { derived, dispatch } = useJourney()
+  const { state, derived, dispatch } = useJourney()
   const headingRef = useRef<HTMLHeadingElement>(null)
 
   useEffect(() => {
     headingRef.current?.focus()
   }, [])
 
+  // Called three times across this stage otherwise; it is pure, but one call
+  // and a passed value is clearer about there being one reading.
+  const reading = useMemo(() => interpret(derived), [derived])
   const canContinue = derived.size !== null
+  const edit = (question: QuestionId) => dispatch({ type: 'editAnswer', question })
 
   return (
     <main className="stage stage--profile">
@@ -33,20 +46,21 @@ export function ProfileStage() {
 
         <div className="profile__grid">
           <div className="profile__main">
-            <ProfileReading derived={derived} />
+            <ProfileReading reading={reading} />
+            <ProfileFacts answers={state.answers} derived={derived} onEdit={edit} />
+            <WhatYouTold answers={state.answers} onEdit={edit} />
             <Calibration derived={derived} />
           </div>
 
           <aside className="profile__side">
-            <BoardDirection derived={derived} />
-            <SizeZone derived={derived} />
+            <BoardDirection derived={derived} reading={reading} />
           </aside>
         </div>
 
         <footer className="profile__foot">
           <div className="profile__actions">
             <button type="button" className="btn btn--quiet" onClick={() => dispatch({ type: 'reviseProfile' })}>
-              Revise my answers
+              Start the questions again
             </button>
             <button
               type="button"

@@ -1,9 +1,7 @@
-import { interpret } from '../../logic/interpret'
-import type { Derived } from '../../logic/calibrate'
+import type { Reading } from '../../logic/interpret'
 
 /** Interpretation first: what we understood, in a shaper's voice. */
-export function ProfileReading({ derived }: { derived: Derived }) {
-  const reading = interpret(derived)
+export function ProfileReading({ reading }: { reading: Reading }) {
   return (
     <div className="reading">
       {reading.paragraphs.map((p, i) => (
@@ -14,21 +12,6 @@ export function ProfileReading({ derived }: { derived: Derived }) {
       <p className="reading__challenge">{reading.challenge}</p>
       {reading.uncertainty && <p className="reading__caveat">{reading.uncertainty}</p>}
       <p className="reading__invite">{reading.invitation}</p>
-    </div>
-  )
-}
-
-/** The board direction, shown above the measurements it makes sense of. */
-export function BoardDirection({ derived }: { derived: Derived }) {
-  const reading = interpret(derived)
-  return (
-    <div className="direction">
-      <p className="eyebrow">
-        <span>Board direction</span>
-      </p>
-      <p className="direction__name">{reading.categoryLabel}</p>
-      <p className="direction__note">{reading.categoryNote}</p>
-      {reading.categoryCaveat && <p className="direction__caveat">{reading.categoryCaveat}</p>}
     </div>
   )
 }

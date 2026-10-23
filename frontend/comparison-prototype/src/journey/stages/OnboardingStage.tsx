@@ -35,6 +35,8 @@ export function OnboardingStage() {
 
   const answered = isAnswered(state.answers, id)
   const last = state.step >= visible.length - 1
+  // Arrived from the profile to fix one answer, rather than walking the flow.
+  const editing = state.returnToProfile
 
   // Cancel any pending advance when the question changes or the stage unmounts,
   // so a fast Back never lands the surfer a question further on than they chose.
@@ -44,6 +46,9 @@ export function OnboardingStage() {
   }, [id])
 
   const commit = (delay: number) => {
+    // Auto-advancing out of a question the surfer deliberately opened to
+    // correct is wrong: they came for this one answer and want to confirm it.
+    if (editing) return
     window.clearTimeout(advanceTimer.current)
     advanceTimer.current = window.setTimeout(() => dispatch({ type: 'next' }), reduced ? 0 : delay)
   }
@@ -55,7 +60,11 @@ export function OnboardingStage() {
     <main className={`stage stage--onboarding${wide ? ' is-wide' : ''}`}>
       <div className={`onboarding${wide ? ' onboarding--wide' : ''}`}>
         <header className="onboarding__head">
-          <Progress step={state.step} total={visible.length} />
+          {editing ? (
+            <p className="onboarding__editing mono">Correcting one answer</p>
+          ) : (
+            <Progress step={state.step} total={visible.length} />
+          )}
           <p className="eyebrow">
             <span>{q.category}</span>
           </p>
@@ -71,7 +80,7 @@ export function OnboardingStage() {
 
         <footer className="onboarding__foot">
           <button type="button" className="btn btn--quiet" onClick={() => dispatch({ type: 'back' })}>
-            Back
+            {editing ? 'Cancel' : 'Back'}
           </button>
           <button
             type="button"
@@ -79,7 +88,7 @@ export function OnboardingStage() {
             disabled={!answered}
             onClick={() => dispatch({ type: 'next' })}
           >
-            {last ? 'See what we understood' : 'Continue'}
+            {editing ? 'Back to my profile' : last ? 'See what we understood' : 'Continue'}
           </button>
         </footer>
       </div>
