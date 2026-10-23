@@ -92,6 +92,8 @@ All values are initial calibration estimates. If comparison against real boards 
 
 **On range width within a tier:** Two surfers at the same weight, band, and sub_level may differ in fitness, surf frequency, and body composition. The range is honest about this uncertainty. Preference signals (Sections 7 and 8) guide which part of the range to recommend from.
 
+> **On the fitness answer.** Onboarding collects a rough activity level alongside height and weight, and the profile shows it back. It does **not** enter this calculation, and no rule here consumes it. That is deliberate: the paragraph above is the reason the range is as wide as it is, and narrowing a tier on a self-reported activity level would need evidence this project does not have. Collect first, calibrate later — and only with a documented rule.
+
 ---
 
 ## 5. Wave Conditions Adjustment
