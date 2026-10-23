@@ -115,14 +115,20 @@ export function IntroStage() {
             <figcaption className="idetail__caption mono">Reference image · not licensed for publication</figcaption>
           </figure>
           <div className="idetail__rail">
-            <p className="idetail__kicker mono">Surfboard recommendation</p>
+            {eyebrow}
             <h1 className="idetail__title">
               Tell us how you surf.
               <br />
               We will tell you what to ride.
             </h1>
-            <p className="idetail__lede">Nine questions about your surfing, not about surfboards.</p>
+            <p className="idetail__lede">
+              Nine questions about your surfing, not about surfboards. You get a size, a direction, and three boards
+              worth comparing.
+            </p>
             {start}
+            {/* The one thing a landing page owes someone deciding whether to
+                begin: how long this takes. */}
+            <p className="idetail__cost mono">Nine questions · about three minutes</p>
           </div>
         </div>
       </main>

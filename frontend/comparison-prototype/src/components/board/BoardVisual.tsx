@@ -95,9 +95,15 @@ export function BoardVisual({ boardId, view, emphasis = 'default', crop, classNa
             src={asset.src}
             alt={status === 'missing' ? '' : alt}
             className="bv__img"
+            /* Custom properties, not an inline transform: see .bv__img in
+               components.css — an inline transform here overrode the focus and
+               dim emphasis on every side view. */
             style={
               flip || flipY
-                ? { transform: `scale(${flip ? -1 : 1}, ${flipY ? -1 : 1})` }
+                ? ({
+                    '--bv-flip-x': flip ? -1 : 1,
+                    '--bv-flip-y': flipY ? -1 : 1,
+                  } as CSSProperties)
                 : undefined
             }
             onLoad={() => setStatus('ready')}

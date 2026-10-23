@@ -1697,7 +1697,12 @@
 
 .idetail {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(320px, 27vw);
+  /* Roughly 55/45 by grid share. The painted image is a little under that,
+     because the plate keeps an asymmetric margin — at 1440px it resolves to
+     about 52% image, 3% margin, 45% rail. The three-sided margin is what makes
+     the photograph a plate on a page rather than a background, which is most
+     of the art direction here, so the rail gives way before the margin does. */
+  grid-template-columns: minmax(0, 1.2fr) minmax(380px, 45%);
   align-items: stretch;
   width: 100%;
   /* A fixed height, not a minimum: the plate holds a portrait photograph, and
@@ -1750,21 +1755,42 @@
   color: var(--ink-3);
 }
 
-/* The scale jump is the point: a large image against small, exact type. */
+/* The headline was two steps below the profile stage's, which left the
+   landing page with the smallest display type in the product. The scale jump
+   against the photograph is still the point — the type just has to hold its
+   side of it. */
 .idetail__title {
-  margin: 14px 0 0;
+  margin: 16px 0 0;
   font-family: var(--font-display);
-  font-size: var(--fs-display-sm);
+  font-size: var(--fs-display);
   font-weight: 400;
-  line-height: 1.22;
-  letter-spacing: -0.005em;
+  line-height: 1.12;
+  letter-spacing: -0.012em;
   text-wrap: balance;
 }
 
 .idetail__lede {
-  margin: 14px 0 28px;
-  font-size: var(--fs-14);
-  line-height: 1.55;
+  margin: 18px 0 30px;
+  max-width: 42ch;
+  font-size: var(--fs-15);
+  line-height: 1.6;
+  color: var(--ink-2);
+}
+
+/* The one button on the page, so it can afford to be the one heavy object in
+   the rail. Still sized to its label rather than stretched — stretched, it
+   outweighs the headline, which is the opposite of the intended order. */
+.intro--detail .btn--lg {
+  padding: 16px 30px;
+  font-size: var(--fs-17);
+  border-radius: var(--radius);
+}
+
+.idetail__cost {
+  margin-top: 18px;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
   color: var(--ink-3);
 }
 
