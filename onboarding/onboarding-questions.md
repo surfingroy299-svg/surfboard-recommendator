@@ -404,59 +404,70 @@ Purpose:
 
 - **id:** skill
 - **category:** Skill
-- **question:** What usually happens when you catch a wave?
-- **type:** multi-select (max 3)
+- **question:** What is the most you can do consistently once you are riding?
+- **type:** single-select (ordered ladder)
+- **helper:** "Pick the highest one that is true most of the time — we assume everything below it."
 - **purpose:** Estimate real surfing ability based on actual behavior
 
-> **Translation Layer note:** The answers are ordered from lowest to highest skill. The Translation Layer should treat the **highest-selected skill** as the primary indicator for `band` and `sub_level`. Additional lower selections below the highest add consistency confidence. If a surfer selects only a very high skill without lower confirmations, a mild `single_source` confidence flag may apply.
+> **Translation Layer note:** The answers are an ordered ladder, lowest to highest. The surfer selects the **highest rung they hold consistently**, and that answer asserts the whole contiguous ladder beneath it — the implied set is `ladder.slice(0, index + 1)`. The selected rung sets `band` and `sub_level` directly.
+>
+> Because the implied ladder is contiguous by construction, a skipped rung cannot be expressed: the `ambiguous_level` flag and the large-gap confidence rule in `translation-layer.md` §6.4 are unreachable through this question rather than merely unused.
+>
+> Confidence therefore turns on **corroboration, not count**. `single_source` applies when nothing in Q2 or Q5 confirms the claimed level — which is the schema's own definition, "only one answer contributed to this axis." A selection above the bottom rung that Q2 or Q5 corroborates reaches `high`; the bottom rung alone cannot, because it implies no range beneath it.
+>
+> *Changed from multi-select (max 3) during the UX refinement pass. The rungs, their normalized values and their `band`/`sub_level` mapping are unchanged, so no sizing output moves. One deliberate consequence: a surfer who would previously have ticked a single mid or high rung without the rungs below it now reads as a contiguous ladder and can reach `high` confidence where they previously got `medium` — which is what the new question means.*
 
 ### answers
 
 **`can_stand_ride_straight`** — "I can stand up and ride straight toward the shore"
 - **meaning:** Surfer can get to feet and maintain a direct line toward shore
-- **signals:** Lowest skill indicator in the system. Alone, suggests `band = beginner`. In this system's target range (intermediate surfers), this is a baseline confirmation rather than a primary level signal. If selected without any higher skills, surfer is likely outside the intended user range.
-- **target_axes:** actual_surfing_level (supporting — baseline confirmation, rarely primary signal for this system's target users)
+- **signals:** Lowest rung. Sets `band = beginner, sub_level = lower`. It is the one rung that implies nothing beneath it, so it cannot reach `high` confidence however well Q2 and Q5 corroborate, and it is the sole Q8 contributor to the `limited_profile` meta flag. A surfer whose highest consistent skill is this is likely outside the intended intermediate user range.
+- **target_axes:** actual_surfing_level (primary for beginner band placement)
 - **weight:** low
 
 ---
 
-**`can_ride_face`** — "I can ride along the face of the wave"
+**`can_ride_face`** — "I can angle along the face instead of straight to shore"
 - **meaning:** Surfer can angle across the wave face rather than riding directly to shore
-- **signals:** Early-intermediate skill indicator. Supports `band = intermediate, sub_level = lower` boundary. This is the minimum skill for the system's target user range — establishing that the surfer is not a pure beginner.
-- **target_axes:** actual_surfing_level (supporting — helps set lower-intermediate boundary)
+- **signals:** Sets `band = beginner, sub_level = upper` — the beginner/intermediate boundary. This is the minimum skill for the system's target user range, establishing that the surfer is not a pure beginner.
+- **target_axes:** actual_surfing_level (primary for the upper-beginner boundary)
 - **weight:** medium
 
 ---
 
-**`can_make_basic_turns`** — "I can make basic turns on the wave"
+**`can_make_basic_turns`** — "I can turn on the face and change direction when I want to"
 - **meaning:** Surfer can execute redirectional turns while on the wave
-- **signals:** Lower-intermediate skill indicator. Primary signal for `band = intermediate, sub_level = lower`. Establishes foundational wave-riding skill. At this level, the system has a reliable lower bound for board recommendations.
+- **signals:** Sets `band = intermediate, sub_level = lower`. Establishes foundational wave-riding skill. At this level the system has a reliable lower bound for board recommendations.
 - **target_axes:** actual_surfing_level (primary for lower-intermediate band placement)
 - **weight:** medium
 
 ---
 
-**`can_link_turns`** — "I can link turns together and control my direction"
+**`can_link_turns`** — "I can link turns together and stay in control of my line"
 - **meaning:** Surfer can connect multiple turns in a single ride without losing the wave
-- **signals:** Mid-intermediate skill indicator. Primary signal for `band = intermediate, sub_level = mid`. Linking turns requires active wave reading and body positioning above basic turning — this is a meaningful skill threshold.
+- **signals:** Sets `band = intermediate, sub_level = mid`. Linking turns requires active wave reading and body positioning above basic turning — a meaningful skill threshold. This rung or higher, on a supportive board, is what reads as `too_supportive`.
 - **target_axes:** actual_surfing_level (primary for mid-intermediate band placement)
 - **weight:** high
 
 ---
 
-**`can_link_turns_smoothly`** — "I can link turns smoothly and control my speed throughout the wave"
+**`can_link_turns_smoothly`** — "I can link turns smoothly and hold speed through the whole wave"
 - **meaning:** Surfer can connect turns with flow and actively manage wave energy and speed
-- **signals:** Upper-intermediate skill indicator. Primary signal for `band = intermediate, sub_level = upper`. Speed control throughout the wave requires advanced wave reading and technique. If this is the highest selected skill, surfer is at the upper end of intermediate and may have `edge_flags = [leans_advanced]` depending on other signals.
-- **target_axes:** actual_surfing_level (primary for upper-intermediate band placement)
+- **signals:** Sets `band = intermediate, sub_level = upper`, and carries `edge_flags = [leans_advanced]` — the top of intermediate, reaching into advanced. Speed control throughout the wave requires advanced wave reading and technique.
+- **target_axes:** actual_surfing_level (primary for upper-intermediate placement and the `leans_advanced` edge flag)
 - **weight:** high
 
 ---
 
-**`can_position_strategically`** — "I can choose where to take off and consistently position myself well"
-- **meaning:** Surfer can read waves and position for optimal take-off with consistency
-- **signals:** Advanced skill indicator. Consistent strategic positioning requires wave reading ability at the advanced level. If this is selected as highest skill, supports `band = advanced` or `edge_flags = [leans_advanced]` if other signals place them at upper-intermediate. Rarely selected by the system's target intermediate user — strong signal if present.
-- **target_axes:** actual_surfing_level (primary for advanced boundary / `leans_advanced` edge flag)
+**`can_position_strategically`** — "I can complete a roundhouse cutback and reconnect with the foam"
+- **meaning:** Surfer can read a wave and complete a closed manoeuvre that returns to the power source
+- **signals:** Highest rung. Sets `band = advanced, sub_level = lower`. Rarely selected by the system's target intermediate user — a strong signal when present.
+- **target_axes:** actual_surfing_level (primary for the advanced boundary)
 - **weight:** high
+
+> **On this label.** The normalized value still names the underlying ability — wave reading and positioning — while the label names the observable evidence for it, because a completed roundhouse *is* the positioning claim: it is the manoeuvre that requires reading the wave and getting back to the pocket. The label was changed from "I can choose where to take off and consistently position myself well" during the UX refinement pass, for two reasons. First, a claimed manoeuvre is observable where "I position myself well" is self-assessment, and this question's stated purpose is to "estimate real surfing ability based on actual behavior." Second, the rung needed to be distinguishable from `can_link_turns_smoothly` as a drawn ride line, and a cutback's reversing, self-crossing track is distinguishable where a positioning claim is not.
+>
+> Disclosed consequence: manoeuvre-anchored wording **narrows** who lands in `advanced/lower`. A surfer who positions well but does not land roundhouses now answers `can_link_turns_smoothly`. Given this rung is already documented as rare for the target range, narrowing toward the observable is the more honest reading.
 
 ---
 

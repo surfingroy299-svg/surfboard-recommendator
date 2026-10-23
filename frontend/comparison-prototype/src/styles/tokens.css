@@ -18,6 +18,19 @@
   --tide-soft: #d6e1e8;
   --tide-ink: #163a51;
 
+  /* Comparison keys — one per board, used only where boards are overlaid */
+  --cmp-a: #1e4b68;
+  --cmp-b: #a4572a;
+  --cmp-c: #3f7355;
+
+  /* Board material — a pale board read across its width: rails fall away,
+     the crown catches light. Deliberately narrow in range; boards are white. */
+  --bform-crown: #fdfdfb;
+  --bform-deck: #eeefe9;
+  --bform-rail: #d2d4cd;
+  --bform-edge: #9ea09a;
+  --bform-fin: #6f736d;
+
   /* Status (store availability only) */
   --ok: #2f7d4f;
   --low: #b26a1b;

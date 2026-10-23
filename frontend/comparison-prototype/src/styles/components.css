@@ -235,10 +235,22 @@
   width: 100%;
 }
 
+/*
+ * Asset correction travels as two custom properties rather than as an inline
+ * `transform`.
+ *
+ * The side assets need a vertical mirror (the rocker curved downward) and some
+ * may need a horizontal one. Written inline, that transform beat every rule
+ * below and silently killed focus and dim on EVERY side view — the Shape state
+ * lost its hover entirely while the shadow kept animating, so it read as a
+ * glitch rather than as an absence. As variables, the corrections compose with
+ * the emphasis transforms instead of replacing them.
+ */
 .bv__img {
   position: relative;
   z-index: 1;
   object-fit: contain;
+  transform: scale(var(--bv-flip-x, 1), var(--bv-flip-y, 1));
   transition: transform var(--dur-3) var(--ease-out), filter var(--dur-3) var(--ease-out);
   user-select: none;
   -webkit-user-drag: none;
@@ -288,7 +300,7 @@
 
 /* Emphasis */
 .bv--focus .bv__img {
-  transform: translateY(-6px) scale(1.03);
+  transform: translateY(-6px) scale(1.03) scale(var(--bv-flip-x, 1), var(--bv-flip-y, 1));
 }
 
 .bv--focus .bv__shadow {
@@ -301,7 +313,10 @@
   color: var(--tide);
 }
 
-.bv--dim .bv__img,
+.bv--dim .bv__img {
+  transform: scale(0.985) scale(var(--bv-flip-x, 1), var(--bv-flip-y, 1));
+}
+
 .bv--dim .bv__placeholder {
   transform: scale(0.985);
 }
@@ -388,6 +403,123 @@
   inset: 16px;
   height: auto;
   aspect-ratio: auto !important;
+}
+
+/* ───────────────────────── Board form (generated, rendered as an object) ───────────────────────── */
+
+.bform {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.bform__body {
+  stroke: var(--bform-edge);
+  stroke-width: 1.15;
+  vector-effect: non-scaling-stroke;
+}
+
+.bform__stringer {
+  stroke: var(--bform-edge);
+  stroke-width: 0.8;
+  opacity: 0.55;
+  vector-effect: non-scaling-stroke;
+  fill: none;
+}
+
+.bform__fin {
+  fill: var(--bform-fin);
+  opacity: 0.92;
+}
+
+.bform__shadow {
+  fill: rgba(21, 23, 26, 0.13);
+  filter: blur(5px);
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .bform__shadow {
+    display: none;
+  }
+}
+
+/* ───────────────────────── Wave glyph (face + ride line) ───────────────────────── */
+
+.wglyph {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.wglyph__face {
+  fill: none;
+  stroke: var(--rule-strong);
+  stroke-width: 1.25;
+  vector-effect: non-scaling-stroke;
+}
+
+.wglyph__ride {
+  fill: none;
+  stroke: var(--ink-2);
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+  transition: stroke var(--dur-1) var(--ease-out);
+}
+
+/* The chosen rung's line is the one that should read. `.rung` is listed
+   alongside `.choice` because the skill ladder is not a `.choice` row — which
+   is why this highlight silently never fired there. */
+.choice[data-selected] .wglyph__ride,
+.choice:hover .wglyph__ride,
+.rung[data-selected] .wglyph__ride,
+.rung:hover .wglyph__ride {
+  stroke: var(--tide);
+}
+
+/* Rungs the selection implies: held, but not the claim itself. */
+.rung[data-held] .wglyph__ride {
+  stroke: var(--ink-3);
+}
+
+.rung[data-held] .wglyph__face {
+  stroke: var(--rule);
+}
+
+/* ───────────────────────── Quiver rack ───────────────────────── */
+
+.quiver {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.quiver__floor {
+  stroke: var(--rule);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.quiver__contact {
+  fill: rgba(21, 23, 26, 0.17);
+  filter: blur(3px);
+}
+
+.quiver__board {
+  transition: opacity 420ms var(--ease-out);
+}
+
+.quiver__board.is-receded {
+  opacity: 0.07;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .quiver__board {
+    transition: none;
+  }
 }
 
 /* ───────────────────────── 01 Overview ───────────────────────── */
@@ -494,6 +626,190 @@
 
 .board[data-emphasis='focus'] .scale__tick {
   transform: scaleY(1.15);
+}
+
+/* ───────────────────────── 02 Outline ───────────────────────── */
+
+.outlines {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(210px, 280px);
+  gap: clamp(20px, 3vw, 52px);
+  align-items: center;
+}
+
+.outlines__stage {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: clamp(16px, 2.4vh, 32px);
+}
+
+.outlines__side {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.outlines__detail {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--rule);
+}
+
+.taildetail {
+  display: block;
+  width: clamp(96px, 11vw, 140px);
+  height: auto;
+  flex: none;
+  /* Must clip: the viewBox is the crop that turns the board into a tail. */
+  overflow: hidden;
+}
+
+.outlines__detailcap {
+  font-size: var(--fs-12);
+  color: var(--ink-3);
+  letter-spacing: 0.04em;
+}
+
+/* Horizontal: the drawing is wide and shallow, so width leads. */
+.outline {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+/* The tail is the alignment reference, so it is drawn rather than implied. */
+.outline__datum {
+  stroke: var(--rule-strong);
+  stroke-width: 1;
+  stroke-dasharray: 3 5;
+  vector-effect: non-scaling-stroke;
+}
+
+.outline__board path {
+  fill: none;
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+  transition: opacity var(--dur-2) var(--ease-out), stroke-width var(--dur-2) var(--ease-out);
+}
+
+.outline__board[data-board='a'] path {
+  stroke: var(--cmp-a);
+}
+.outline__board[data-board='b'] path {
+  stroke: var(--cmp-b);
+}
+.outline__board[data-board='c'] path {
+  stroke: var(--cmp-c);
+}
+
+.outline__board.is-dim path {
+  opacity: 0.22;
+}
+
+.outline__board.is-focus path {
+  stroke-width: 3.5;
+}
+
+/* Legend: quiet, and keyed by the same colours as the drawing. */
+.outlines__legend {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.okey {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-areas:
+    'swatch name'
+    'tail tail'
+    'dims dims';
+  align-items: center;
+  gap: 3px 10px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--rule);
+  transition: opacity var(--dur-2) var(--ease-out);
+}
+
+.okey:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.okey[data-emphasis='dim'] {
+  opacity: 0.4;
+}
+
+.okey__swatch {
+  grid-area: swatch;
+  width: 18px;
+  height: 2px;
+  border-radius: 1px;
+}
+
+.okey[data-board='a'] .okey__swatch {
+  background: var(--cmp-a);
+}
+.okey[data-board='b'] .okey__swatch {
+  background: var(--cmp-b);
+}
+.okey[data-board='c'] .okey__swatch {
+  background: var(--cmp-c);
+}
+
+.okey__name {
+  grid-area: name;
+  font-size: var(--fs-15);
+  font-weight: 500;
+}
+
+.okey__tail {
+  grid-area: tail;
+  font-size: var(--fs-13);
+  color: var(--ink-2);
+}
+
+.okey__dims {
+  grid-area: dims;
+  margin-top: 4px;
+  font-size: var(--fs-12);
+  color: var(--ink-3);
+}
+
+.outlines__note {
+  grid-column: 1 / -1;
+  margin-top: 8px;
+  font-size: var(--fs-12);
+  color: var(--ink-3);
+  letter-spacing: 0.02em;
+}
+
+@media (max-width: 860px) {
+  .outlines {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .outlines__side {
+    gap: 18px;
+  }
+
+  .outlines__legend {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 20px 28px;
+  }
+
+  .okey {
+    border-bottom: 0;
+    padding-bottom: 0;
+    flex: 1 1 160px;
+  }
 }
 
 /* ───────────────────────── 02 Shape ───────────────────────── */

@@ -9,7 +9,7 @@ import { emphasisFor, useComparison } from '../../state/comparisonState'
 export function TailFinsState() {
   const { state } = useComparison()
   return (
-    <StateSection id="tail-fins" index={3} title="Tail & Fins" lede="The two choices you can see at a glance, and what each one does to a turn.">
+    <StateSection id="tail-fins" index={4} title="Tail & Fins" lede="The two choices you can see at a glance, and what each one does to a turn.">
       <div className="tailfins">
         {boards.map((board) => (
           <BoardFigure

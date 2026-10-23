@@ -14,7 +14,7 @@ export function ShapeState() {
   const [hot, setHot] = useState<{ id: BoardId; callout: Callout } | null>(null)
 
   return (
-    <StateSection id="shape" index={2} title="Shape" lede="Seen from the side, two things decide how each board enters a wave and carries foam.">
+    <StateSection id="shape" index={3} title="Shape" lede="Seen from the side, two things decide how each board enters a wave and carries foam.">
       <div className="shape">
         {boards.map((board) => (
           <BoardFigure
