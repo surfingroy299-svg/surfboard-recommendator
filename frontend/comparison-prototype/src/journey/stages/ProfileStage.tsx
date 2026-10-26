@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useRef } from 'react'
 import { useJourney } from '../journeyState'
-import { ProfileReading } from '../profile/ProfileReading'
+import { AboutSurfing, WhereTaking } from '../profile/ProfileReading'
 import { BoardDirection } from '../profile/BoardDirection'
-import { ProfileFacts } from '../profile/ProfileFacts'
+import { ProfileIdentity } from '../profile/ProfileIdentity'
 import { WhatYouTold } from '../profile/WhatYouTold'
 import { Calibration } from '../profile/Calibration'
 import { interpret } from '../../logic/interpret'
@@ -12,11 +12,13 @@ import type { QuestionId } from '../../logic/questions'
  * "Here's what we understood about you" — the structure in
  * comparison-experience-spec.md section 4.
  *
- * Reading order is the argument: the claim, then the facts it rests on, then
- * the answers it read, then the way to argue with it. The recommendation sits
- * alongside the whole column and stays on screen while you read and type,
- * because calibration only works if you can SEE the numbers move — a
- * correction whose result is off-screen is a form submission.
+ * A dashboard, not a summary. Reading order left to right, top to bottom: who
+ * you are, what we read, where that points, what is in the way and what you
+ * want — and in parallel on the right, the board and the way to argue with it.
+ *
+ * Correction lives WITH the recommendation rather than at the bottom of the
+ * reading, because it only works if you can see the numbers move while you
+ * type. A correction whose result is off-screen is a form submission.
  */
 export function ProfileStage() {
   const { state, derived, dispatch } = useJourney()
@@ -36,24 +38,24 @@ export function ProfileStage() {
     <main className="stage stage--profile">
       <div className="profile">
         <header className="profile__head">
-          <p className="eyebrow">
-            <span>Your profile</span>
-          </p>
           <h1 className="profile__title" tabIndex={-1} ref={headingRef}>
-            Here is what we understood about you
+            Your Profile
           </h1>
         </header>
 
         <div className="profile__grid">
           <div className="profile__main">
-            <ProfileReading reading={reading} />
-            <ProfileFacts answers={state.answers} derived={derived} onEdit={edit} />
+            <ProfileIdentity answers={state.answers} derived={derived} onEdit={edit} />
+            <div className="profile__read">
+              <AboutSurfing reading={reading} />
+              <WhereTaking reading={reading} />
+            </div>
             <WhatYouTold answers={state.answers} onEdit={edit} />
-            <Calibration derived={derived} />
           </div>
 
           <aside className="profile__side">
             <BoardDirection derived={derived} reading={reading} />
+            <Calibration derived={derived} invitation={reading.invitation} />
           </aside>
         </div>
 
@@ -74,7 +76,7 @@ export function ProfileStage() {
           <p className="disclosure">
             Your profile and sizing above respond to your answers. The three boards that follow are a fixed example
             set, shown with a reference surfer&rsquo;s explanations — live inventory and real board matching are not
-            connected yet.
+            connected yet. The name, location and avatar above are demo stand-ins — onboarding does not ask for them.
           </p>
         </footer>
       </div>

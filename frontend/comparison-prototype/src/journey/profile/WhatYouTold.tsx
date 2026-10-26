@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react'
 import { Icon } from '../../components/ui/Icon'
 import type { Answers } from '../../logic/answers'
 import { labelFor, type QuestionId } from '../../logic/questions'
@@ -21,14 +22,10 @@ import { labelFor, type QuestionId } from '../../logic/questions'
 
 export function WhatYouTold({ answers, onEdit }: { answers: Answers; onEdit: (q: QuestionId) => void }) {
   return (
-    <section className="told" aria-labelledby="told-title">
-      <h2 id="told-title" className="visually-hidden">
-        What you told us
-      </h2>
-
+    <section className="told" aria-label="What you told us">
       <Block
         kind="block"
-        title="In the way"
+        title="Challenges"
         lede="What you said is holding you back"
         items={answers.Q5.map((v) => labelFor('Q5', v))}
         note={answers.Q5FreeText}
@@ -37,7 +34,7 @@ export function WhatYouTold({ answers, onEdit }: { answers: Answers; onEdit: (q:
       />
       <Block
         kind="aim"
-        title="After"
+        title="What you&rsquo;re looking for"
         lede="What you want more of"
         items={answers.Q6.map((v) => labelFor('Q6', v))}
         note={answers.Q6FreeText}
@@ -58,7 +55,7 @@ function Block({
   onEdit,
 }: {
   kind: 'block' | 'aim'
-  title: string
+  title: ReactNode
   lede: string
   items: string[]
   note: string
@@ -68,7 +65,7 @@ function Block({
   return (
     <div className="told__block" data-kind={kind}>
       <div className="told__head">
-        <p className="told__title">{title}</p>
+        <h2 className="told__title">{title}</h2>
         <button
           type="button"
           className="told__edit"

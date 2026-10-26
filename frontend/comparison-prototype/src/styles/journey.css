@@ -691,14 +691,15 @@
   margin: 0 auto;
 }
 
+/* One line, and the eyebrow above it is gone: "Your Profile" does not need a
+   label saying it is your profile. Worth ~90px of the page. */
 .profile__title {
-  margin: 14px 0 0;
+  margin: 0;
   font-family: var(--font-display);
-  font-size: var(--fs-display);
+  font-size: var(--fs-display-sm);
   font-weight: 400;
-  line-height: 1.14;
-  letter-spacing: -0.012em;
-  max-width: 20ch;
+  line-height: 1.1;
+  letter-spacing: -0.008em;
 }
 
 .profile__title:focus-visible {
@@ -709,7 +710,7 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(300px, 380px);
   gap: clamp(32px, 4.5vw, 72px);
-  margin-top: clamp(32px, 6vh, 64px);
+  margin-top: 28px;
   align-items: start;
 }
 
@@ -717,44 +718,13 @@
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 44px;
+  gap: 36px;
 }
 
-/* The reading stays at a reading measure even though the column is wider —
-   prose does not get easier to read by getting longer. Everything below it is
-   structured, so it uses the full column. */
-.reading {
-  max-width: 62ch;
-}
-
-.reading__lede {
-  font-family: var(--font-display);
-  font-size: var(--fs-display-sm);
-  font-weight: 400;
-  line-height: 1.32;
-  letter-spacing: -0.008em;
-}
-
-.reading__para {
-  margin-top: 18px;
-  font-size: var(--fs-17);
-  line-height: 1.58;
-  color: var(--ink-2);
-}
-
-.reading__challenge {
-  margin-top: 26px;
-  padding-top: 20px;
-  border-top: 1px solid var(--rule);
-  font-size: var(--fs-17);
-  line-height: 1.5;
-}
-
-.reading__caveat {
-  margin-top: 14px;
-  font-size: var(--fs-13);
-  color: var(--ink-3);
-  line-height: 1.5;
+.profile__read {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
 }
 
 /* Board direction + size zone */
@@ -1879,12 +1849,9 @@
   }
 }
 
-/* ── The reading invites an argument; calibration is where it happens. */
-
-.reading__invite {
-  margin-top: 14px;
-  font-size: var(--fs-15);
-  line-height: 1.5;
+/* The reading's invitation now opens the correction panel, where it has
+   somewhere to go. */
+.calib__lede {
   color: var(--tide-ink);
 }
 
@@ -1944,116 +1911,257 @@
   padding-left: 2px;
 }
 
-/* ───────────────────────────────────────────────────────── Profile: the facts
-   What we have on you. A ledger, not cards: one rule-separated line per fact,
-   so six facts scan in one pass and the two that are drawn stand out against
-   the four that are set. */
+/* ─────────────────────────────────────────────────── Profile: who you are
+   Seven facts in three rows, where the old ledger took six rows for six.
+   Two of them are drawn, because two of them are shapes. */
 
-.ledger__title,
-.told__title,
-.dirn__name {
-  font-family: var(--font-display);
-  font-weight: 400;
+.pid {
+  padding: 16px 20px 18px;
+  background: var(--paper-raised);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-lg);
 }
 
-.ledger__title {
-  font-size: var(--fs-22);
-  line-height: 1.2;
-  margin-bottom: 4px;
-}
-
-.ledger__list {
-  margin: 0;
-}
-
-.ledger__row {
-  position: relative;
-  display: grid;
-  grid-template-columns: 148px minmax(0, 1fr) auto auto;
+.pid__id {
+  display: flex;
   align-items: center;
-  gap: 16px;
-  padding: 13px 0;
+  gap: 13px;
+  padding-bottom: 16px;
   border-bottom: 1px solid var(--rule);
 }
 
-.ledger__row:first-of-type {
-  border-top: 1px solid var(--rule);
+/* A monogram, not a portrait. No person image exists in this project and the
+   photography is unlicensed, so an avatar that claims to be someone would be
+   the one dishonest element on the screen. */
+.pid__avatar {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: var(--tide-soft);
+  color: var(--tide-ink);
+  font-family: var(--font-display);
+  font-size: var(--fs-22);
+  line-height: 1;
 }
 
-.ledger__row[data-muted] .ledger__value {
+.pid__who {
+  min-width: 0;
+}
+
+.pid__nameline {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.pid__name {
+  font-family: var(--font-display);
+  font-size: var(--fs-22);
+  font-weight: 400;
+  line-height: 1.15;
+}
+
+/* Said out loud rather than left to pass for real. */
+.pid__demo {
+  padding: 1px 6px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  background: var(--wash);
+  border-radius: 999px;
+}
+
+.pid__place {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 3px;
+  font-size: var(--fs-13);
   color: var(--ink-3);
 }
 
-.ledger__key {
+.pid__level {
   display: flex;
   align-items: center;
-  gap: 9px;
+  gap: 10px;
+  margin-left: auto;
+  text-align: right;
+}
+
+.pid__levelkey {
   font-size: var(--fs-12);
   letter-spacing: 0.09em;
   text-transform: uppercase;
   color: var(--ink-3);
 }
 
-.ledger__icon {
+.pid__levelval {
+  font-size: var(--fs-17);
+  color: var(--ink);
+}
+
+.pid__glyph {
+  width: 62px;
+  height: auto;
+  flex: none;
+}
+
+.pid__glyph .wglyph__ride {
+  stroke: var(--tide);
+}
+
+.pid__grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px 20px;
+  align-items: start;
+  margin: 15px 0 0;
+}
+
+.pid__board {
+  margin-top: 15px;
+  padding-top: 14px;
+  border-top: 1px solid var(--rule);
+}
+
+.pid__cell {
+  position: relative;
+  min-width: 0;
+}
+
+.pid__key {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: var(--fs-12);
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.pid__icon {
   flex: none;
   color: var(--tide);
   opacity: 0.85;
 }
 
-.ledger__val {
+.pid__val {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
-  gap: 3px 10px;
-  margin: 0;
-  min-width: 0;
+  gap: 2px 9px;
+  margin: 5px 0 0;
 }
 
-.ledger__value {
+.pid__value {
   font-size: var(--fs-17);
   line-height: 1.3;
   color: var(--ink);
 }
 
-.ledger__note {
+.pid__note {
   font-size: var(--fs-13);
   color: var(--ink-3);
-  line-height: 1.4;
 }
 
-/* The two drawn facts. Small, but the same marks the questions used — you
-   recognise your own answer rather than reading a description of it. */
-.ledger__fig {
+/* The board row puts its silhouette beside the value rather than under it. */
+.pid__board .pid__cell {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 4px 16px;
+}
+
+.pid__board .pid__key {
+  grid-row: 1;
+}
+
+.pid__board .pid__val {
+  grid-row: 1;
+  margin: 0;
+}
+
+.pid__boardfig {
+  grid-row: 1;
+  width: 86px;
+  height: auto;
+  justify-self: end;
+}
+
+/* ─────────────────────────────────────────── Profile: the reading, condensed */
+
+.about__lede {
+  margin-top: 12px;
+  font-family: var(--font-display);
+  font-size: var(--fs-22);
+  line-height: 1.38;
+  color: var(--ink);
+}
+
+.about__para {
+  margin-top: 12px;
+  font-size: var(--fs-17);
+  line-height: 1.55;
+  color: var(--ink-2);
+}
+
+.about__caveat {
+  margin-top: 12px;
+  font-size: var(--fs-13);
+  line-height: 1.5;
+  color: var(--ink-3);
+}
+
+.plan__name {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
-  width: 74px;
-  height: 30px;
+  gap: 10px;
+  margin-top: 12px;
+  font-family: var(--font-display);
+  font-size: var(--fs-22);
+  line-height: 1.2;
+  color: var(--ink);
 }
 
-.ledger__glyph {
-  width: 70px;
-  height: auto;
+.plan__icon {
+  flex: none;
+  color: var(--tide);
 }
 
-.ledger__glyph .wglyph__ride {
-  stroke: var(--tide);
+.plan__basis,
+.plan__para {
+  margin-top: 10px;
+  font-size: var(--fs-17);
+  line-height: 1.55;
+  color: var(--ink-2);
 }
 
-.ledger__board {
-  width: 74px;
-  height: auto;
+.plan__push {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--rule);
+  font-size: var(--fs-15);
+  line-height: 1.5;
+  color: var(--ink-2);
 }
 
-/* Edit affordances stay quiet until the row is approached: six pencils in a
-   column would read as an unfinished form. */
-.ledger__edit,
+/* Edit affordances — quiet until the row is approached. */
+
+.pid__edit,
 .told__edit {
+  position: absolute;
+  top: -4px;
+  right: -4px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 26px;
-  height: 26px;
+  width: 24px;
+  height: 24px;
   border-radius: var(--radius);
   color: var(--ink-3);
   opacity: 0;
@@ -2061,20 +2169,24 @@
     background var(--dur-1) var(--ease-out);
 }
 
-.ledger__row:hover .ledger__edit,
+.told__edit {
+  position: static;
+}
+
+.pid__cell:hover .pid__edit,
 .told__block:hover .told__edit,
-.ledger__edit:focus-visible,
+.pid__edit:focus-visible,
 .told__edit:focus-visible {
   opacity: 1;
 }
 
-.ledger__edit:hover,
+.pid__edit:hover,
 .told__edit:hover {
   color: var(--tide);
   background: var(--wash);
 }
 
-.ledger__edit:focus-visible,
+.pid__edit:focus-visible,
 .told__edit:focus-visible {
   outline: 2px solid var(--tide);
   outline-offset: 1px;
@@ -2100,11 +2212,11 @@
 }
 
 .told__block[data-kind='block'] {
-  border-top: 2px solid var(--rule-strong);
+  border-top: 2px solid var(--block);
 }
 
 .told__block[data-kind='aim'] {
-  border-top: 2px solid var(--tide);
+  border-top: 2px solid var(--aim);
 }
 
 .told__head {
@@ -2115,12 +2227,18 @@
 }
 
 .told__title {
+  font-family: var(--font-display);
   font-size: var(--fs-22);
+  font-weight: 400;
   line-height: 1.1;
 }
 
+.told__block[data-kind='block'] .told__title {
+  color: var(--block);
+}
+
 .told__block[data-kind='aim'] .told__title {
-  color: var(--tide-ink);
+  color: var(--aim);
 }
 
 .told__lede {
@@ -2147,17 +2265,18 @@
 }
 
 /* A short bar, not a dot: struck through for what blocks, pointing for what
-   is wanted. */
+   is wanted. The two colours are the only thing separating the pair at a
+   glance, so they also carry the bullet and the title. */
 .told__bullet {
   flex: none;
   width: 14px;
   height: 2px;
   margin-top: 8px;
-  background: var(--rule-strong);
+  background: var(--block);
 }
 
 .told__block[data-kind='aim'] .told__bullet {
-  background: var(--tide);
+  background: var(--aim);
 }
 
 .told__empty {
@@ -2203,11 +2322,35 @@
 .profile__side {
   position: sticky;
   top: 24px;
-  /* Bounded, so the volume range and its clamp notices cannot be stranded
-     below the fold on a short viewport or when split sizing adds rows. */
-  max-height: calc(100vh - 48px);
-  overflow-y: auto;
-  overscroll-behavior: contain;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  /* Bounded so the volume range cannot be stranded below the fold — but NOT a
+     scroller itself. Two nested scrollers would let Calibration's
+     scrollIntoView({block:'nearest'}) resolve to this column and push the
+     numbers out of view, which is the one thing the sticky card exists to
+     prevent. The transcript is the only thing that scrolls. */
+  max-height: calc(100dvh - 48px);
+  overflow: hidden;
+}
+
+.profile__side > .dirn {
+  flex: 0 0 auto;
+}
+
+.profile__side > .calib {
+  flex: 1 1 auto;
+  /* Load-bearing: without it a flex item refuses to shrink below its content
+     and the height cap leaks. */
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.profile__side .exchange {
+  flex: 1 1 auto;
+  min-height: 0;
+  max-height: none;
 }
 
 .dirn {
@@ -2292,28 +2435,54 @@
     grid-template-columns: minmax(0, 1fr);
   }
 
-  .ledger__row {
-    grid-template-columns: 1fr auto auto;
-    gap: 6px 12px;
-  }
-
-  .ledger__key {
-    grid-column: 1 / -1;
-  }
-
-  /* This block is appended after the stage's own 920px rules, so it has to
-     repeat the un-stick rather than rely on it: a sticky card with its own
-     scroller is wrong on a phone, where the card already leads the page. */
+  /* The aside stops being a box so its two cards can be placed independently.
+     Without this, moving Calibration inside it would put a correction form
+     above the entire profile on a phone — a form for fixing something you
+     have not read yet. */
   .profile__side {
-    position: static;
-    max-height: none;
-    overflow: visible;
+    display: contents;
+  }
+
+  .dirn {
+    order: -1;
+  }
+
+  .calib {
+    order: 1;
   }
 
   /* Edit affordances reveal on hover, which a touch screen does not have. */
-  .ledger__edit,
+  .pid__edit,
   .told__edit {
     opacity: 1;
+  }
+
+  /* Four columns resolve to ~56px on a phone, which is narrower than the
+     values. Two give each fact a readable measure and still keep the card
+     shorter than the six-row ledger it replaced. */
+  .pid__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px 16px;
+  }
+
+  .pid__level {
+    gap: 7px;
+  }
+
+  .pid__glyph {
+    width: 46px;
+  }
+
+  /* The board row's three columns do not fit beside a 86px silhouette. */
+  .pid__board .pid__cell {
+    grid-template-columns: auto 1fr;
+  }
+
+  .pid__boardfig {
+    grid-row: 2;
+    grid-column: 1 / -1;
+    justify-self: start;
+    margin-top: 6px;
   }
 
   /* The emphasis marker competes with the value for one line at 375px; let it

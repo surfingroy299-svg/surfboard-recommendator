@@ -23,8 +23,17 @@ import { Icon } from '../../components/ui/Icon'
  * every time; six buttons are faster to read, are self-evidently the whole
  * set, and clicking one is a working correction rather than a description of
  * one.
+ *
+ * ORDER MATTERS HERE. The input sits above the transcript, not below it. This
+ * panel is height-capped inside a sticky column, so a chat-ordered layout
+ * pushes the input below the fold the moment a conversation starts. Pinned
+ * above, it stays reachable at any transcript length.
+ *
+ * `invitation` replaces the static lede when the reading supplies one: it
+ * names the specific claim this profile is least sure of, where the lede only
+ * promises a response.
  */
-export function Calibration({ derived }: { derived: Derived }) {
+export function Calibration({ derived, invitation }: { derived: Derived; invitation?: string }) {
   const { state, dispatch } = useJourney()
   const announce = useAnnounce()
   const [draft, setDraft] = useState('')
@@ -102,9 +111,36 @@ export function Calibration({ derived }: { derived: Derived }) {
           <h2 id="calib-title" className="calib__title">
             Not quite right?
           </h2>
-          <p className="calib__lede">Tell me what I got wrong, and I&rsquo;ll take another look.</p>
+          <p className="calib__lede">{invitation ?? 'Tell me what I got wrong, and I’ll take another look.'}</p>
         </div>
       </div>
+
+      <form className="calib__form" onSubmit={onSubmit}>
+        <label className="visually-hidden" htmlFor="calib-input">
+          What should we change?
+        </label>
+        <input
+          id="calib-input"
+          className="calib__input"
+          value={draft}
+          autoComplete="off"
+          placeholder="e.g. 40 L is too much for me"
+          onChange={(e) => setDraft(e.target.value)}
+        />
+        <button type="submit" className="iconbtn iconbtn--solid" aria-label="Send">
+          <Icon name="send" />
+        </button>
+      </form>
+
+      {!opened && suggestions.length > 0 && (
+        <div className="calib__chips">
+          {suggestions.map((s) => (
+            <button key={s} type="button" className="chip" onClick={() => submit(s)}>
+              {s}
+            </button>
+          ))}
+        </div>
+      )}
 
       <div className="exchange" role="status" aria-live="polite">
         {shown.map((t, i) => (
@@ -123,33 +159,6 @@ export function Calibration({ derived }: { derived: Derived }) {
         ))}
         <div ref={endRef} />
       </div>
-
-      {!opened && suggestions.length > 0 && (
-        <div className="calib__chips">
-          {suggestions.map((s) => (
-            <button key={s} type="button" className="chip" onClick={() => submit(s)}>
-              {s}
-            </button>
-          ))}
-        </div>
-      )}
-
-      <form className="calib__form" onSubmit={onSubmit}>
-        <label className="visually-hidden" htmlFor="calib-input">
-          What should we change?
-        </label>
-        <input
-          id="calib-input"
-          className="calib__input"
-          value={draft}
-          autoComplete="off"
-          placeholder="e.g. 40 L is too much for me"
-          onChange={(e) => setDraft(e.target.value)}
-        />
-        <button type="submit" className="iconbtn iconbtn--solid" aria-label="Send">
-          <Icon name="send" />
-        </button>
-      </form>
 
       {/* What it can actually change, available before you have guessed wrong
           rather than only after. */}
