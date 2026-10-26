@@ -1507,30 +1507,26 @@
 }
 
 .wtile__size {
+  padding: 2px 7px;
   font-size: var(--fs-12);
-  letter-spacing: 0.06em;
-  color: var(--ink-3);
-  transition: color var(--dur-1) var(--ease-out);
+  letter-spacing: 0.04em;
+  color: var(--ink-2);
+  background: var(--wash);
+  border-radius: 999px;
+  transition: color var(--dur-1) var(--ease-out), background var(--dur-1) var(--ease-out);
 }
 
 .wtile[data-selected] .wtile__size {
-  color: var(--tide);
+  color: var(--paper);
+  background: var(--tide);
 }
 
-/* The one-line reading. This is the fastest way to tell the four apart, so it
-   sits directly under the name and carries weight. */
+/* The one-line reading — now the only description, so it carries the weight
+   the removed sentence used to share. */
 .wtile__hint {
-  font-size: var(--fs-14);
-  line-height: 1.4;
+  font-size: var(--fs-15);
+  line-height: 1.45;
   color: var(--ink-2);
-}
-
-/* The full sentence from the answer definition — the tiebreaker, read only by
-   someone still deciding between two. */
-.wtile__desc {
-  font-size: var(--fs-13);
-  line-height: 1.5;
-  color: var(--ink-3);
 }
 
 /* Honest fallback when a reference image is absent — nothing imitating a photo. */

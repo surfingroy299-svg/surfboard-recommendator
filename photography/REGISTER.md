@@ -23,12 +23,36 @@ file is absent, so a fresh clone builds and runs.
 | File | Slot | Source | Photographer | Licence | Status |
 |---|---|---|---|---|---|
 | `hero-aerial.jpg` | Intro hero | [unsplash.com/photos/L78RstAZuTY](https://unsplash.com/photos/L78RstAZuTY) | Silas Baisch | Unsplash | `reference` |
-| `waves-small-weak.jpg` | Q7 · small, weak waves | [unsplash.com/photos/99PoKoAkMHs](https://unsplash.com/photos/99PoKoAkMHs) | — | Unsplash | `reference` |
-| `waves-medium-push.jpg` | Q7 · medium with push | [unsplash.com/photos/yRv2F4NN3BE](https://unsplash.com/photos/yRv2F4NN3BE) | Jeremy Bishop | Unsplash | `reference` |
-| `waves-powerful.jpg` | Q7 · steep and powerful | [unsplash.com/photos/6fiRnDWxQMw](https://unsplash.com/photos/6fiRnDWxQMw) | Lisha Riabinina | Unsplash | `reference` |
+| `waves-small-weak.jpg` | Q7 · small and weak, 1–2 ft | Supplied by the project owner — Figma `xXrzNJb56TNBy3IxffjG2R`, node `15:10` ("small 1-2 ft") | unknown | **to confirm** | `reference` |
+| `waves-medium-push.jpg` | Q7 · medium with push, 2–4 ft | Supplied by the project owner — Figma `xXrzNJb56TNBy3IxffjG2R`, node `15:11` ("medium 2-4 ft") | unknown | **to confirm** | `reference` |
+| `waves-powerful.jpg` | Q7 · powerful and steep, 5 ft + | Supplied by the project owner — Figma `xXrzNJb56TNBy3IxffjG2R`, node `15:12` ("big 5+ ft") | unknown | **to confirm** | `reference` |
 | `waves-variable.jpg` | Q7 · conditions vary | [unsplash.com/photos/ibeKWxHvems](https://unsplash.com/photos/ibeKWxHvems) | — | Unsplash | `reference` |
 
-All five downloaded at 1400px, q72, from `images.unsplash.com`.
+`hero-aerial.jpg` and `waves-variable.jpg` were downloaded at 1400px, q72, from
+`images.unsplash.com`. The three Q7 frames were exported from the Figma file
+above and resampled to the same 1400px / q72 to match.
+
+### On the three supplied frames
+
+They arrived through the project owner's Figma file rather than from a named
+source, and their layer names — `beautiful-girl-riding-surf-board-waves`,
+`female-surfer-amazing-blue-wave-bali-island`,
+`surfer-riding-large-ocean-wave` — read like stock-library filenames. So the
+licence column says **to confirm** rather than naming one: someone has to
+establish which library they came from and under what terms before these are
+published. They are treated exactly like the Unsplash placeholders in the
+meantime — local, gitignored, not cleared.
+
+## What the three new frames fixed
+
+The previous Q7 set was four frames from four different shoots, unified only
+by a CSS filter — the register's own standing complaint. These three share one
+blue-green register, each carries a person at a readable scale, and each one
+shows its own size unambiguously: a longboarder on a waist-high wall, a surfer
+on a head-high green face, and a crowd under something clearly overhead.
+
+The wave-height ranges on the cards come from the Figma frame names, which is
+also where `5 ft +` for the powerful option came from.
 
 ## Why these frames
 
