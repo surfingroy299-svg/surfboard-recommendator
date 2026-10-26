@@ -8,6 +8,7 @@
  */
 
 import type { Derived } from './calibrate'
+import type { ProgressionDirection } from './decide'
 import { CATEGORY_NOTE, CATEGORY_LABEL, isFallbackCategory } from './categoryContext'
 import { LEVEL_DOING, LEVEL_NAME, levelKey } from './levelVocabulary'
 import type { Conditions, FitDirection } from './profile'
@@ -45,6 +46,32 @@ export interface Reading {
   categoryNote: string
   /** Present only when the category was a fallback rather than a positive choice. */
   categoryCaveat: string | null
+  /**
+   * Where the recommendation is taking the surfer.
+   *
+   * `progression_direction` has been computed since the Decision Layer was
+   * written and has never reached a screen. Nothing new is concluded here: the
+   * `basis` is the sentence `decide.ts` already wrote, and the label is a
+   * short restatement of it — the same relationship `categoryLabel` has to
+   * `categoryNote`.
+   */
+  direction: { label: string; basis: string }
+}
+
+/**
+ * One short label per progression direction. Presentation vocabulary, like
+ * CATEGORY_LABEL and LEVEL_SHORT — each restates the basis sentence that
+ * already exists in decide.ts rather than adding a conclusion.
+ *
+ * Typed against the enum so a new direction is a compile error, not an
+ * undefined label.
+ */
+const DIRECTION_LABEL: Record<ProgressionDirection, string> = {
+  maintain: 'Stay with what you have',
+  support_more: 'Toward a more forgiving board',
+  challenge_more: 'Ready for a more demanding board',
+  redirect: 'A different type of board',
+  split_unclear: 'Two directions are open',
 }
 
 export function interpret(d: Derived): Reading {
@@ -155,5 +182,9 @@ export function interpret(d: Derived): Reading {
     categoryCaveat: isFallbackCategory(signals)
       ? 'Your answers do not single out one board type, so this is the standard baseline.'
       : null,
+    direction: {
+      label: DIRECTION_LABEL[signals.progression_direction.value],
+      basis: signals.progression_direction.basis,
+    },
   }
 }

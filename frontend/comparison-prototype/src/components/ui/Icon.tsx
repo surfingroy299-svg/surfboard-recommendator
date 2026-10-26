@@ -31,6 +31,7 @@ type Name =
   | 'conditions'
   | 'board'
   | 'ride'
+  | 'location'
 
 const paths: Record<Name, ReactElement> = {
   close: <path d="M5 5l10 10M15 5L5 15" />,
@@ -60,6 +61,25 @@ const paths: Record<Name, ReactElement> = {
   board: <path d="M10 2.5c2.6 2.9 3.6 6 3.6 8.2 0 3.6-1.8 5.6-3.6 6.8-1.8-1.2-3.6-3.2-3.6-6.8C6.4 8.5 7.4 5.4 10 2.5zM10 5.5v9" />,
   // The ride line: a turn linked across a face.
   ride: <path d="M2.5 5.5c4.5 0 4 7 8 5.4 3.2-1.3 3 3.1 7 1.6" />,
+  /**
+   * BORROWED — Heroicons 24/outline "map-pin" (MIT, © Tailwind Labs).
+   *
+   * The one mark here that is not drawn for this product. No surf-native shape
+   * means "a place", and inventing one would read worse than borrowing a
+   * familiar one. Kept on its native 24 grid rather than refitted to 20, since
+   * a rescaled pin loses its proportions — see VIEWBOX below.
+   */
+  location: (
+    <>
+      <path d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+      <path d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
+    </>
+  ),
+}
+
+/** Marks drawn on a grid other than the house 20×20. */
+const VIEWBOX: Partial<Record<Name, string>> = {
+  location: '0 0 24 24',
 }
 
 export function Icon({ name, size = 16, ...rest }: { name: Name; size?: number } & SVGProps<SVGSVGElement>) {
@@ -67,7 +87,7 @@ export function Icon({ name, size = 16, ...rest }: { name: Name; size?: number }
     <svg
       width={size}
       height={size}
-      viewBox="0 0 20 20"
+      viewBox={VIEWBOX[name] ?? '0 0 20 20'}
       fill="none"
       stroke="currentColor"
       strokeWidth="1.5"

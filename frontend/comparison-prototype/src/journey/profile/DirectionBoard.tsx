@@ -39,6 +39,22 @@ const NOMINAL_WIDTH_IN: Record<BoardCategory, number> = {
 
 const PAD = 7
 
+/**
+ * The tail needs its own, much larger pad.
+ *
+ * `tailEdge()` places this tail's control points at `L + tailHalf * 0.86`, and
+ * a cubic whose two control-x values are equal peaks at three quarters of
+ * that — so the drawn tail reaches `L + 0.645 * tailHalf` past the measured
+ * length. At PAD = 7 that clipped eight of the nine categories, flattening a
+ * round tail into a vertical chop: 9.9 units over for a shortboard, 19.5 for a
+ * longboard. 30 clears the widest (longboard, 26.5) with room to spare.
+ *
+ * The nose needs nothing — its tip curve resolves to +0.025 * noseR, a
+ * fraction of a unit — so the padding is deliberately asymmetric rather than
+ * doubling the whole viewBox.
+ */
+const TAIL_PAD = 30
+
 export function DirectionBoard({
   category,
   lengthFt,
@@ -57,7 +73,7 @@ export function DirectionBoard({
   return (
     <svg
       className="dirboard"
-      viewBox={`0 0 ${L + PAD * 2} ${W + PAD * 2}`}
+      viewBox={`0 0 ${L + PAD + TAIL_PAD} ${W + PAD * 2}`}
       role="img"
       aria-label={label}
       focusable="false"
@@ -68,7 +84,7 @@ export function DirectionBoard({
       {/* Geometry runs along +x FROM THE NOSE, which draws nose-left. The
           Outline and Shape states both point nose-right, so it is mirrored to
           match — every drawn board in the product faces the same way. */}
-      <g transform={`translate(${L + PAD} ${W / 2 + PAD}) scale(-1 1)`}>
+      <g transform={`translate(${L + TAIL_PAD} ${W / 2 + PAD}) scale(-1 1)`}>
         <BoardBody spec={spec} fins={null} gradientId={`dir-${uid}`} shadow={false} />
       </g>
     </svg>

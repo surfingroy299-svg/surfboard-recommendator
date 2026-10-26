@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Logo } from '../../components/brand/Logo'
 import { useJourney } from '../journeyState'
 
 /**
@@ -40,8 +41,21 @@ export function IntroStage() {
 
   const start = (
     <button type="button" className="btn btn--primary btn--lg" onClick={() => dispatch({ type: 'start' })}>
-      Start
+      Find my board
     </button>
+  )
+
+  /**
+   * Three statements rather than a paragraph: what we ask, what we do with it,
+   * what you get. A reader deciding whether to begin scans for the shape of
+   * the deal, and a sentence makes them read to find it.
+   */
+  const value = (
+    <ul className="ivalue">
+      <li className="ivalue__item">Nine questions about your surfing, not about surfboards.</li>
+      <li className="ivalue__item">We read your answers into a size, a shape and a direction.</li>
+      <li className="ivalue__item">Then three boards worth comparing, and why.</li>
+    </ul>
   )
 
   const eyebrow = (
@@ -115,16 +129,13 @@ export function IntroStage() {
             <figcaption className="idetail__caption mono">Reference image · not licensed for publication</figcaption>
           </figure>
           <div className="idetail__rail">
-            {eyebrow}
+            <Logo className="idetail__logo" />
             <h1 className="idetail__title">
               Tell us how you surf.
               <br />
               We will tell you what to ride.
             </h1>
-            <p className="idetail__lede">
-              Nine questions about your surfing, not about surfboards. You get a size, a direction, and three boards
-              worth comparing.
-            </p>
+            {value}
             {start}
             {/* The one thing a landing page owes someone deciding whether to
                 begin: how long this takes. */}

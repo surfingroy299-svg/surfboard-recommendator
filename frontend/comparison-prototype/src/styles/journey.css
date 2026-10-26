@@ -1755,6 +1755,69 @@
   color: var(--ink-3);
 }
 
+/* ── The mark. Three boards leaning together: a quiver, drawn from the same
+   geometry generator the app uses everywhere else. */
+
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 13px;
+}
+
+.logo__mark {
+  display: block;
+  height: 42px;
+  width: auto;
+  flex: none;
+}
+
+/* Filled, not stroked: at this size a 1px outline on a 7px-wide board closes
+   up into a smudge, while a solid silhouette keeps its shape. */
+.logo__board {
+  fill: var(--ink);
+  stroke: none;
+}
+
+.logo__word {
+  font-family: var(--font-display);
+  font-size: 28px;
+  line-height: 1;
+  letter-spacing: 0.005em;
+  color: var(--ink);
+}
+
+.idetail__logo {
+  margin-bottom: 14px;
+}
+
+/* Three statements, not a paragraph. The bar is the same mark the profile
+   uses for its two accent lists, so the system has one list idiom. */
+.ivalue {
+  margin: 20px 0 30px;
+  max-width: 44ch;
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+
+.ivalue__item {
+  position: relative;
+  padding-left: 26px;
+  font-size: var(--fs-17);
+  line-height: 1.45;
+  color: var(--ink-2);
+}
+
+.ivalue__item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.68em;
+  width: 14px;
+  height: 2px;
+  background: var(--tide);
+}
+
 /* The headline was two steps below the profile stage's, which left the
    landing page with the smallest display type in the product. The scale jump
    against the photograph is still the point — the type just has to hold its

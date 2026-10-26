@@ -18,10 +18,19 @@
   --tide-soft: #d6e1e8;
   --tide-ink: #163a51;
 
-  /* Comparison keys — one per board, used only where boards are overlaid */
+  /* Comparison keys — one per board, where boards are overlaid.
+     --cmp-b and --cmp-c are also aliased below as the two profile accents. */
   --cmp-a: #1e4b68;
   --cmp-b: #a4572a;
   --cmp-c: #3f7355;
+
+  /* Profile accents — the two halves of one comparison: what is in the way,
+     and what is wanted. Aliases of the comparison keys, so no new hue enters
+     the palette. Named separately because this is a semantic role, not a
+     per-board key — and deliberately NOT --ok / --low, which are status
+     (--low already carries low stock, invalid field and clamped size). */
+  --block: var(--cmp-b);
+  --aim: var(--cmp-c);
 
   /* Board material — a pale board read across its width: rails fall away,
      the crown catches light. Deliberately narrow in range; boards are white. */

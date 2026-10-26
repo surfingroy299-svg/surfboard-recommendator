@@ -144,18 +144,20 @@ export const QUESTIONS: Question[] = [
     prompt: 'What is the most you can do consistently once you are riding?',
     kind: 'single',
     options: [
-      { value: 'can_stand_ride_straight', label: 'I can stand up and ride straight toward the shore' },
-      { value: 'can_ride_face', label: 'I can angle along the face instead of straight to shore' },
-      { value: 'can_make_basic_turns', label: 'I can turn on the face and change direction when I want to' },
-      { value: 'can_link_turns', label: 'I can link turns together and stay in control of my line' },
-      { value: 'can_link_turns_smoothly', label: 'I can link turns smoothly and hold speed through the whole wave' },
-      // The value still names the underlying ability (reading the wave and
-      // positioning); the label names the observable evidence for it, because a
-      // completed roundhouse IS the positioning claim. The question's purpose is
-      // to read ability "based on actual behavior", and a claimed manoeuvre is
-      // observable where "I position myself well" is self-assessment. See the
-      // note under this answer in onboarding-questions.md.
-      { value: 'can_position_strategically', label: 'I can complete a roundhouse cutback and reconnect with the foam' },
+      { value: 'can_stand_ride_straight', label: 'I can stand up and ride straight toward shore' },
+      { value: 'can_ride_face', label: 'I can angle along the wave face instead of riding straight' },
+      { value: 'can_make_basic_turns', label: 'I can make basic turns and start generating my own speed' },
+      { value: 'can_link_turns', label: 'I can link controlled turns and hold speed, with basic manoeuvres like cutbacks' },
+      { value: 'can_link_turns_smoothly', label: 'I can surf with speed, power and flow, with strong turns throughout' },
+      // The value names the underlying ability — reading the wave and placing
+      // yourself on it — while the label names what that ability looks like at
+      // the top of the ladder. The two have never been the same sentence; see
+      // the note under this answer in onboarding-questions.md.
+      //
+      // NOTE: this rung's ride-line glyph still draws a roundhouse cutback,
+      // which was kept deliberately. The drawing and the copy therefore
+      // disagree here, and rung 04 is the one that now names cutbacks.
+      { value: 'can_position_strategically', label: 'I can surf at a high-performance level, including aerials and demanding combinations' },
     ],
   },
   {
