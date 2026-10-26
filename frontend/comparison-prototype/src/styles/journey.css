@@ -1890,24 +1890,24 @@
    so six facts scan in one pass and the two that are drawn stand out against
    the four that are set. */
 
-.facts__title,
+.ledger__title,
 .told__title,
 .dirn__name {
   font-family: var(--font-display);
   font-weight: 400;
 }
 
-.facts__title {
+.ledger__title {
   font-size: var(--fs-22);
   line-height: 1.2;
   margin-bottom: 4px;
 }
 
-.facts__list {
+.ledger__list {
   margin: 0;
 }
 
-.fact {
+.ledger__row {
   position: relative;
   display: grid;
   grid-template-columns: 148px minmax(0, 1fr) auto auto;
@@ -1917,15 +1917,15 @@
   border-bottom: 1px solid var(--rule);
 }
 
-.fact:first-of-type {
+.ledger__row:first-of-type {
   border-top: 1px solid var(--rule);
 }
 
-.fact[data-muted] .fact__value {
+.ledger__row[data-muted] .ledger__value {
   color: var(--ink-3);
 }
 
-.fact__key {
+.ledger__key {
   display: flex;
   align-items: center;
   gap: 9px;
@@ -1935,13 +1935,13 @@
   color: var(--ink-3);
 }
 
-.fact__icon {
+.ledger__icon {
   flex: none;
   color: var(--tide);
   opacity: 0.85;
 }
 
-.fact__val {
+.ledger__val {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
@@ -1950,13 +1950,13 @@
   min-width: 0;
 }
 
-.fact__value {
+.ledger__value {
   font-size: var(--fs-17);
   line-height: 1.3;
   color: var(--ink);
 }
 
-.fact__note {
+.ledger__note {
   font-size: var(--fs-13);
   color: var(--ink-3);
   line-height: 1.4;
@@ -1964,7 +1964,7 @@
 
 /* The two drawn facts. Small, but the same marks the questions used — you
    recognise your own answer rather than reading a description of it. */
-.fact__fig {
+.ledger__fig {
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -1972,23 +1972,23 @@
   height: 30px;
 }
 
-.facts__glyph {
+.ledger__glyph {
   width: 70px;
   height: auto;
 }
 
-.facts__glyph .wglyph__ride {
+.ledger__glyph .wglyph__ride {
   stroke: var(--tide);
 }
 
-.facts__board {
+.ledger__board {
   width: 74px;
   height: auto;
 }
 
 /* Edit affordances stay quiet until the row is approached: six pencils in a
    column would read as an unfinished form. */
-.fact__edit,
+.ledger__edit,
 .told__edit {
   display: inline-flex;
   align-items: center;
@@ -2002,20 +2002,20 @@
     background var(--dur-1) var(--ease-out);
 }
 
-.fact:hover .fact__edit,
+.ledger__row:hover .ledger__edit,
 .told__block:hover .told__edit,
-.fact__edit:focus-visible,
+.ledger__edit:focus-visible,
 .told__edit:focus-visible {
   opacity: 1;
 }
 
-.fact__edit:hover,
+.ledger__edit:hover,
 .told__edit:hover {
   color: var(--tide);
   background: var(--wash);
 }
 
-.fact__edit:focus-visible,
+.ledger__edit:focus-visible,
 .told__edit:focus-visible {
   outline: 2px solid var(--tide);
   outline-offset: 1px;
@@ -2233,12 +2233,12 @@
     grid-template-columns: minmax(0, 1fr);
   }
 
-  .fact {
+  .ledger__row {
     grid-template-columns: 1fr auto auto;
     gap: 6px 12px;
   }
 
-  .fact__key {
+  .ledger__key {
     grid-column: 1 / -1;
   }
 
@@ -2252,7 +2252,7 @@
   }
 
   /* Edit affordances reveal on hover, which a touch screen does not have. */
-  .fact__edit,
+  .ledger__edit,
   .told__edit {
     opacity: 1;
   }

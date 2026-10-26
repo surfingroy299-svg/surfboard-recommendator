@@ -217,7 +217,17 @@ npm run build --prefix frontend/comparison-prototype
 
 `build` runs a TypeScript project build and then Vite, so it typechecks as well as bundles. See `frontend/comparison-prototype/README.md` for board assets, data files and architecture notes.
 
-The prototypes under `design-exploration/` are historical reference and are not maintained.
+The prototypes under `design-exploration/` are historical reference and are not maintained. They have their own dependencies, which a fresh clone does not install — `.claude/launch.json` offers the app as a one-click server, and starting it without this first fails with `vite: command not found`:
+
+```bash
+npm install --prefix design-exploration/prototypes/app
+```
+
+```bash
+npm run dev --prefix design-exploration/prototypes/app
+```
+
+That one runs on port 5178, so it can sit alongside the comparison prototype on 5179.
 
 ---
 

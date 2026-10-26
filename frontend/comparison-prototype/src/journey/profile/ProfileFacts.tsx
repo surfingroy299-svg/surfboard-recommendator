@@ -48,23 +48,23 @@ export function ProfileFacts({
   const dims = [answers.Q4.length, answers.Q4.volume].filter(Boolean).join(' · ')
 
   return (
-    <section className="facts" aria-labelledby="facts-title">
-      <h2 id="facts-title" className="facts__title">
+    <section className="ledger" aria-labelledby="ledger-title">
+      <h2 id="ledger-title" className="ledger__title">
         What we have on you
       </h2>
 
-      <dl className="facts__list">
-        <Fact
+      <dl className="ledger__list">
+        <LedgerRow
           icon="ride"
           label="Surfing"
           question="Q8"
           onEdit={onEdit}
           value={LEVEL_SHORT[levelKey(level.band, level.sub_level)]}
           note={answers.Q8 ? labelFor('Q8', answers.Q8) : 'Not answered'}
-          figure={answers.Q8 ? <WaveGlyph rung={answers.Q8} className="facts__glyph" /> : null}
+          figure={answers.Q8 ? <WaveGlyph rung={answers.Q8} className="ledger__glyph" /> : null}
         />
 
-        <Fact
+        <LedgerRow
           icon="conditions"
           label="Usual waves"
           question="Q7"
@@ -73,17 +73,17 @@ export function ProfileFacts({
           note={answers.Q7 ? labelFor('Q7', answers.Q7) : null}
         />
 
-        <Fact
+        <LedgerRow
           icon="board"
           label="Riding now"
           question={answers.Q1 === 'no_regular_board' ? 'Q1' : 'Q4'}
           onEdit={onEdit}
           value={answers.Q1 ? labelFor('Q1', answers.Q1) : 'Not answered'}
           note={dims || 'Dimensions not given'}
-          figure={shape ? <BoardForm {...shape} orient="right" fins={null} className="facts__board" /> : null}
+          figure={shape ? <BoardForm {...shape} orient="right" fins={null} className="ledger__board" /> : null}
         />
 
-        <Fact
+        <LedgerRow
           icon="height"
           label="Height"
           question="Q9"
@@ -92,7 +92,7 @@ export function ProfileFacts({
           mono
         />
 
-        <Fact
+        <LedgerRow
           icon="weight"
           label="Weight"
           question="Q9"
@@ -102,7 +102,7 @@ export function ProfileFacts({
           mono
         />
 
-        <Fact
+        <LedgerRow
           icon="fitness"
           label="In the water"
           question="Q9"
@@ -116,7 +116,7 @@ export function ProfileFacts({
   )
 }
 
-function Fact({
+function LedgerRow({
   icon,
   label,
   value,
@@ -138,19 +138,19 @@ function Fact({
   muted?: boolean
 }) {
   return (
-    <div className="fact" data-muted={muted || undefined}>
-      <dt className="fact__key">
-        <Icon name={icon} size={15} className="fact__icon" />
+    <div className="ledger__row" data-muted={muted || undefined}>
+      <dt className="ledger__key">
+        <Icon name={icon} size={15} className="ledger__icon" />
         <span>{label}</span>
       </dt>
-      <dd className="fact__val">
-        <span className={`fact__value${mono ? ' mono' : ''}`}>{value}</span>
-        {note && <span className="fact__note">{note}</span>}
+      <dd className="ledger__val">
+        <span className={`ledger__value${mono ? ' mono' : ''}`}>{value}</span>
+        {note && <span className="ledger__note">{note}</span>}
       </dd>
-      {figure && <div className="fact__fig">{figure}</div>}
+      {figure && <div className="ledger__fig">{figure}</div>}
       <button
         type="button"
-        className="fact__edit"
+        className="ledger__edit"
         onClick={() => onEdit(question)}
         aria-label={`Change ${label.toLowerCase()}`}
       >
