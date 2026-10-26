@@ -27,8 +27,19 @@ BOARD-A/TAIL&FINS  → board-a-tail.png   (same crop as the Figma frame, transpa
 ```
 
 Export notes: the image layer inside each frame is exported (not the frame,
-whose white fill would break the cutout), at 2x, trimmed to content. Nothing
-about the images is used to infer models or specs; they are Board A / B / C.
+whose white fill would break the cutout — verified again in October 2026, when
+rendering a frame produced an opaque white corner and the image layer inside it
+produced a transparent one), at 2x, trimmed to content. Nothing about the
+images is used to infer models or specs; they are Board A / B / C.
+
+Two constraints the side export has to meet, because the app corrects for them
+globally rather than per board: the nose must point **right**, and the asset is
+expected **vertically inverted** — `BoardVisual` applies `scaleY(-1)` to every
+side view. A side asset that arrives the right way up will render upside down.
+
+The `-tail.png` crop should include the actual tail tip. The Figma TAIL&FINS
+frame does not always: Board B's frame stopped 75px short of it, which is the
+one feature that view exists to show.
 
 If a `-tail.png` file is missing, Tail & Fins falls back to a configurable crop
 of the bottom image (`tailCrop` in `src/data/assets.ts`). If a side file points

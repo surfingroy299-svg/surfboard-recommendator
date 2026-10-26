@@ -10,8 +10,10 @@
  *
  * Geometry is drawn from the data rather than traced from the product photos.
  * Tracing the deck images disagrees with the stated tails — board A is a squash
- * but its photo tapers almost to a point, and board C is a round but its photo
- * shows a swallow notch — so a traced outline would contradict Tail & Fins.
+ * but its photo tapers almost to a point, board C is a round but its photo
+ * shows a swallow notch, and board B is a stated swallow/quad whose October
+ * 2026 photo shows a round tail with five boxes — so a traced outline would
+ * contradict Tail & Fins.
  *
  * Added over the original: a squash case, so squash, swallow and round each
  * read differently instead of squash and round sharing one rounded edge.
