@@ -56,7 +56,7 @@
 .topbar__saved {
   font-family: var(--font-mono);
   font-size: var(--fs-12);
-  letter-spacing: 0.06em;
+  letter-spacing: var(--ls-label);
   color: var(--tide);
 }
 
@@ -73,7 +73,7 @@
   align-items: center;
   gap: 8px;
   padding: 0 16px;
-  font-size: var(--fs-14);
+  font-size: var(--fs-15);
   color: var(--ink-3);
   transition: color var(--dur-1) var(--ease-out);
 }
@@ -106,7 +106,7 @@
 .statenav__index {
   font-family: var(--font-mono);
   font-size: var(--fs-12);
-  letter-spacing: 0.06em;
+  letter-spacing: var(--ls-label);
   color: var(--ink-3);
 }
 
@@ -128,15 +128,19 @@
   display: grid;
   gap: 12px;
   margin-bottom: clamp(28px, 4vh, 52px);
-  max-width: 46ch;
+  /* `ch` resolves against the 15px body size this element inherits, not the
+     38px display size of the title inside it — so 46ch was about 345px and
+     put the four state headings on three and four lines. A width in rem is
+     measured in the same units the eye is, and still shrinks below it. */
+  max-width: min(100%, 46rem);
 }
 
 .state__title {
   font-family: var(--font-display);
   font-weight: 400;
   font-size: var(--fs-lede);
-  line-height: 1.12;
-  letter-spacing: -0.012em;
+  line-height: var(--lh-display);
+  letter-spacing: var(--ls-display);
   text-wrap: balance;
 }
 
@@ -152,6 +156,47 @@
   opacity: 0.62;
 }
 
+/*
+ * While a baseline is active the other two columns are the thing being read,
+ * so 0.62 would fade out the comparison that was just asked for. They stay
+ * nearly full strength; the focused board is still marked by its figure
+ * lifting and scaling, which costs no legibility anywhere else.
+ */
+.overview[data-comparing='true'] .board[data-emphasis='dim'] {
+  opacity: 0.9;
+}
+
+/*
+ * Baseline control. Hover and keyboard focus already set a baseline, so this
+ * exists only where neither is available. `hover: none` rather than a width
+ * query: it is the absence of a pointer that matters, not the screen size.
+ */
+.overview__pin {
+  display: none;
+}
+
+@media (hover: none) {
+  .overview__pin {
+    display: inline-flex;
+    align-items: center;
+    margin-top: var(--space-4);
+    padding: 7px 12px;
+    font-size: var(--fs-11);
+    letter-spacing: var(--ls-label);
+    text-transform: uppercase;
+    color: var(--ink-2);
+    background: none;
+    border: 1px solid var(--rule-strong);
+    border-radius: var(--radius);
+  }
+
+  .overview__pin[aria-pressed='true'] {
+    color: var(--paper);
+    background: var(--tide);
+    border-color: var(--tide);
+  }
+}
+
 .board__button {
   display: block;
   width: 100%;
@@ -164,10 +209,10 @@
 
 .board__name {
   font-family: var(--font-display);
-  font-weight: 500;
+  font-weight: 400;
   font-size: var(--fs-display);
-  line-height: 1.05;
-  letter-spacing: -0.015em;
+  line-height: var(--lh-display);
+  letter-spacing: var(--ls-display);
   transition: color var(--dur-2) var(--ease-out);
 }
 
@@ -190,7 +235,7 @@
 .board__summary {
   margin-top: 16px;
   font-size: var(--fs-15);
-  line-height: 1.5;
+  line-height: var(--lh-body);
   color: var(--ink-2);
   max-width: 36ch;
 }
@@ -301,7 +346,10 @@
   color: var(--tide);
 }
 
-.bv--dim .bv__img,
+.bv--dim .bv__img {
+  transform: scale(0.985);
+}
+
 .bv--dim .bv__placeholder {
   transform: scale(0.985);
 }
@@ -323,7 +371,7 @@
   color: var(--ink-3);
   font-family: var(--font-mono);
   font-size: var(--fs-12);
-  letter-spacing: 0.02em;
+  letter-spacing: var(--ls-micro);
   text-align: center;
   padding: 12px;
   transition: transform var(--dur-3) var(--ease-out), border-color var(--dur-3) var(--ease-out), color var(--dur-3) var(--ease-out);
@@ -390,6 +438,123 @@
   aspect-ratio: auto !important;
 }
 
+/* ───────────────────────── Board form (generated, rendered as an object) ───────────────────────── */
+
+.bform {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.bform__body {
+  stroke: var(--bform-edge);
+  stroke-width: 1.15;
+  vector-effect: non-scaling-stroke;
+}
+
+.bform__stringer {
+  stroke: var(--bform-edge);
+  stroke-width: 0.8;
+  opacity: 0.55;
+  vector-effect: non-scaling-stroke;
+  fill: none;
+}
+
+.bform__fin {
+  fill: var(--bform-fin);
+  opacity: 0.92;
+}
+
+.bform__shadow {
+  fill: rgba(21, 23, 26, 0.13);
+  filter: blur(5px);
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .bform__shadow {
+    display: none;
+  }
+}
+
+/* ───────────────────────── Wave glyph (face + ride line) ───────────────────────── */
+
+.wglyph {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.wglyph__face {
+  fill: none;
+  stroke: var(--rule-strong);
+  stroke-width: 1.25;
+  vector-effect: non-scaling-stroke;
+}
+
+.wglyph__ride {
+  fill: none;
+  stroke: var(--ink-2);
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+  transition: stroke var(--dur-1) var(--ease-out);
+}
+
+/* The chosen rung's line is the one that should read. `.rung` is listed
+   alongside `.choice` because the skill ladder is not a `.choice` row — which
+   is why this highlight silently never fired there. */
+.choice[data-selected] .wglyph__ride,
+.choice:hover .wglyph__ride,
+.rung[data-selected] .wglyph__ride,
+.rung:hover .wglyph__ride {
+  stroke: var(--tide);
+}
+
+/* Rungs the selection implies: held, but not the claim itself. */
+.rung[data-held] .wglyph__ride {
+  stroke: var(--ink-3);
+}
+
+.rung[data-held] .wglyph__face {
+  stroke: var(--rule);
+}
+
+/* ───────────────────────── Quiver rack ───────────────────────── */
+
+.quiver {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.quiver__floor {
+  stroke: var(--rule);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.quiver__contact {
+  fill: rgba(21, 23, 26, 0.17);
+  filter: blur(3px);
+}
+
+.quiver__board {
+  transition: opacity 420ms var(--ease-out);
+}
+
+.quiver__board.is-receded {
+  opacity: 0.07;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .quiver__board {
+    transition: none;
+  }
+}
+
 /* ───────────────────────── 01 Overview ───────────────────────── */
 
 .overview {
@@ -435,6 +600,24 @@
   color: var(--ink);
 }
 
+/* The non-colour half of the comparison. Sits with the label rather than on
+   the track: at 14px the track has no room for a glyph that does not land on
+   the marker or the end labels. */
+.scale__sign {
+  margin-left: 6px;
+  margin-right: auto;
+  font-size: var(--fs-13);
+  line-height: 1;
+}
+
+.scale__sign[data-dir='up'] {
+  color: var(--aim);
+}
+
+.scale__sign[data-dir='down'] {
+  color: var(--block);
+}
+
 .scale__note {
   font-size: var(--fs-13);
   color: var(--ink-3);
@@ -450,8 +633,8 @@
 
 .scale__end {
   font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.1em;
+  font-size: var(--fs-11);
+  letter-spacing: var(--ls-label);
   text-transform: uppercase;
   color: var(--ink-3);
 }
@@ -472,6 +655,26 @@
   background: var(--rule-strong);
 }
 
+/* Only the span between this board's value and the baseline's — never the
+   whole bar, which would read as a score rather than a difference. */
+.scale__delta {
+  position: absolute;
+  top: 50%;
+  height: 6px;
+  margin-top: -3px;
+  border-radius: 1px;
+  transition: left var(--dur-2) var(--ease-out), width var(--dur-2) var(--ease-out),
+    background var(--dur-2) var(--ease-out);
+}
+
+.scale__delta[data-dir='up'] {
+  background: var(--delta-up);
+}
+
+.scale__delta[data-dir='down'] {
+  background: var(--delta-down);
+}
+
 .scale__stop {
   position: absolute;
   top: 50%;
@@ -479,6 +682,21 @@
   height: 5px;
   margin-top: -2.5px;
   background: var(--rule-strong);
+}
+
+/* The travelled part of the scale, filled. Two pixels of the accent — the
+   same colour as the marker, so the marker reads as the head of the fill
+   rather than a separate object. Thin on purpose: this is a qualitative
+   position, and a thick bar would start to look like a measured percentage. */
+.scale__fill {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  height: 2px;
+  margin-top: -1px;
+  background: var(--tide);
+  border-radius: 1px;
+  transition: width var(--dur-2) var(--ease-out);
 }
 
 .scale__tick {
@@ -496,29 +714,256 @@
   transform: scaleY(1.15);
 }
 
+/* ───────────────────────── 02 Outline ───────────────────────── */
+
+.outlines {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(210px, 280px);
+  gap: clamp(20px, 3vw, 52px);
+  align-items: center;
+}
+
+.outlines__stage {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: clamp(16px, 2.4vh, 32px);
+}
+
+.outlines__side {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.outlines__detail {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--rule);
+}
+
+.taildetail {
+  display: block;
+  width: clamp(96px, 11vw, 140px);
+  height: auto;
+  flex: none;
+  /* Must clip: the viewBox is the crop that turns the board into a tail. */
+  overflow: hidden;
+}
+
+.outlines__detailcap {
+  font-size: var(--fs-12);
+  color: var(--ink-3);
+  letter-spacing: var(--ls-micro);
+}
+
+/* Horizontal: the drawing is wide and shallow, so width leads. */
+.outline {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+/* The tail is the alignment reference, so it is drawn rather than implied. */
+.outline__datum {
+  stroke: var(--rule-strong);
+  stroke-width: 1;
+  stroke-dasharray: 3 5;
+  vector-effect: non-scaling-stroke;
+}
+
+.outline__board path {
+  fill: none;
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+  transition: opacity var(--dur-2) var(--ease-out), stroke-width var(--dur-2) var(--ease-out);
+}
+
+.outline__board[data-board='a'] path {
+  stroke: var(--cmp-a);
+}
+.outline__board[data-board='b'] path {
+  stroke: var(--cmp-b);
+}
+.outline__board[data-board='c'] path {
+  stroke: var(--cmp-c);
+}
+
+.outline__board.is-dim path {
+  opacity: 0.22;
+}
+
+.outline__board.is-focus path {
+  stroke-width: 3.5;
+}
+
+/* Legend: quiet, and keyed by the same colours as the drawing. */
+.outlines__legend {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.okey {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-areas:
+    'swatch name'
+    'tail tail'
+    'dims dims';
+  align-items: center;
+  gap: 3px 10px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--rule);
+  transition: opacity var(--dur-2) var(--ease-out);
+}
+
+.okey:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.okey[data-emphasis='dim'] {
+  opacity: 0.4;
+}
+
+.okey__swatch {
+  grid-area: swatch;
+  width: 18px;
+  height: 2px;
+  border-radius: 1px;
+}
+
+.okey[data-board='a'] .okey__swatch {
+  background: var(--cmp-a);
+}
+.okey[data-board='b'] .okey__swatch {
+  background: var(--cmp-b);
+}
+.okey[data-board='c'] .okey__swatch {
+  background: var(--cmp-c);
+}
+
+.okey__name {
+  grid-area: name;
+  font-size: var(--fs-15);
+  font-weight: 500;
+}
+
+.okey__tail {
+  grid-area: tail;
+  font-size: var(--fs-13);
+  color: var(--ink-2);
+}
+
+.okey__dims {
+  grid-area: dims;
+  margin-top: 4px;
+  font-size: var(--fs-12);
+  color: var(--ink-3);
+}
+
+.outlines__note {
+  grid-column: 1 / -1;
+  margin-top: 8px;
+  font-size: var(--fs-12);
+  color: var(--ink-3);
+  letter-spacing: var(--ls-micro);
+}
+
+@media (max-width: 860px) {
+  .outlines {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .outlines__side {
+    gap: 18px;
+  }
+
+  .outlines__legend {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 20px 28px;
+  }
+
+  .okey {
+    border-bottom: 0;
+    padding-bottom: 0;
+    flex: 1 1 160px;
+  }
+}
+
 /* ───────────────────────── 02 Shape ───────────────────────── */
 
+/*
+ * Three rocker profiles are only comparable if you can hold them in one view,
+ * so this state is laid out to fit a 1440x900 desktop rather than to breathe.
+ * The height came out of four places, none of them the drawings: the board
+ * name and dimensions sat in the right-hand rail, where they added to the
+ * column that was already the tallest; the stage padded 100px around a 62px
+ * image for annotation marks that need 74; the callouts carried 12px of
+ * vertical padding each; and the rows were 36px apart with 18px of their own
+ * padding on top of that.
+ *
+ * The name moves over the drawing it names, which is where it reads anyway,
+ * and the rail is left holding only the two explanations.
+ */
 .shape {
   display: grid;
-  gap: clamp(28px, 4vh, 56px);
+  gap: clamp(20px, 2.2vh, 30px);
 }
 
 .shape__row {
   display: grid;
   grid-template-columns: minmax(0, 1.55fr) minmax(300px, 0.85fr);
-  gap: clamp(28px, 4vw, 80px);
-  align-items: center;
-  padding: 18px 0;
+  grid-template-areas:
+    'head rail'
+    'fig rail';
+  column-gap: clamp(28px, 4vw, 80px);
+  row-gap: 10px;
+  padding: 12px 0;
   border-top: 1px solid var(--rule);
+}
+
+/* The rail is usually the taller column, and grid hands a spanning item's
+   extra height to the rows it crosses. Pinning the name to the bottom of its
+   row and the drawing to the top of the next keeps the pair together — the
+   slack opens above the name and below the drawing instead of between them. */
+.shape__head {
+  grid-area: head;
+  align-self: end;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px var(--space-4);
+}
+
+.shape__row > .board__button {
+  grid-area: fig;
+  align-self: start;
+}
+
+.shape__head .board__dims {
+  margin-top: 0;
 }
 
 .shape__row:first-of-type {
   border-top: 0;
 }
 
+/* The marks, measured on screen rather than from the stylesheet: the rocker
+   label's top lands 44px above the image and the thickness label's bottom 35px
+   below it. 56/44 was carrying 21px of nothing; 50/40 leaves 6px and 5px of
+   slack, which is the margin a font fallback or a longer thickness value
+   needs and 46/36 did not have. */
 .shape__stage {
   position: relative;
-  padding: 56px 0 44px;
+  padding: 50px 0 40px;
 }
 
 .shape__stage .bv {
@@ -526,13 +971,13 @@
 }
 
 .shape__rail {
-  padding: 8px 0;
+  grid-area: rail;
+  align-self: center;
 }
 
 .callouts {
-  margin-top: 20px;
   display: grid;
-  gap: 16px;
+  gap: 12px;
 }
 
 .callout {
@@ -543,7 +988,7 @@
     'term why';
   column-gap: 16px;
   row-gap: 4px;
-  padding: 12px 0 12px 14px;
+  padding: 8px 0 8px 14px;
   border-left: 1px solid var(--rule-strong);
   transition: border-color var(--dur-2) var(--ease-out);
 }
@@ -556,7 +1001,7 @@
   grid-area: term;
   font-family: var(--font-mono);
   font-size: var(--fs-12);
-  letter-spacing: 0.08em;
+  letter-spacing: var(--ls-label);
   text-transform: uppercase;
   color: var(--ink-3);
   padding-top: 3px;
@@ -570,15 +1015,15 @@
 
 .callout__why {
   grid-area: why;
-  font-size: var(--fs-14);
-  line-height: 1.5;
+  font-size: var(--fs-15);
+  line-height: var(--lh-body);
   color: var(--ink-2);
 }
 
 /* Geometry marks over the side image */
 .geo {
   position: absolute;
-  inset: 56px 0 44px;
+  inset: 50px 0 40px;
   pointer-events: none;
 }
 
@@ -596,8 +1041,8 @@
   position: absolute;
   left: 0;
   bottom: calc(100% + 6px);
-  font-size: 11px;
-  letter-spacing: 0.08em;
+  font-size: var(--fs-11);
+  letter-spacing: var(--ls-label);
   text-transform: uppercase;
   color: var(--ink-2);
   white-space: nowrap;
@@ -617,8 +1062,8 @@
   top: calc(100% + 4px);
   left: 50%;
   transform: translateX(-50%);
-  font-size: 11px;
-  letter-spacing: 0.04em;
+  font-size: var(--fs-11);
+  letter-spacing: var(--ls-micro);
   color: var(--ink-2);
   white-space: nowrap;
 }
@@ -666,8 +1111,8 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 11px;
-  letter-spacing: 0.06em;
+  font-size: var(--fs-11);
+  letter-spacing: var(--ls-label);
   text-transform: uppercase;
   color: var(--ink-3);
 }
@@ -719,7 +1164,7 @@
 .fact__term {
   font-family: var(--font-mono);
   font-size: var(--fs-12);
-  letter-spacing: 0.08em;
+  letter-spacing: var(--ls-label);
   text-transform: uppercase;
   color: var(--ink-3);
 }
@@ -729,7 +1174,8 @@
   font-family: var(--font-display);
   font-size: var(--fs-22);
   font-weight: 500;
-  letter-spacing: -0.01em;
+  line-height: var(--lh-display);
+  letter-spacing: var(--ls-display);
 }
 
 .fact__value--withglyph {
@@ -740,8 +1186,8 @@
 
 .fact__why {
   margin-top: 8px;
-  font-size: var(--fs-14);
-  line-height: 1.5;
+  font-size: var(--fs-15);
+  line-height: var(--lh-body);
   color: var(--ink-2);
   max-width: 36ch;
 }
@@ -751,6 +1197,27 @@
   stroke: var(--ink-3);
   fill: var(--tide);
   stroke-width: 1;
+}
+
+/* Unfilled and hairline, so it reads as a drawing of an edge rather than a
+   swatch. The drawing is 34px wide but the box is 40, matching FinGlyph in
+   the row below: the two glyphs then share a footprint and "Squash" and
+   "Thruster · 3 fins" start on the same left edge. */
+.tailglyph {
+  flex: none;
+  width: 34px;
+  height: auto;
+  margin-inline: 3px;
+  fill: none;
+  stroke: var(--ink-3);
+}
+
+/* vector-effect does not inherit, so it goes on the path: the viewBox is
+   roughly 3x the rendered size, and without it a 1px stroke would render at a
+   third of a pixel. */
+.tailglyph path {
+  stroke-width: 1.2;
+  vector-effect: non-scaling-stroke;
 }
 
 .finglyph line {
@@ -770,7 +1237,7 @@
   border-top: 1px solid var(--rule);
   padding-top: 28px;
   color: var(--ink-3);
-  font-size: var(--fs-14);
+  font-size: var(--fs-15);
 }
 
 .endnote__text {
@@ -780,7 +1247,7 @@
 .endnote__future {
   font-family: var(--font-mono);
   font-size: var(--fs-12);
-  letter-spacing: 0.08em;
+  letter-spacing: var(--ls-label);
   text-transform: uppercase;
   white-space: nowrap;
 }
@@ -828,10 +1295,10 @@
 .inspect__title {
   margin-top: 6px;
   font-family: var(--font-display);
-  font-weight: 500;
+  font-weight: 400;
   font-size: var(--fs-display);
-  line-height: 1.05;
-  letter-spacing: -0.015em;
+  line-height: var(--lh-display);
+  letter-spacing: var(--ls-display);
 }
 
 .inspect__dims {
@@ -1002,8 +1469,8 @@
 
 .specgrid__term {
   font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.08em;
+  font-size: var(--fs-11);
+  letter-spacing: var(--ls-label);
   text-transform: uppercase;
   color: var(--ink-3);
 }
@@ -1029,7 +1496,7 @@
   color: var(--tide-ink);
   font-size: var(--fs-13);
   font-weight: 500;
-  letter-spacing: 0.01em;
+  letter-spacing: var(--ls-micro);
 }
 
 /* Fit explanation */
@@ -1050,13 +1517,13 @@
   font-family: var(--font-display);
   font-weight: 500;
   font-size: var(--fs-22);
-  line-height: 1.15;
-  letter-spacing: -0.01em;
+  line-height: var(--lh-display);
+  letter-spacing: var(--ls-display);
 }
 
 .fit__body {
   font-size: var(--fs-15);
-  line-height: 1.6;
+  line-height: var(--lh-body);
   color: var(--ink-2);
   max-width: 54ch;
 }
@@ -1083,7 +1550,8 @@
   font-family: var(--font-display);
   font-weight: 500;
   font-size: var(--fs-22);
-  letter-spacing: -0.01em;
+  line-height: var(--lh-display);
+  letter-spacing: var(--ls-display);
 }
 
 .store__area {
@@ -1135,8 +1603,8 @@
   align-items: center;
   gap: 8px;
   padding: 10px 14px;
-  border-radius: 4px;
-  font-size: var(--fs-14);
+  border-radius: var(--radius);
+  font-size: var(--fs-15);
   font-weight: 500;
   line-height: 1;
   border: 1px solid transparent;
@@ -1227,7 +1695,7 @@
   border-radius: 999px;
   background: var(--ink);
   color: var(--paper);
-  font-size: var(--fs-14);
+  font-size: var(--fs-15);
   font-weight: 500;
   box-shadow: 0 14px 30px -14px rgba(21, 23, 26, 0.6);
   transition: transform var(--dur-2) var(--ease-out), background var(--dur-1) var(--ease-out);
@@ -1271,8 +1739,8 @@
 
 .chat__context {
   margin-top: 4px;
-  font-size: 11px;
-  letter-spacing: 0.04em;
+  font-size: var(--fs-11);
+  letter-spacing: var(--ls-micro);
   color: var(--tide);
 }
 
@@ -1287,16 +1755,16 @@
 
 .chat__empty {
   font-size: var(--fs-13);
-  line-height: 1.5;
+  line-height: var(--lh-body);
   color: var(--ink-3);
 }
 
 .msg {
   max-width: 88%;
   padding: 10px 12px;
-  border-radius: 10px;
-  font-size: var(--fs-14);
-  line-height: 1.5;
+  border-radius: var(--radius-lg);
+  font-size: var(--fs-15);
+  line-height: var(--lh-body);
 }
 
 .msg--user {
@@ -1387,7 +1855,7 @@
   flex: 1;
   min-width: 0;
   font: inherit;
-  font-size: var(--fs-14);
+  font-size: var(--fs-15);
   padding: 9px 12px;
   border: 1px solid var(--rule-strong);
   border-radius: 8px;
@@ -1423,8 +1891,19 @@
 /* ───────────────────────── Responsive-ready (desktop is the deliverable) ───────────────────────── */
 
 @media (max-width: 1180px) {
+  /* One column, so the areas have to be restated — a two-column template
+     against a single-column grid is not applied at all. */
   .shape__row {
     grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      'head'
+      'fig'
+      'rail';
+    row-gap: var(--space-3);
+  }
+
+  .shape__rail {
+    align-self: start;
   }
 
   .inspect__body {

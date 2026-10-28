@@ -1,6 +1,27 @@
 import type { SurferProfile } from './types'
 
-/** Fixed demo surfer from the specification. Target zone is MOCK sizing output. */
+/**
+ * Fixed demo surfer from the specification.
+ *
+ * The profile screen reads ONLY `name` and `country` from here — the two
+ * things onboarding never asks for, shown as clearly-marked demo data so the
+ * dashboard has an identity.
+ *
+ * Everything else is SUPERSEDED by the live engine and must not be rendered:
+ *
+ *   targetZone  MOCK sizing. Says 30–33 L where the engine computes 38.5–49.6 L
+ *               for the same surfer. Rendering it would contradict the panel
+ *               beside it.
+ *   sessions    Says "2–3 a week"; the live Q9 fitness answer says "1–2 times
+ *               a week".
+ *   level, heightCm, weightKg, conditions, currentBoard
+ *               All duplicate live answers and would desync the moment someone
+ *               answers differently.
+ *   horizon, constraint, frustration, goal, age
+ *               No engine basis. `horizon` is the tempting one — it reads like
+ *               a progression plan — and is exactly the false precision the
+ *               "Where we are taking you" section must not invent.
+ */
 export const surfer: SurferProfile = {
   name: 'Daniel',
   age: 28,

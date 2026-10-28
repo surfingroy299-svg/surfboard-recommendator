@@ -4,12 +4,14 @@ import { StateSection } from './StateSection'
 import { BoardFigure } from '../board/BoardFigure'
 import { BoardVisual } from '../board/BoardVisual'
 import { FinGlyph } from '../tailfins/FinGlyph'
+import { TailGlyph } from '../tailfins/TailGlyph'
+import { parseTail } from '../outline/outlineGeometry'
 import { emphasisFor, useComparison } from '../../state/comparisonState'
 
 export function TailFinsState() {
   const { state } = useComparison()
   return (
-    <StateSection id="tail-fins" index={3} title="Tail & Fins" lede="The two choices you can see at a glance, and what each one does to a turn.">
+    <StateSection id="tail-fins" index={4} title="Tail & Fins" lede="The two choices you can see at a glance, and what each one does to a turn.">
       <div className="tailfins">
         {boards.map((board) => (
           <BoardFigure
@@ -36,7 +38,10 @@ export function TailFinsState() {
               <dl className="facts">
                 <div className="fact">
                   <dt className="fact__term">Tail</dt>
-                  <dd className="fact__value">{board.tailFins.tail}</dd>
+                  <dd className="fact__value fact__value--withglyph">
+                    <TailGlyph tail={parseTail(board.tailFins.tail)} />
+                    <span>{board.tailFins.tail}</span>
+                  </dd>
                   <dd className="fact__why">{board.tailFins.tailExplanation}</dd>
                 </div>
                 <div className="fact">

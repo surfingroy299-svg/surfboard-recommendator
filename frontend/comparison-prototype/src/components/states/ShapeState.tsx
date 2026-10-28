@@ -14,7 +14,12 @@ export function ShapeState() {
   const [hot, setHot] = useState<{ id: BoardId; callout: Callout } | null>(null)
 
   return (
-    <StateSection id="shape" index={2} title="Shape" lede="Seen from the side, two things decide how each board enters a wave and carries foam.">
+    <StateSection
+      id="shape"
+      index={3}
+      title="Rocker"
+      lede="Seen from the side, two things decide how each board enters a wave and carries foam."
+    >
       <div className="shape">
         {boards.map((board) => (
           <BoardFigure
@@ -22,6 +27,14 @@ export function ShapeState() {
             board={board}
             inspectView="side"
             className="shape__row"
+            header={
+              <header className="shape__head">
+                <h3 className="board__name board__name--sm">{board.model}</h3>
+                <p className="board__dims mono">
+                  {board.dimensions.length} · {board.dimensions.thickness} thick
+                </p>
+              </header>
+            }
             visual={
               <div className="shape__stage">
                 <BoardVisual boardId={board.id} view="side" emphasis={emphasisFor(state.focusedBoardId, board.id)} decorative />
@@ -30,10 +43,6 @@ export function ShapeState() {
             }
           >
             <div className="shape__rail">
-              <h3 className="board__name board__name--sm">{board.model}</h3>
-              <p className="board__dims mono">
-                {board.dimensions.length} · {board.dimensions.thickness} thick
-              </p>
               <dl className="callouts">
                 <div
                   className="callout"

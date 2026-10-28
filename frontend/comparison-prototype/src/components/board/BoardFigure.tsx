@@ -7,6 +7,13 @@ interface Props {
   board: Board
   /** Which view Inspect should open with from this context. */
   inspectView: BoardView
+  /**
+   * Rendered ABOVE the visual and OUTSIDE the button. A heading belongs here
+   * rather than in `visual`: the button carries its own aria-label, which
+   * replaces its content for assistive tech, so a heading inside it would
+   * vanish from the document outline.
+   */
+  header?: ReactNode
   /** The visual (BoardVisual) rendered inside the interactive control. */
   visual: ReactNode
   /** Everything else in the column/row: text, scales, callouts. */
@@ -19,7 +26,7 @@ interface Props {
  * hover (mouse) or keyboard focus = temporary Focus; click / Enter = Inspect.
  * Touch has no hover, so a tap goes straight to Inspect.
  */
-export function BoardFigure({ board, inspectView, visual, children, className = '' }: Props) {
+export function BoardFigure({ board, inspectView, header, visual, children, className = '' }: Props) {
   const { state, dispatch, inspectTriggerRef } = useComparison()
   const announce = useAnnounce()
   const buttonRef = useRef<HTMLButtonElement>(null)
@@ -52,6 +59,7 @@ export function BoardFigure({ board, inspectView, visual, children, className = 
         if ((e.target as HTMLElement).closest('button, a') === buttonRef.current || !(e.target as HTMLElement).closest('button, a')) open()
       }}
     >
+      {header}
       <button
         ref={buttonRef}
         type="button"

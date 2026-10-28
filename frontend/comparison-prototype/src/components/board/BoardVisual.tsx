@@ -30,7 +30,21 @@ export function BoardVisual({ boardId, view, emphasis = 'default', crop, classNa
     setStatus('loading')
   }, [asset.src])
 
-  const flip = view === 'side' && boardAssets[boardId].side.noseDirection === 'left'
+  /*
+   * NO ASSET CORRECTION HAPPENS HERE ANY MORE.
+   *
+   * The previous side assets were exported upside down, and this component
+   * corrected them with a scaleY(-1) carried in a custom property. That
+   * correction had a cost that only showed on hover: `.bv__img` transitions
+   * `transform`, and a reflection cannot be interpolated component-wise
+   * against the emphasis transform, so the browser fell back to matrix
+   * interpolation — which decomposes scaleY(-1) into a 180 degree rotation
+   * and animates through it. Hovering a board visibly spun it.
+   *
+   * The current assets are cut nose-right and rocker-up straight out of the
+   * source image, so there is nothing to correct and the flip is gone rather
+   * than fixed. If an asset ever needs mirroring again, mirror the FILE.
+   */
   const alt = decorative ? '' : asset.alt
   const classes = `bv bv--${view} bv--${emphasis} bv--${status}${crop || view === 'tail' ? ' bv--crop' : ''} ${className}`.trim()
 
@@ -57,7 +71,7 @@ export function BoardVisual({ boardId, view, emphasis = 'default', crop, classNa
   if (crop) {
     const imgStyle: CSSProperties = {
       width: `${crop.zoom * 100}%`,
-      transform: `translate(${-crop.focusX * 100}%, ${-crop.focusY * 100}%)${flip ? ' scaleX(-1)' : ''}`,
+      transform: `translate(${-crop.focusX * 100}%, ${-crop.focusY * 100}%)`,
     }
     return (
       <figure className={classes} data-status={status}>
@@ -88,7 +102,6 @@ export function BoardVisual({ boardId, view, emphasis = 'default', crop, classNa
             src={asset.src}
             alt={status === 'missing' ? '' : alt}
             className="bv__img"
-            style={flip ? { transform: 'scaleX(-1)' } : undefined}
             onLoad={() => setStatus('ready')}
             onError={() => setStatus('missing')}
             draggable={false}

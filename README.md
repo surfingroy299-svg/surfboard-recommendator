@@ -37,8 +37,8 @@ The core design principle is **explainability over accuracy**: every recommendat
 | Agent specification | Not started |
 | Board database | 10 boards (Channel Islands only) |
 | Comparison experience spec | Complete — `comparison-experience-spec.md` |
-| UI / frontend | Comparison prototype built — `frontend/comparison-prototype`, static mock data |
-| Logic layers wired into the frontend | Not started |
+| UI / frontend | Full journey built — intro, 9-question onboarding, profile, matching, comparison |
+| Logic layers wired into the frontend | Translation, Decision, Size Calculation and calibration run live in the prototype. Board Matching does not — the three compared boards are fixed |
 | Backend / API | Not started |
 
 ---
@@ -175,7 +175,7 @@ surfboard-recommendator/
 
 **Missing infrastructure**
 
-5. **Onboarding and profile UI** — The comparison experience is built; the onboarding flow and profile interpretation screens that precede it are not.
+5. **Board Matching in the frontend** — Every layer through Size Calculation is implemented and runs live, so the profile and the size range respond to real answers. The Board Matching Layer is not implemented, so the three compared boards are a fixed example set rather than a result.
 
 6. **Backend / API** — No server, endpoints, or data layer.
 
@@ -217,7 +217,17 @@ npm run build --prefix frontend/comparison-prototype
 
 `build` runs a TypeScript project build and then Vite, so it typechecks as well as bundles. See `frontend/comparison-prototype/README.md` for board assets, data files and architecture notes.
 
-The prototypes under `design-exploration/` are historical reference and are not maintained.
+The prototypes under `design-exploration/` are historical reference and are not maintained. They have their own dependencies, which a fresh clone does not install — `.claude/launch.json` offers the app as a one-click server, and starting it without this first fails with `vite: command not found`:
+
+```bash
+npm install --prefix design-exploration/prototypes/app
+```
+
+```bash
+npm run dev --prefix design-exploration/prototypes/app
+```
+
+That one runs on port 5178, so it can sit alongside the comparison prototype on 5179.
 
 ---
 

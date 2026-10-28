@@ -116,7 +116,7 @@ The `meta` section is populated during Translation Layer processing, not post-ho
 | `missing_dimensions` | Q3 = `does_not_know_dimensions` |
 | `no_regular_board` | Q1 = `no_regular_board` |
 | `conflicting_feel_signals` | Q2 includes mutually contradictory selections (e.g., `catches_waves_easily` + `struggles_to_catch_waves`) |
-| `ambiguous_level` | Q8 selections have a large gap (e.g., `can_stand_ride_straight` + `can_position_strategically` with nothing in between) |
+| `ambiguous_level` | Not emitted by Axis 1 since Q8 became a single-select ladder — a skipped rung is now inexpressible (see §6.4). Still raised by `wave_context.conditions = mixed` and by a strong intent/ability gap |
 | `no_progression_signal` | Q6 = `wants_progression` only, and Q5 provides no specific direction |
 | `limited_profile` | Two or more of the following: Q1 = `unsure`, Q3 = `does_not_know_dimensions`, Q8 is a single low-level selection, Q5 and Q6 are both vague |
 
@@ -141,9 +141,11 @@ Schema reference: `surfer-profile-schema.md → Axis 1`
 
 ### 6.1 Primary Input — Q8 (Skill)
 
-Q8 is a multi-select with a defined skill ordering from lowest to highest. The **highest-selected skill** sets the primary `band` and `sub_level`. The number of selected skills affects confidence, not the band assignment.
+Q8 is a single-select ordered ladder, lowest to highest. The surfer picks the **highest rung they hold consistently**, and that answer asserts the whole contiguous ladder beneath it: the implied set is `ladder.slice(0, index + 1)`. The selected rung sets `band` and `sub_level` directly.
 
-**Q8 highest-selected → band + sub_level:**
+Because the implied ladder is contiguous by construction, the number of rungs held is a function of the answer rather than an independent input. It affects confidence, never the band assignment.
+
+**Q8 selected rung → band + sub_level:**
 
 | Highest Q8 value | Band | Sub-level | Notes |
 |---|---|---|---|
@@ -155,8 +157,9 @@ Q8 is a multi-select with a defined skill ordering from lowest to highest. The *
 | `can_position_strategically` | `advanced` | `lower` | Unusual for the typical target range |
 
 **Edge flags:**
-- `leans_advanced`: apply when `can_position_strategically` is selected alongside `can_link_turns_smoothly` (surfer is spanning the intermediate-advanced boundary)
-- `leans_beginner`: apply when highest-selected is `can_stand_ride_straight` or `can_ride_face` (surfer is at or below the lower boundary of the target range)
+- `leans_advanced`: apply when the selected rung is `can_link_turns_smoothly` — the top of intermediate, reaching into advanced.
+  *Under single-select this replaces the former two-rung conjunction (`can_position_strategically` alongside `can_link_turns_smoothly`), which is now vacuous: the top rung implies the one below it, so the old rule would fire for every advanced reading and make the flag a synonym for `band = advanced`. Anchoring it to upper-intermediate is what keeps "spanning the boundary" meaningful — and is the reading `onboarding-questions.md` already gives this rung.*
+- `leans_beginner`: apply when the selected rung is `can_stand_ride_straight` or `can_ride_face` (surfer is at or below the lower boundary of the target range)
 
 ---
 
@@ -190,28 +193,30 @@ Supporting signals adjust confidence and can add nuance to the evidence trail. T
 
 ### 6.3 Confidence Rules
 
+Confidence turns on **corroboration, not count**: the ladder is always coherent, so the only open question is whether anything else in the answers agrees with it.
+
 | Confidence level | Conditions |
 |---|---|
-| `high` | Q8 has 2+ selected skills forming a coherent ascending range (no large gaps) AND at least one Q2 or Q5 signal is consistent with the inferred level |
-| `medium` | Q8 has only 1 skill selected (single_source); OR Q8 is coherent but Q2/Q5 provide no corroboration; OR minor tension between Q8 and supporting signals |
-| `low` | Q8 selections have a large unexplained gap (e.g., `can_stand_ride_straight` + `can_position_strategically` with no intermediate skills) |
+| `high` | The selected rung is above `can_stand_ride_straight` (so it implies a range of 2+ rungs) AND at least one Q2 or Q5 signal is consistent with the inferred level |
+| `medium` | Q2/Q5 provide no corroboration (`single_source`); OR the rung is `can_stand_ride_straight`, which implies no range beneath it; OR there is tension between Q8 and the supporting signals |
+| `low` | Not reachable from an answered Q8. A single-select ladder cannot express the large unexplained gap this level described. `low` still applies when Q8 is unanswered, as `insufficient_data`. |
 
 **Confidence type mapping:**
 
 | Type | When |
 |---|---|
-| `consistent_signals` | Q8 coherent range + Q2/Q5 corroborate the inferred level |
-| `single_source` | Only one Q8 skill selected; no additional corroboration |
-| `insufficient_data` | Very few Q8 signals and no corroborating Q2/Q5 signals |
-| `conflicting_signals` | Q8 highest is high but Q2/Q5 suggest lower ability; or Q8 gap is large |
-| `indirect_inference` | Band inferred primarily from Q2/Q5 when Q8 selections are minimal |
+| `consistent_signals` | Q2/Q5 corroborate the inferred level |
+| `single_source` | Nothing in Q2 or Q5 confirms the claimed level. Matches the schema's definition — "only one answer contributed to this axis" — which under single-select is literally true |
+| `insufficient_data` | Q8 unanswered |
+| `conflicting_signals` | The selected rung is high but Q2/Q5 suggest lower ability |
+| `indirect_inference` | Band inferred primarily from Q2/Q5 — reachable only when Q8 is unanswered, since an answered rung is always the primary signal |
 
 ---
 
 ### 6.4 Conflict Handling
 
 **Q8 high skill + Q2/Q5 paddling struggle:**
-- `can_position_strategically` or `can_link_turns_smoothly` (high Q8) + Q2/Q5 `struggles_to_catch_waves`
+- Selected rung is `can_link_turns_smoothly` or higher + Q2/Q5 `struggles_to_catch_waves`
 - Do NOT lower the band. The paddling barrier is most likely board or conditions, not skill.
 - Record both signals in evidence; note the discrepancy in the confidence basis.
 - Confidence type: `conflicting_signals`; level: `medium`
@@ -228,31 +233,36 @@ Supporting signals adjust confidence and can add nuance to the evidence trail. T
   - Q1 = `shortboard` + Q8 = `can_make_basic_turns` or lower → board may be too demanding for current skill; note as possible skill-board mismatch
   - Q1 = `unsure` or no resolution available → record as ambiguous; confidence type: `insufficient_data`
 
-**Large Q8 skill gap:**
-- Selections skip a level (e.g., `can_make_basic_turns` + `can_position_strategically` without `can_link_turns`)
-- Use the highest selected for band assignment
-- Set meta flag `ambiguous_level`
-- Confidence type: `conflicting_signals`; level: `low`
+**Large Q8 skill gap — unreachable under single-select.**
+- Previously: selections that skipped a rung set the `ambiguous_level` meta flag and dropped confidence to `low`/`conflicting_signals`.
+- A single-select ladder cannot express a skipped rung, so this case is designed out of existence rather than left unhandled. The `ambiguous_level` flag is no longer emitted by Axis 1.
+- The flag remains defined in the schema and the Decision Layer still tests for it, so the plumbing survives for any future input that could produce it. Its two other triggers — `wave_context.conditions = mixed` and a strong intent/ability gap — are unaffected.
+- Retained here as a record of the rule this question used to need.
 
 ---
 
 ### 6.5 Examples
 
 **Profile A — Clear mid-intermediate:**
-- Q8 selected: `can_ride_face`, `can_make_basic_turns`, `can_link_turns`
-- Highest = `can_link_turns` → band: intermediate, sub_level: mid
+- Q8 selected: `can_link_turns` (implies the three rungs beneath it)
+- → band: intermediate, sub_level: mid
 - Q2 = `loses_speed_easily` → consistent with intermediate; confidence: high, type: consistent_signals
 
-**Profile B — Single-source lower-intermediate:**
-- Q8 selected: `can_make_basic_turns` (only)
-- Highest = `can_make_basic_turns` → band: intermediate, sub_level: lower
+**Profile B — Uncorroborated lower-intermediate:**
+- Q8 selected: `can_make_basic_turns` (implies `can_stand_ride_straight`, `can_ride_face`)
+- → band: intermediate, sub_level: lower
 - No Q2/Q5 corroboration → confidence: medium, type: single_source
+- *The rung implies a range, so the ladder is not what limits confidence here — the absence of any second signal is.*
 
 **Profile C — Boundary with edge flag:**
-- Q8 selected: `can_link_turns_smoothly`, `can_position_strategically`
-- Highest = `can_position_strategically` → band: advanced, sub_level: lower
-- Edge flags: [`leans_advanced`]
-- Confidence: high, type: consistent_signals (two adjacent skills selected)
+- Q8 selected: `can_link_turns_smoothly` → band: intermediate, sub_level: upper
+- Edge flags: [`leans_advanced`] — applied by the rung itself
+- Q5 = `cant_perform_turns` absent, Q2 = `feels_stable_comfortable` present → confidence: high, type: consistent_signals
+
+**Profile D — Bottom of the ladder:**
+- Q8 selected: `can_stand_ride_straight` → band: beginner, sub_level: lower
+- Edge flags: [`leans_beginner`]; contributes to the `limited_profile` meta flag
+- Confidence: medium at best, even with corroboration — the bottom rung implies no range beneath it
 
 ---
 
