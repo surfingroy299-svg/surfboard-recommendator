@@ -22,6 +22,14 @@ export function ShapeState() {
             board={board}
             inspectView="side"
             className="shape__row"
+            header={
+              <header className="shape__head">
+                <h3 className="board__name board__name--sm">{board.model}</h3>
+                <p className="board__dims mono">
+                  {board.dimensions.length} · {board.dimensions.thickness} thick
+                </p>
+              </header>
+            }
             visual={
               <div className="shape__stage">
                 <BoardVisual boardId={board.id} view="side" emphasis={emphasisFor(state.focusedBoardId, board.id)} decorative />
@@ -30,10 +38,6 @@ export function ShapeState() {
             }
           >
             <div className="shape__rail">
-              <h3 className="board__name board__name--sm">{board.model}</h3>
-              <p className="board__dims mono">
-                {board.dimensions.length} · {board.dimensions.thickness} thick
-              </p>
               <dl className="callouts">
                 <div
                   className="callout"

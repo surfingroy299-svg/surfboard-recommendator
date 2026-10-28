@@ -833,27 +833,70 @@
 
 /* ───────────────────────── 02 Shape ───────────────────────── */
 
+/*
+ * Three rocker profiles are only comparable if you can hold them in one view,
+ * so this state is laid out to fit a 1440x900 desktop rather than to breathe.
+ * The height came out of four places, none of them the drawings: the board
+ * name and dimensions sat in the right-hand rail, where they added to the
+ * column that was already the tallest; the stage padded 100px around a 62px
+ * image for annotation marks that need 74; the callouts carried 12px of
+ * vertical padding each; and the rows were 36px apart with 18px of their own
+ * padding on top of that.
+ *
+ * The name moves over the drawing it names, which is where it reads anyway,
+ * and the rail is left holding only the two explanations.
+ */
 .shape {
   display: grid;
-  gap: clamp(28px, 4vh, 56px);
+  gap: clamp(20px, 2.2vh, 30px);
 }
 
 .shape__row {
   display: grid;
   grid-template-columns: minmax(0, 1.55fr) minmax(300px, 0.85fr);
-  gap: clamp(28px, 4vw, 80px);
-  align-items: center;
-  padding: 18px 0;
+  grid-template-areas:
+    'head rail'
+    'fig rail';
+  column-gap: clamp(28px, 4vw, 80px);
+  row-gap: 10px;
+  padding: 12px 0;
   border-top: 1px solid var(--rule);
+}
+
+/* The rail is usually the taller column, and grid hands a spanning item's
+   extra height to the rows it crosses. Pinning the name to the bottom of its
+   row and the drawing to the top of the next keeps the pair together — the
+   slack opens above the name and below the drawing instead of between them. */
+.shape__head {
+  grid-area: head;
+  align-self: end;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px var(--space-4);
+}
+
+.shape__row > .board__button {
+  grid-area: fig;
+  align-self: start;
+}
+
+.shape__head .board__dims {
+  margin-top: 0;
 }
 
 .shape__row:first-of-type {
   border-top: 0;
 }
 
+/* The marks, measured on screen rather than from the stylesheet: the rocker
+   label's top lands 44px above the image and the thickness label's bottom 35px
+   below it. 56/44 was carrying 21px of nothing; 50/40 leaves 6px and 5px of
+   slack, which is the margin a font fallback or a longer thickness value
+   needs and 46/36 did not have. */
 .shape__stage {
   position: relative;
-  padding: 56px 0 44px;
+  padding: 50px 0 40px;
 }
 
 .shape__stage .bv {
@@ -861,13 +904,13 @@
 }
 
 .shape__rail {
-  padding: 8px 0;
+  grid-area: rail;
+  align-self: center;
 }
 
 .callouts {
-  margin-top: 20px;
   display: grid;
-  gap: 16px;
+  gap: 12px;
 }
 
 .callout {
@@ -878,7 +921,7 @@
     'term why';
   column-gap: 16px;
   row-gap: 4px;
-  padding: 12px 0 12px 14px;
+  padding: 8px 0 8px 14px;
   border-left: 1px solid var(--rule-strong);
   transition: border-color var(--dur-2) var(--ease-out);
 }
@@ -913,7 +956,7 @@
 /* Geometry marks over the side image */
 .geo {
   position: absolute;
-  inset: 56px 0 44px;
+  inset: 50px 0 40px;
   pointer-events: none;
 }
 
@@ -1781,8 +1824,19 @@
 /* ───────────────────────── Responsive-ready (desktop is the deliverable) ───────────────────────── */
 
 @media (max-width: 1180px) {
+  /* One column, so the areas have to be restated — a two-column template
+     against a single-column grid is not applied at all. */
   .shape__row {
     grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      'head'
+      'fig'
+      'rail';
+    row-gap: var(--space-3);
+  }
+
+  .shape__rail {
+    align-self: start;
   }
 
   .inspect__body {
