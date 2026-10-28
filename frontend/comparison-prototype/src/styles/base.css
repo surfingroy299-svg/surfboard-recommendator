@@ -15,7 +15,7 @@ body {
   color: var(--ink);
   font-family: var(--font-body);
   font-size: var(--fs-15);
-  line-height: 1.5;
+  line-height: var(--lh-body);
   font-feature-settings: 'kern', 'liga';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -47,6 +47,20 @@ ul {
   margin: 0;
 }
 
+/*
+ * Headings also reset their WEIGHT.
+ *
+ * The UA default is 700, and 700 is not among the weights loaded in
+ * index.html — so any heading without an explicit weight was rendering as
+ * SYNTHETIC bold. Three did: the two eyebrow-as-h2 section labels on the
+ * profile, and `.dirn__name`, the recommendation's own headline.
+ */
+h1,
+h2,
+h3 {
+  font-weight: 400;
+}
+
 ul {
   padding: 0;
   list-style: none;
@@ -61,7 +75,7 @@ ul {
 .mono {
   font-family: var(--font-mono);
   font-variant-numeric: tabular-nums;
-  letter-spacing: -0.01em;
+  letter-spacing: var(--ls-mono);
 }
 
 .visually-hidden {
@@ -82,7 +96,7 @@ ul {
   gap: 10px;
   font-family: var(--font-mono);
   font-size: var(--fs-12);
-  letter-spacing: 0.12em;
+  letter-spacing: var(--ls-label);
   text-transform: uppercase;
   color: var(--ink-3);
 }
@@ -92,7 +106,7 @@ ul {
 }
 
 .eyebrow--plain {
-  letter-spacing: 0.1em;
+  letter-spacing: var(--ls-label);
 }
 
 .dot {

@@ -106,13 +106,10 @@ export function Calibration({ derived, invitation }: { derived: Derived; invitat
   return (
     <section className="calib" aria-labelledby="calib-title">
       <div className="calib__head">
-        <Icon name="message" size={17} className="calib__icon" />
-        <div>
-          <h2 id="calib-title" className="calib__title">
-            Not quite right?
-          </h2>
-          <p className="calib__lede">{invitation ?? 'Tell me what I got wrong, and I’ll take another look.'}</p>
-        </div>
+        <h2 id="calib-title" className="calib__title">
+          Not quite right?
+        </h2>
+        <p className="calib__lede">{invitation ?? 'Tell me what I got wrong, and I’ll take another look.'}</p>
       </div>
 
       <form className="calib__form" onSubmit={onSubmit}>
@@ -177,7 +174,7 @@ export function Calibration({ derived, invitation }: { derived: Derived; invitat
         <ul className="calib__list">
           {state.adjustments.map((a: Adjustment) => (
             <li key={a.id} className="calib__item">
-              <Icon name="check" size={12} className="calib__itemtick" />
+              <Icon name="check" size={14} className="calib__itemtick" />
               <span className="calib__itemlabel">{a.label}</span>
               <button
                 type="button"
@@ -189,7 +186,7 @@ export function Calibration({ derived, invitation }: { derived: Derived; invitat
                   announce(`Removed ${a.label}.`)
                 }}
               >
-                <Icon name="close" size={12} />
+                <Icon name="close" size={14} />
               </button>
             </li>
           ))}

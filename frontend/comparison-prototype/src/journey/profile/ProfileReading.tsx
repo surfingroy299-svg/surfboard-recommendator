@@ -48,7 +48,7 @@ export function WhereTaking({ reading }: { reading: Reading }) {
       </h2>
 
       <p className="plan__name">
-        <Icon name="directions" size={18} className="plan__icon" />
+        <Icon name="directions" size={20} className="plan__icon" />
         {reading.direction.label}
       </p>
       <p className="plan__basis">{reading.direction.basis}</p>

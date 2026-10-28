@@ -56,7 +56,7 @@
 .topbar__saved {
   font-family: var(--font-mono);
   font-size: var(--fs-12);
-  letter-spacing: 0.06em;
+  letter-spacing: var(--ls-label);
   color: var(--tide);
 }
 
@@ -73,7 +73,7 @@
   align-items: center;
   gap: 8px;
   padding: 0 16px;
-  font-size: var(--fs-14);
+  font-size: var(--fs-15);
   color: var(--ink-3);
   transition: color var(--dur-1) var(--ease-out);
 }
@@ -106,7 +106,7 @@
 .statenav__index {
   font-family: var(--font-mono);
   font-size: var(--fs-12);
-  letter-spacing: 0.06em;
+  letter-spacing: var(--ls-label);
   color: var(--ink-3);
 }
 
@@ -135,8 +135,8 @@
   font-family: var(--font-display);
   font-weight: 400;
   font-size: var(--fs-lede);
-  line-height: 1.12;
-  letter-spacing: -0.012em;
+  line-height: var(--lh-display);
+  letter-spacing: var(--ls-display);
   text-wrap: balance;
 }
 
@@ -166,8 +166,8 @@
   font-family: var(--font-display);
   font-weight: 500;
   font-size: var(--fs-display);
-  line-height: 1.05;
-  letter-spacing: -0.015em;
+  line-height: var(--lh-display);
+  letter-spacing: var(--ls-display);
   transition: color var(--dur-2) var(--ease-out);
 }
 
@@ -190,7 +190,7 @@
 .board__summary {
   margin-top: 16px;
   font-size: var(--fs-15);
-  line-height: 1.5;
+  line-height: var(--lh-body);
   color: var(--ink-2);
   max-width: 36ch;
 }
@@ -338,7 +338,7 @@
   color: var(--ink-3);
   font-family: var(--font-mono);
   font-size: var(--fs-12);
-  letter-spacing: 0.02em;
+  letter-spacing: var(--ls-micro);
   text-align: center;
   padding: 12px;
   transition: transform var(--dur-3) var(--ease-out), border-color var(--dur-3) var(--ease-out), color var(--dur-3) var(--ease-out);
@@ -582,8 +582,8 @@
 
 .scale__end {
   font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.1em;
+  font-size: var(--fs-11);
+  letter-spacing: var(--ls-label);
   text-transform: uppercase;
   color: var(--ink-3);
 }
@@ -672,7 +672,7 @@
 .outlines__detailcap {
   font-size: var(--fs-12);
   color: var(--ink-3);
-  letter-spacing: 0.04em;
+  letter-spacing: var(--ls-micro);
 }
 
 /* Horizontal: the drawing is wide and shallow, so width leads. */
@@ -787,7 +787,7 @@
   margin-top: 8px;
   font-size: var(--fs-12);
   color: var(--ink-3);
-  letter-spacing: 0.02em;
+  letter-spacing: var(--ls-micro);
 }
 
 @media (max-width: 860px) {
@@ -872,7 +872,7 @@
   grid-area: term;
   font-family: var(--font-mono);
   font-size: var(--fs-12);
-  letter-spacing: 0.08em;
+  letter-spacing: var(--ls-label);
   text-transform: uppercase;
   color: var(--ink-3);
   padding-top: 3px;
@@ -886,8 +886,8 @@
 
 .callout__why {
   grid-area: why;
-  font-size: var(--fs-14);
-  line-height: 1.5;
+  font-size: var(--fs-15);
+  line-height: var(--lh-body);
   color: var(--ink-2);
 }
 
@@ -912,8 +912,8 @@
   position: absolute;
   left: 0;
   bottom: calc(100% + 6px);
-  font-size: 11px;
-  letter-spacing: 0.08em;
+  font-size: var(--fs-11);
+  letter-spacing: var(--ls-label);
   text-transform: uppercase;
   color: var(--ink-2);
   white-space: nowrap;
@@ -933,8 +933,8 @@
   top: calc(100% + 4px);
   left: 50%;
   transform: translateX(-50%);
-  font-size: 11px;
-  letter-spacing: 0.04em;
+  font-size: var(--fs-11);
+  letter-spacing: var(--ls-micro);
   color: var(--ink-2);
   white-space: nowrap;
 }
@@ -982,8 +982,8 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 11px;
-  letter-spacing: 0.06em;
+  font-size: var(--fs-11);
+  letter-spacing: var(--ls-label);
   text-transform: uppercase;
   color: var(--ink-3);
 }
@@ -1035,7 +1035,7 @@
 .fact__term {
   font-family: var(--font-mono);
   font-size: var(--fs-12);
-  letter-spacing: 0.08em;
+  letter-spacing: var(--ls-label);
   text-transform: uppercase;
   color: var(--ink-3);
 }
@@ -1045,7 +1045,7 @@
   font-family: var(--font-display);
   font-size: var(--fs-22);
   font-weight: 500;
-  letter-spacing: -0.01em;
+  letter-spacing: var(--ls-display);
 }
 
 .fact__value--withglyph {
@@ -1056,8 +1056,8 @@
 
 .fact__why {
   margin-top: 8px;
-  font-size: var(--fs-14);
-  line-height: 1.5;
+  font-size: var(--fs-15);
+  line-height: var(--lh-body);
   color: var(--ink-2);
   max-width: 36ch;
 }
@@ -1086,7 +1086,7 @@
   border-top: 1px solid var(--rule);
   padding-top: 28px;
   color: var(--ink-3);
-  font-size: var(--fs-14);
+  font-size: var(--fs-15);
 }
 
 .endnote__text {
@@ -1096,7 +1096,7 @@
 .endnote__future {
   font-family: var(--font-mono);
   font-size: var(--fs-12);
-  letter-spacing: 0.08em;
+  letter-spacing: var(--ls-label);
   text-transform: uppercase;
   white-space: nowrap;
 }
@@ -1146,8 +1146,8 @@
   font-family: var(--font-display);
   font-weight: 500;
   font-size: var(--fs-display);
-  line-height: 1.05;
-  letter-spacing: -0.015em;
+  line-height: var(--lh-display);
+  letter-spacing: var(--ls-display);
 }
 
 .inspect__dims {
@@ -1318,8 +1318,8 @@
 
 .specgrid__term {
   font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.08em;
+  font-size: var(--fs-11);
+  letter-spacing: var(--ls-label);
   text-transform: uppercase;
   color: var(--ink-3);
 }
@@ -1345,7 +1345,7 @@
   color: var(--tide-ink);
   font-size: var(--fs-13);
   font-weight: 500;
-  letter-spacing: 0.01em;
+  letter-spacing: var(--ls-micro);
 }
 
 /* Fit explanation */
@@ -1366,13 +1366,13 @@
   font-family: var(--font-display);
   font-weight: 500;
   font-size: var(--fs-22);
-  line-height: 1.15;
-  letter-spacing: -0.01em;
+  line-height: var(--lh-display);
+  letter-spacing: var(--ls-display);
 }
 
 .fit__body {
   font-size: var(--fs-15);
-  line-height: 1.6;
+  line-height: var(--lh-body);
   color: var(--ink-2);
   max-width: 54ch;
 }
@@ -1399,7 +1399,7 @@
   font-family: var(--font-display);
   font-weight: 500;
   font-size: var(--fs-22);
-  letter-spacing: -0.01em;
+  letter-spacing: var(--ls-display);
 }
 
 .store__area {
@@ -1451,8 +1451,8 @@
   align-items: center;
   gap: 8px;
   padding: 10px 14px;
-  border-radius: 4px;
-  font-size: var(--fs-14);
+  border-radius: var(--radius);
+  font-size: var(--fs-15);
   font-weight: 500;
   line-height: 1;
   border: 1px solid transparent;
@@ -1543,7 +1543,7 @@
   border-radius: 999px;
   background: var(--ink);
   color: var(--paper);
-  font-size: var(--fs-14);
+  font-size: var(--fs-15);
   font-weight: 500;
   box-shadow: 0 14px 30px -14px rgba(21, 23, 26, 0.6);
   transition: transform var(--dur-2) var(--ease-out), background var(--dur-1) var(--ease-out);
@@ -1587,8 +1587,8 @@
 
 .chat__context {
   margin-top: 4px;
-  font-size: 11px;
-  letter-spacing: 0.04em;
+  font-size: var(--fs-11);
+  letter-spacing: var(--ls-micro);
   color: var(--tide);
 }
 
@@ -1603,16 +1603,16 @@
 
 .chat__empty {
   font-size: var(--fs-13);
-  line-height: 1.5;
+  line-height: var(--lh-body);
   color: var(--ink-3);
 }
 
 .msg {
   max-width: 88%;
   padding: 10px 12px;
-  border-radius: 10px;
-  font-size: var(--fs-14);
-  line-height: 1.5;
+  border-radius: var(--radius-lg);
+  font-size: var(--fs-15);
+  line-height: var(--lh-body);
 }
 
 .msg--user {
@@ -1703,7 +1703,7 @@
   flex: 1;
   min-width: 0;
   font: inherit;
-  font-size: var(--fs-14);
+  font-size: var(--fs-15);
   padding: 9px 12px;
   border: 1px solid var(--rule-strong);
   border-radius: 8px;

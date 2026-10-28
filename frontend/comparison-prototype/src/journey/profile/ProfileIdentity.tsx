@@ -69,7 +69,7 @@ export function ProfileIdentity({
             <span className="pid__demo">demo</span>
           </div>
           <p className="pid__place">
-            <Icon name="location" size={13} />
+            <Icon name="location" size={16} />
             {surfer.country}
           </p>
         </div>
@@ -124,8 +124,8 @@ function Cell({
 }) {
   return (
     <div className="pid__cell">
-      <dt className="pid__key">
-        <Icon name={icon} size={14} className="pid__icon" />
+      <dt className="pid__key mono">
+        <Icon name={icon} size={16} className="pid__icon" />
         <span>{label}</span>
       </dt>
       <dd className="pid__val">
@@ -139,7 +139,7 @@ function Cell({
         onClick={() => onEdit(question)}
         aria-label={`Change ${label.toLowerCase()}`}
       >
-        <Icon name="pencil" size={12} />
+        <Icon name="pencil" size={14} />
       </button>
     </div>
   )

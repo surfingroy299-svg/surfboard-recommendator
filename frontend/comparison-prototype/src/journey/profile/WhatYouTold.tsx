@@ -72,7 +72,7 @@ function Block({
           onClick={() => onEdit(question)}
           aria-label={`Change what you said about ${lede.toLowerCase()}`}
         >
-          <Icon name="pencil" size={13} />
+          <Icon name="pencil" size={14} />
         </button>
       </div>
       <p className="told__lede">{lede}</p>
