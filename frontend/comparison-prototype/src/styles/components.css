@@ -156,6 +156,47 @@
   opacity: 0.62;
 }
 
+/*
+ * While a baseline is active the other two columns are the thing being read,
+ * so 0.62 would fade out the comparison that was just asked for. They stay
+ * nearly full strength; the focused board is still marked by its figure
+ * lifting and scaling, which costs no legibility anywhere else.
+ */
+.overview[data-comparing='true'] .board[data-emphasis='dim'] {
+  opacity: 0.9;
+}
+
+/*
+ * Baseline control. Hover and keyboard focus already set a baseline, so this
+ * exists only where neither is available. `hover: none` rather than a width
+ * query: it is the absence of a pointer that matters, not the screen size.
+ */
+.overview__pin {
+  display: none;
+}
+
+@media (hover: none) {
+  .overview__pin {
+    display: inline-flex;
+    align-items: center;
+    margin-top: var(--space-4);
+    padding: 7px 12px;
+    font-size: var(--fs-11);
+    letter-spacing: var(--ls-label);
+    text-transform: uppercase;
+    color: var(--ink-2);
+    background: none;
+    border: 1px solid var(--rule-strong);
+    border-radius: var(--radius);
+  }
+
+  .overview__pin[aria-pressed='true'] {
+    color: var(--paper);
+    background: var(--tide);
+    border-color: var(--tide);
+  }
+}
+
 .board__button {
   display: block;
   width: 100%;
@@ -239,22 +280,10 @@
   width: 100%;
 }
 
-/*
- * Asset correction travels as two custom properties rather than as an inline
- * `transform`.
- *
- * The side assets need a vertical mirror (the rocker curved downward) and some
- * may need a horizontal one. Written inline, that transform beat every rule
- * below and silently killed focus and dim on EVERY side view — the Shape state
- * lost its hover entirely while the shadow kept animating, so it read as a
- * glitch rather than as an absence. As variables, the corrections compose with
- * the emphasis transforms instead of replacing them.
- */
 .bv__img {
   position: relative;
   z-index: 1;
   object-fit: contain;
-  transform: scale(var(--bv-flip-x, 1), var(--bv-flip-y, 1));
   transition: transform var(--dur-3) var(--ease-out), filter var(--dur-3) var(--ease-out);
   user-select: none;
   -webkit-user-drag: none;
@@ -304,7 +333,7 @@
 
 /* Emphasis */
 .bv--focus .bv__img {
-  transform: translateY(-6px) scale(1.03) scale(var(--bv-flip-x, 1), var(--bv-flip-y, 1));
+  transform: translateY(-6px) scale(1.03);
 }
 
 .bv--focus .bv__shadow {
@@ -318,7 +347,7 @@
 }
 
 .bv--dim .bv__img {
-  transform: scale(0.985) scale(var(--bv-flip-x, 1), var(--bv-flip-y, 1));
+  transform: scale(0.985);
 }
 
 .bv--dim .bv__placeholder {
@@ -571,6 +600,24 @@
   color: var(--ink);
 }
 
+/* The non-colour half of the comparison. Sits with the label rather than on
+   the track: at 14px the track has no room for a glyph that does not land on
+   the marker or the end labels. */
+.scale__sign {
+  margin-left: 6px;
+  margin-right: auto;
+  font-size: var(--fs-13);
+  line-height: 1;
+}
+
+.scale__sign[data-dir='up'] {
+  color: var(--aim);
+}
+
+.scale__sign[data-dir='down'] {
+  color: var(--block);
+}
+
 .scale__note {
   font-size: var(--fs-13);
   color: var(--ink-3);
@@ -606,6 +653,26 @@
   top: 50%;
   height: 1px;
   background: var(--rule-strong);
+}
+
+/* Only the span between this board's value and the baseline's — never the
+   whole bar, which would read as a score rather than a difference. */
+.scale__delta {
+  position: absolute;
+  top: 50%;
+  height: 6px;
+  margin-top: -3px;
+  border-radius: 1px;
+  transition: left var(--dur-2) var(--ease-out), width var(--dur-2) var(--ease-out),
+    background var(--dur-2) var(--ease-out);
+}
+
+.scale__delta[data-dir='up'] {
+  background: var(--delta-up);
+}
+
+.scale__delta[data-dir='down'] {
+  background: var(--delta-down);
 }
 
 .scale__stop {

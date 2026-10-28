@@ -6,7 +6,7 @@ export const STATE_ORDER: readonly StateId[] = ['overview', 'outline', 'shape', 
 export const STATE_LABEL: Record<StateId, string> = {
   overview: 'Overview',
   outline: 'Outline',
-  shape: 'Shape',
+  shape: 'Rocker',
   'tail-fins': 'Tail & Fins',
 }
 
@@ -18,6 +18,14 @@ export interface InspectState {
 
 export interface ComparisonState {
   focusedBoardId: BoardId | null
+  /**
+   * Board pinned as the comparison baseline on the Overview scales.
+   *
+   * Hover and keyboard focus already supply a baseline through
+   * `focusedBoardId`; this exists for touch, which has neither. It is only
+   * ever set from the explicit control that appears on coarse pointers.
+   */
+  baselineBoardId: BoardId | null
   inspect: InspectState | null
   chatOpen: boolean
   savedBoardIds: BoardId[]
@@ -26,6 +34,7 @@ export interface ComparisonState {
 
 export type Action =
   | { type: 'focusBoard'; boardId: BoardId | null }
+  | { type: 'setBaseline'; boardId: BoardId | null }
   | { type: 'openInspect'; boardId: BoardId; view?: BoardView }
   | { type: 'closeInspect' }
   | { type: 'setInspectView'; view: BoardView }
@@ -37,6 +46,7 @@ export type Action =
 
 const initialState: ComparisonState = {
   focusedBoardId: null,
+  baselineBoardId: null,
   inspect: null,
   chatOpen: false,
   savedBoardIds: [],
@@ -49,6 +59,9 @@ function reducer(state: ComparisonState, action: Action): ComparisonState {
   switch (action.type) {
     case 'focusBoard':
       return state.focusedBoardId === action.boardId ? state : { ...state, focusedBoardId: action.boardId }
+    case 'setBaseline':
+      // Tapping the pinned board again clears it, so the control is a toggle.
+      return { ...state, baselineBoardId: state.baselineBoardId === action.boardId ? null : action.boardId }
     case 'openInspect':
       // Underlying comparison state (focus, scroll) is left untouched on purpose.
       return { ...state, inspect: { boardId: action.boardId, view: action.view ?? 'deck', zoomed: false }, chatOpen: false }
