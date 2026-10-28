@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef } from 'react'
 import { useJourney } from '../journeyState'
-import { AboutSurfing, WhereTaking } from '../profile/ProfileReading'
+import { WhereTaking } from '../profile/ProfileReading'
 import { BoardDirection } from '../profile/BoardDirection'
 import { ProfileIdentity } from '../profile/ProfileIdentity'
 import { WhatYouTold } from '../profile/WhatYouTold'
@@ -45,17 +45,29 @@ export function ProfileStage() {
 
         <div className="profile__grid">
           <div className="profile__main">
-            <ProfileIdentity answers={state.answers} derived={derived} onEdit={edit} />
-            <div className="profile__read">
-              <AboutSurfing reading={reading} />
-              <WhereTaking reading={reading} />
-            </div>
+            <ProfileIdentity answers={state.answers} derived={derived} reading={reading} onEdit={edit} />
+            <WhereTaking reading={reading} />
             <WhatYouTold answers={state.answers} onEdit={edit} />
           </div>
 
+          {/* The recommendation, the way to argue with it, and the way
+              forward — in that order, in a column that stays on screen. The
+              CTA is pinned here rather than in the page footer because the
+              footer's position depends on how tall the reading happens to be;
+              pinned, it is reachable at any viewport height. */}
           <aside className="profile__side">
             <BoardDirection derived={derived} reading={reading} />
             <Calibration derived={derived} invitation={reading.invitation} />
+            <div className="profile__go">
+              <button
+                type="button"
+                className="btn btn--primary btn--lg profile__gobtn"
+                disabled={!canContinue}
+                onClick={() => dispatch({ type: 'findBoards' })}
+              >
+                Find my boards
+              </button>
+            </div>
           </aside>
         </div>
 
@@ -63,14 +75,6 @@ export function ProfileStage() {
           <div className="profile__actions">
             <button type="button" className="btn btn--quiet" onClick={() => dispatch({ type: 'reviseProfile' })}>
               Start the questions again
-            </button>
-            <button
-              type="button"
-              className="btn btn--primary btn--lg"
-              disabled={!canContinue}
-              onClick={() => dispatch({ type: 'findBoards' })}
-            >
-              Find my boards
             </button>
           </div>
           <p className="disclosure">

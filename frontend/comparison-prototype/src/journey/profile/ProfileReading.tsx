@@ -4,14 +4,9 @@ import type { Reading } from '../../logic/interpret'
 /**
  * What we read, and where it points.
  *
- * One reading used to run as three paragraphs plus a challenge plus an
- * invitation at a 62ch measure — 440px of prose on a screen whose job is to
- * show you yourself at a glance. The same sentences are now two labelled
- * sections, and the invitation has moved to sit with the correction box that
- * answers it.
- *
- * Nothing here is generated. Every line is a field `interpret()` already
- * produced; the split is about where each one belongs.
+ * `AboutSurfing` renders INSIDE the profile card now, under the personal
+ * information, so the facts and the interpretation read as one component
+ * rather than two stacked blocks with an invisible boundary between them.
  */
 
 export function AboutSurfing({ reading }: { reading: Reading }) {
@@ -21,24 +16,23 @@ export function AboutSurfing({ reading }: { reading: Reading }) {
         <span>About your surfing</span>
       </h2>
       <p className="about__lede">{reading.paragraphs[0]}</p>
-      {reading.paragraphs.slice(1, 2).map((p, i) => (
-        <p key={i} className="about__para">
-          {p}
-        </p>
-      ))}
+      {reading.paragraphs[1] && <p className="about__para">{reading.paragraphs[1]}</p>}
       {reading.uncertainty && <p className="about__caveat">{reading.uncertainty}</p>}
     </section>
   )
 }
 
 /**
- * The progression direction, which the Decision Layer has computed since it
- * was written and which has never reached a screen until now. The label is a
- * short restatement; the sentence under it is the basis `decide.ts` wrote.
+ * The progression direction — computed by the Decision Layer since it was
+ * written, and shown on a screen only since the last pass.
  *
- * Deliberately not a plan: one direction and one sentence on how hard to
- * push. No step indicator, no horizon, no second board — none of which the
- * engine produces.
+ * Three elements, not five. The direction, one explanation, and how hard we
+ * would push. `paragraphs[2]` used to sit in the middle restating the Q6
+ * goals, which the "What you're looking for" card renders as bullets a few
+ * hundred pixels below — so it was duplication, and it is gone.
+ *
+ * Still deliberately not a plan: no step indicator, no horizon, no second
+ * board. The engine produces one direction and one challenge sentence.
  */
 export function WhereTaking({ reading }: { reading: Reading }) {
   return (
@@ -52,7 +46,6 @@ export function WhereTaking({ reading }: { reading: Reading }) {
         {reading.direction.label}
       </p>
       <p className="plan__basis">{reading.direction.basis}</p>
-      {reading.paragraphs[2] && <p className="plan__para">{reading.paragraphs[2]}</p>}
       <p className="plan__push">{reading.challenge}</p>
     </section>
   )

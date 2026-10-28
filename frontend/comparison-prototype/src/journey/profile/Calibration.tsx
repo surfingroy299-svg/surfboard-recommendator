@@ -38,7 +38,6 @@ export function Calibration({ derived, invitation }: { derived: Derived; invitat
   const announce = useAnnounce()
   const [draft, setDraft] = useState('')
   const [turns, setTurns] = useState<Turn[]>([])
-  const [showAll, setShowAll] = useState(false)
   const endRef = useRef<HTMLDivElement>(null)
 
   const suggestions = useMemo(() => buildSuggestions(derived), [derived])
@@ -121,7 +120,7 @@ export function Calibration({ derived, invitation }: { derived: Derived; invitat
           className="calib__input"
           value={draft}
           autoComplete="off"
-          placeholder="e.g. 40 L is too much for me"
+          placeholder="Try &ldquo;max 40 L&rdquo;, &ldquo;something easier&rdquo;, or &ldquo;I&rsquo;m 78 kg&rdquo;"
           onChange={(e) => setDraft(e.target.value)}
         />
         <button type="submit" className="iconbtn iconbtn--solid" aria-label="Send">
@@ -156,19 +155,6 @@ export function Calibration({ derived, invitation }: { derived: Derived; invitat
         ))}
         <div ref={endRef} />
       </div>
-
-      {/* What it can actually change, available before you have guessed wrong
-          rather than only after. */}
-      <details className="calib__can" open={showAll} onToggle={(e) => setShowAll(e.currentTarget.open)}>
-        <summary className="calib__cansum">What can I change?</summary>
-        <div className="calib__canchips">
-          {capabilities.map((c) => (
-            <button key={c} type="button" className="chip chip--quiet" onClick={() => submit(c)}>
-              {c}
-            </button>
-          ))}
-        </div>
-      </details>
 
       {state.adjustments.length > 0 && (
         <ul className="calib__list">
@@ -217,17 +203,30 @@ const CONSEQUENCE: Record<string, (label: string) => string> = {
   category_preference: (l) => `${l}. The range is recalculated for that board type.`,
 }
 
-/** Chips drawn from this profile, so they are always actionable. */
+/**
+ * Three chips, short enough to sit on one row beside a 300px column.
+ *
+ * The label IS the payload — clicking one submits this exact string — so each
+ * has been checked against `parseCalibration`'s own patterns. Long sentences
+ * ("I want something more performance-oriented" at 269px) forced one chip per
+ * row and pushed the panel past its height; these are the same intents said
+ * shorter.
+ *
+ * They cover three DIFFERENT intents on purpose: a volume ceiling, a direction
+ * toward performance, and a direction toward support. Together with the
+ * placeholder's three examples, the surfer can see six of the six things this
+ * can change without opening anything.
+ */
 function buildSuggestions(d: Derived): string[] {
   const out: string[] = []
   const position = d.profile.axes.support_vs_performance_need.state.position
   if (d.size) {
     const cap = Math.max(16, Math.round(d.size.target_volume.max) - 4)
-    out.push(`No more than ${cap} L`)
+    out.push(`Max ${cap} L`)
   }
-  if (position !== 'performance_capable') out.push('I want something more performance-oriented')
-  if (position !== 'needs_support') out.push('I want something easier')
-  if (d.category !== 'fish') out.push('Keep me closer to a fish')
+  if (position !== 'performance_capable') out.push('More performance')
+  if (position !== 'needs_support') out.push('Something easier')
+  if (d.category !== 'fish') out.push('Size for a fish')
   return out.slice(0, 3)
 }
 

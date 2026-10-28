@@ -2,6 +2,7 @@ import type { ReactNode } from 'react'
 import { Icon } from '../../components/ui/Icon'
 import type { Answers } from '../../logic/answers'
 import { labelFor, type QuestionId } from '../../logic/questions'
+import { DEMO_SECOND_CHALLENGE, isDemoChallengeSet } from '../../data/demoPresentation'
 
 /**
  * What is holding you back, and what you are after.
@@ -20,6 +21,18 @@ import { labelFor, type QuestionId } from '../../logic/questions'
  * interpreted: V1 preserves them for the agent and does not parse them.
  */
 
+/**
+ * The demo surfer carries one Q5 answer where the question permits two, which
+ * left the Challenges card visibly thinner than its pair. The second is
+ * supplied as PRESENTATION data — it never reaches the engine, so no number
+ * moves — and only while the answers are the untouched demo set. A real
+ * surfer's own answers are rendered exactly as given.
+ */
+function challenges(values: Answers['Q5']): string[] {
+  const own = values.map((v) => labelFor('Q5', v))
+  return isDemoChallengeSet(values) ? [...own, DEMO_SECOND_CHALLENGE] : own
+}
+
 export function WhatYouTold({ answers, onEdit }: { answers: Answers; onEdit: (q: QuestionId) => void }) {
   return (
     <section className="told" aria-label="What you told us">
@@ -27,7 +40,7 @@ export function WhatYouTold({ answers, onEdit }: { answers: Answers; onEdit: (q:
         kind="block"
         title="Challenges"
         lede="What you said is holding you back"
-        items={answers.Q5.map((v) => labelFor('Q5', v))}
+        items={challenges(answers.Q5)}
         note={answers.Q5FreeText}
         question="Q5"
         onEdit={onEdit}

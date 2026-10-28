@@ -6,6 +6,8 @@ import { FITNESS_OPTIONS, type Answers } from '../../logic/answers'
 import { LEVEL_SHORT, levelKey } from '../../logic/levelVocabulary'
 import { labelFor, questionById, type Q1Value, type QuestionId } from '../../logic/questions'
 import { surfer } from '../../data/surfer'
+import { AboutSurfing } from './ProfileReading'
+import type { Reading } from '../../logic/interpret'
 import type { Derived } from '../../logic/calibrate'
 import type { ReactNode } from 'react'
 
@@ -30,10 +32,12 @@ import type { ReactNode } from 'react'
 export function ProfileIdentity({
   answers,
   derived,
+  reading,
   onEdit,
 }: {
   answers: Answers
   derived: Derived
+  reading: Reading
   onEdit: (q: QuestionId) => void
 }) {
   const level = derived.profile.axes.actual_surfing_level.state
@@ -98,6 +102,12 @@ export function ProfileIdentity({
           onEdit={onEdit}
           figure={shape ? <BoardForm {...shape} orient="right" fins={null} className="pid__boardfig" /> : null}
         />
+      </div>
+
+      {/* The interpretation belongs to the facts above it, not to a separate
+          block below the card — same component, one rule between them. */}
+      <div className="pid__about">
+        <AboutSurfing reading={reading} />
       </div>
     </section>
   )

@@ -111,7 +111,15 @@ export function parseCalibration(raw: string): ParseOutcome {
   }
 
   // ── Volume floor / ceiling
-  const wantsFloor = /\b(not? (?:go )?below|no lower than|at least|minimum|min\b|nothing under|don'?t go under)\b/.test(text)
+  // `nothing below` and `no less than` were both missing, which made two
+  // strings the UI itself produces unparseable: the "Nothing below N L"
+  // capability chip (whose refusal then suggested that exact phrase), and
+  // "No less than N L", the label an ACCEPTED floor adjustment carries — so a
+  // floor you had just set could not be re-submitted.
+  const wantsFloor =
+    /\b(not? (?:go )?below|nothing below|no lower than|no less than|at least|minimum|min\b|nothing under|don'?t go under)\b/.test(
+      text,
+    )
   const wantsCap = /\b(too much|too big|too high|too large|no more than|at most|maximum|max\b|cap|less foam|too much foam|under)\b/.test(text)
 
   if (volume !== null && (wantsFloor || wantsCap)) {
