@@ -1089,12 +1089,15 @@
   stroke-width: 1;
 }
 
-/* Sized to sit level with the fin cluster in the row below it. Unfilled and
-   hairline, so it reads as a drawing of an edge rather than a swatch. */
+/* Unfilled and hairline, so it reads as a drawing of an edge rather than a
+   swatch. The drawing is 34px wide but the box is 40, matching FinGlyph in
+   the row below: the two glyphs then share a footprint and "Squash" and
+   "Thruster · 3 fins" start on the same left edge. */
 .tailglyph {
   flex: none;
   width: 34px;
   height: auto;
+  margin-inline: 3px;
   fill: none;
   stroke: var(--ink-3);
 }

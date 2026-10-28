@@ -2013,6 +2013,11 @@
   /* Was --ink-3, which measures ~3.9:1 on this surface — under the 4.5
      minimum, and most of why the card read flat and grey. */
   color: var(--ink-2);
+  /* The pencil sits inside the cell now, top-right, on this row. 24px button
+     at right: 4px means the label has to stop 28px short of the padding box —
+     28 exactly, because 20 left a 2px overlap the last time this was guessed
+     rather than measured. */
+  padding-right: 28px;
 }
 
 .pid__icon {
@@ -2059,6 +2064,7 @@
 
 .pid__board .pid__key {
   grid-row: 1;
+  padding-right: 0;
 }
 
 .pid__board .pid__val {
@@ -2067,11 +2073,14 @@
   padding-top: 0;
 }
 
+/* The hover pencil overhangs the cell's right edge by 20px, which put it on
+   top of the silhouette. The figure stops short of it instead. */
 .pid__boardfig {
   grid-row: 1;
   width: 86px;
   height: auto;
   justify-self: end;
+  margin-right: 24px;
 }
 
 /* ─────────────────────────────────────────── Profile: the reading, condensed */
@@ -2470,6 +2479,12 @@
      overlap, which is how this was missed the first time. */
   .pid__cell {
     padding-right: 28px;
+  }
+
+  /* The gutter is on the cell here and the pencil is centred in it, so the
+     label needs no reservation of its own. */
+  .pid__key {
+    padding-right: 0;
   }
 
   /* Values sit under their label again rather than at the cell floor. At
