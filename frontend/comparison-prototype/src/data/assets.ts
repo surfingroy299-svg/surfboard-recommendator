@@ -1,14 +1,25 @@
 import type { BoardAssetView, BoardId } from './types'
 
 /**
- * Asset mapping layer. Source of the current temporary assets: Figma file
- * "surfboaRD-RECCOMENDATOR", page MODELS (node 1:71), sections BOARD A / B / C.
- * Frame → file mapping (exported at 2x, trimmed to content; SIDE rotated to nose-right):
- *   BOARD-X/FRONT      → public/boards/board-x-deck.png
- *   BOARD-X/BOTTOM     → public/boards/board-x-bottom.png
- *   BOARD-X/SIDE       → public/boards/board-x-side.png
- *   BOARD-X/TAIL&FINS  → public/boards/board-x-tail.png   (optional; otherwise bottom is cropped)
- * Components only read this file; nothing here identifies a real model.
+ * Asset mapping layer. Source: Figma file "surfboaRD-RECCOMENDATOR", page 4
+ * (node 21:64), sections Board A / Board B / Board C.
+ *
+ * Each section holds ONE image carrying three views of one board side by side,
+ * already on a transparent background. The four files per board were cut out
+ * of that single image rather than exported as separate frames, so every view
+ * of a board is guaranteed to be the same board:
+ *
+ *   left / right outer view  → board-x-bottom.png   (the one with fin boxes)
+ *   left / right outer view  → board-x-deck.png
+ *   narrow middle view       → board-x-side.png     (quarter-turned to nose-right)
+ *   lower third of bottom    → board-x-tail.png
+ *
+ * Which outer view is the bottom is not consistent between the three sources —
+ * Board B's alpha copy is the un-mirrored original and runs the other way
+ * round. The fin boxes settle it, since they only ever appear on the bottom.
+ *
+ * Nothing was stretched, recoloured or redrawn; the only transform applied is
+ * the quarter turn on the side profile. Components only read this file.
  */
 
 export interface ViewAssetConfig {
@@ -16,10 +27,14 @@ export interface ViewAssetConfig {
   alt: string
 }
 
-export interface SideAssetConfig extends ViewAssetConfig {
-  /** Which way the nose points in the file. Display always points nose right. */
-  noseDirection: 'left' | 'right'
-}
+/**
+ * The side files are cut nose-right and rocker-up, so nothing corrects them at
+ * render time. An orientation flag used to live here; it is gone deliberately,
+ * because the scaleY it drove could not be interpolated against the hover
+ * transform and animated through a rotation. Mirror the file, not the pixels
+ * on screen.
+ */
+export type SideAssetConfig = ViewAssetConfig
 
 /**
  * Per-board crop of the bottom image, used when no prepared tail asset exists.
@@ -47,7 +62,7 @@ const base = `${import.meta.env.BASE_URL}boards/`
 function set(id: BoardId, label: string, tailCrop: TailCropConfig): BoardAssetSet {
   return {
     deck: { src: `${base}board-${id}-deck.png`, alt: `${label}, deck view` },
-    side: { src: `${base}board-${id}-side.png`, alt: `${label}, side profile`, noseDirection: 'right' },
+    side: { src: `${base}board-${id}-side.png`, alt: `${label}, side profile` },
     bottom: { src: `${base}board-${id}-bottom.png`, alt: `${label}, bottom view with fins` },
     tail: { src: `${base}board-${id}-tail.png`, alt: `${label}, tail and fins` },
     tailCrop,
@@ -55,9 +70,9 @@ function set(id: BoardId, label: string, tailCrop: TailCropConfig): BoardAssetSe
 }
 
 export const boardAssets: Record<BoardId, BoardAssetSet> = {
-  a: set('a', 'Board A', { focusX: 0.5, focusY: 0.861, zoom: 0.895 }),
-  b: set('b', 'Board B', { focusX: 0.5, focusY: 0.86, zoom: 0.935 }),
-  c: set('c', 'Board C', { focusX: 0.5, focusY: 0.861, zoom: 1.005 }),
+  a: set('a', 'Tidalform Edge', { focusX: 0.5, focusY: 0.861, zoom: 0.895 }),
+  b: set('b', 'Tidecraft Flow', { focusX: 0.5, focusY: 0.86, zoom: 0.935 }),
+  c: set('c', 'Saltline Drift', { focusX: 0.5, focusY: 0.861, zoom: 1.005 }),
 }
 
 export function assetFor(id: BoardId, view: BoardAssetView): ViewAssetConfig | undefined {
