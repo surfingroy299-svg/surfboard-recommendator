@@ -22,15 +22,32 @@ file is absent, so a fresh clone builds and runs.
 
 | File | Slot | Source | Photographer | Licence | Status |
 |---|---|---|---|---|---|
-| `hero-aerial.jpg` | Intro hero | [unsplash.com/photos/L78RstAZuTY](https://unsplash.com/photos/L78RstAZuTY) | Silas Baisch | Unsplash | `reference` |
+| `hero-barrel.jpg` | Intro hero | Supplied by the project owner | unknown | **to confirm** | `reference` |
 | `waves-small-weak.jpg` | Q7 · small and weak, 1–2 ft | Supplied by the project owner — Figma `xXrzNJb56TNBy3IxffjG2R`, node `15:10` ("small 1-2 ft") | unknown | **to confirm** | `reference` |
 | `waves-medium-push.jpg` | Q7 · medium with push, 2–4 ft | Supplied by the project owner — Figma `xXrzNJb56TNBy3IxffjG2R`, node `15:11` ("medium 2-4 ft") | unknown | **to confirm** | `reference` |
 | `waves-powerful.jpg` | Q7 · powerful and steep, 5 ft + | Supplied by the project owner — Figma `xXrzNJb56TNBy3IxffjG2R`, node `15:12` ("big 5+ ft") | unknown | **to confirm** | `reference` |
 | `waves-variable.jpg` | Q7 · conditions vary | [unsplash.com/photos/ibeKWxHvems](https://unsplash.com/photos/ibeKWxHvems) | — | Unsplash | `reference` |
 
-`hero-aerial.jpg` and `waves-variable.jpg` were downloaded at 1400px, q72, from
-`images.unsplash.com`. The three Q7 frames were exported from the Figma file
-above and resampled to the same 1400px / q72 to match.
+`waves-variable.jpg` was downloaded at 1400px, q72, from `images.unsplash.com`.
+The three Q7 frames were exported from the Figma file above and resampled to
+the same 1400px / q72 to match. `hero-barrel.jpg` arrived at 1333px wide, near
+enough to 1400 that resampling up would only invent detail, so it keeps its
+native size and is re-encoded at the same q72.
+
+### On the hero
+
+It replaced `hero-aerial.jpg` (Silas Baisch, Unsplash, `L78RstAZuTY`), which
+was an aerial frame — hence the old slot name, which is why the file is now
+called `hero-barrel.jpg` rather than keeping a name that describes a picture
+that is no longer there.
+
+The replacement came straight from the project owner with no source attached,
+so its licence column says **to confirm** for the same reason the three Q7
+frames do: someone has to establish where it came from before it is published.
+It is treated exactly like the other placeholders in the meantime — local and
+gitignored. The on-image caption that used to carry this provenance in the
+interface has been removed at the owner's request, so **this register is now
+the only place it is recorded.**
 
 ### On the three supplied frames
 

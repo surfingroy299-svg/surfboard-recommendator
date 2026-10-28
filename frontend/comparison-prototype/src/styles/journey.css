@@ -1642,21 +1642,14 @@
   margin: clamp(20px, 4vh, 54px) 0 clamp(20px, 4vh, 54px) clamp(20px, 3vw, 54px);
 }
 
-.idetail__caption {
-  position: absolute;
-  left: 0;
-  bottom: 10px;
-  padding: 4px 8px;
-  background: rgba(10, 24, 32, 0.38);
-  border-radius: 2px;
-  color: rgba(241, 241, 237, 0.82);
-  font-size: var(--fs-11);
-  letter-spacing: var(--ls-label);
-  text-transform: uppercase;
-}
-
+/* 34% was tuned for the aerial frame this slot used to hold. The plate crops
+   about a quarter of a portrait image's height, and on the barrel shot that
+   quarter decides whether the board under the wave is in the picture: at 34%
+   it sits on the bottom edge against the caption, at 50% it reads clearly
+   with the deep water under it. Holding the board matters more here than
+   holding the top of the barrel — it is what the page is about. */
 .idetail__media .introshot__img {
-  object-position: center 34%;
+  object-position: center 50%;
   filter: saturate(0.9) contrast(1.03);
 }
 

@@ -27,7 +27,7 @@ import { useJourney } from '../journeyState'
 
 type Composition = 'a' | 'b' | 'c'
 
-const HERO = `${import.meta.env.BASE_URL}photography/hero-aerial.jpg`
+const HERO = `${import.meta.env.BASE_URL}photography/hero-barrel.jpg`
 
 function useComposition(): Composition {
   const param = new URLSearchParams(window.location.search).get('intro')
@@ -122,12 +122,7 @@ export function IntroStage() {
     return (
       <main className="stage stage--intro intro--detail" data-composition="c">
         <div className="idetail">
-          <figure className="idetail__media">
-            {photo}
-            {/* An editorial caption, which also carries the provenance
-                honestly rather than hiding it in a file nobody opens. */}
-            <figcaption className="idetail__caption mono">Reference image · not licensed for publication</figcaption>
-          </figure>
+          <figure className="idetail__media">{photo}</figure>
           <div className="idetail__rail">
             <Logo className="idetail__logo" />
             <h1 className="idetail__title">
