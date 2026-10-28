@@ -18,6 +18,10 @@ export function CharacteristicScale({ characteristic }: { characteristic: Charac
           {[0, 25, 50, 75, 100].map((p) => (
             <i key={p} className="scale__stop" style={{ left: `${p}%` }} />
           ))}
+          {/* After the stops, so the fill crosses their middle and leaves the
+              nubs above and below legible. Before the marker, so the marker
+              still reads as the head of the fill. */}
+          <i className="scale__fill" style={{ width: `${pct}%` }} />
           <i className="scale__tick" style={{ left: `${pct}%` }} />
         </span>
         <span className="scale__end">High</span>

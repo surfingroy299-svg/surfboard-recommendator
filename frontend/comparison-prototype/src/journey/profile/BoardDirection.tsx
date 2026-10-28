@@ -32,7 +32,7 @@ export function BoardDirection({ derived, reading }: { derived: Derived; reading
   return (
     <section className="dirn" aria-labelledby="dirn-title">
       <p className="eyebrow">
-        <span>Where we would point you</span>
+        <span>Recommendation</span>
       </p>
 
       <h2 id="dirn-title" className="dirn__name">

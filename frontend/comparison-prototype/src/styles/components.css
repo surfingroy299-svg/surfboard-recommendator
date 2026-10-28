@@ -128,7 +128,11 @@
   display: grid;
   gap: 12px;
   margin-bottom: clamp(28px, 4vh, 52px);
-  max-width: 46ch;
+  /* `ch` resolves against the 15px body size this element inherits, not the
+     38px display size of the title inside it — so 46ch was about 345px and
+     put the four state headings on three and four lines. A width in rem is
+     measured in the same units the eye is, and still shrinks below it. */
+  max-width: min(100%, 46rem);
 }
 
 .state__title {
@@ -613,6 +617,21 @@
   background: var(--rule-strong);
 }
 
+/* The travelled part of the scale, filled. Two pixels of the accent — the
+   same colour as the marker, so the marker reads as the head of the fill
+   rather than a separate object. Thin on purpose: this is a qualitative
+   position, and a thick bar would start to look like a measured percentage. */
+.scale__fill {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  height: 2px;
+  margin-top: -1px;
+  background: var(--tide);
+  border-radius: 1px;
+  transition: width var(--dur-2) var(--ease-out);
+}
+
 .scale__tick {
   position: absolute;
   top: 0;
@@ -1068,6 +1087,24 @@
   stroke: var(--ink-3);
   fill: var(--tide);
   stroke-width: 1;
+}
+
+/* Sized to sit level with the fin cluster in the row below it. Unfilled and
+   hairline, so it reads as a drawing of an edge rather than a swatch. */
+.tailglyph {
+  flex: none;
+  width: 34px;
+  height: auto;
+  fill: none;
+  stroke: var(--ink-3);
+}
+
+/* vector-effect does not inherit, so it goes on the path: the viewBox is
+   roughly 3x the rendered size, and without it a 1px stroke would render at a
+   third of a pixel. */
+.tailglyph path {
+  stroke-width: 1.2;
+  vector-effect: non-scaling-stroke;
 }
 
 .finglyph line {

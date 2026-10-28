@@ -844,12 +844,6 @@
   line-height: var(--lh-display);
 }
 
-.calib__lede {
-  margin-top: var(--space-1);
-  font-size: var(--fs-15);
-  color: var(--tide-ink);
-}
-
 .calib__chips {
   display: flex;
   flex-wrap: wrap;
@@ -1937,7 +1931,7 @@
   gap: var(--space-2);
   margin-top: 3px;
   font-size: var(--fs-13);
-  color: var(--ink-3);
+  color: var(--ink-2);
 }
 
 .pid__level {
@@ -1949,10 +1943,10 @@
 }
 
 .pid__levelkey {
-  font-size: var(--fs-12);
+  font-size: var(--fs-11);
   letter-spacing: var(--ls-label);
   text-transform: uppercase;
-  color: var(--ink-3);
+  color: var(--ink-2);
 }
 
 .pid__levelval {
@@ -1972,11 +1966,12 @@
 
 .pid__grid {
   display: grid;
-  /* Numbers take what they need; the two prose facts split the remainder.
-     Equal tracks for unequal content manufactured the imbalance. */
-  grid-template-columns: auto auto minmax(0, 1fr) minmax(0, 1.35fr);
-  gap: var(--space-3) var(--space-6);
-  align-items: start;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-2);
+  /* Stretch, not start: equal tracks mean the longest value wraps, and a
+     shared cell height keeps the row reading as one set rather than three
+     short cells beside a tall one. */
+  align-items: stretch;
   margin: var(--space-4) 0 0;
 }
 
@@ -1993,19 +1988,31 @@
   border-top: 1px solid var(--rule);
 }
 
+/* Each fact is its own object: a hairline, its own padding, label over value.
+   The outline is a hairline and the fill is the PAGE colour rather than a new
+   one, so four facts read as a set of insets in the raised card without
+   outweighing the recommendation beside it. */
 .pid__cell {
   position: relative;
   min-width: 0;
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-3);
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
 }
 
 .pid__key {
   display: flex;
   align-items: center;
   gap: var(--space-2);
-  font-size: var(--fs-12);
+  font-size: var(--fs-11);
   letter-spacing: var(--ls-label);
   text-transform: uppercase;
-  color: var(--ink-3);
+  /* Was --ink-3, which measures ~3.9:1 on this surface — under the 4.5
+     minimum, and most of why the card read flat and grey. */
+  color: var(--ink-2);
 }
 
 .pid__icon {
@@ -2018,8 +2025,13 @@
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
-  gap: 2px 9px;
-  margin: 5px 0 0;
+  gap: 2px var(--space-2);
+  /* Bottom-aligned, with the gap as padding so it survives `auto`. Equal
+     tracks mean the longest value takes two lines and the cells share its
+     height; pushing every value to the cell floor gives the row one baseline
+     instead of leaving three cells with a hole under them. */
+  margin: auto 0 0;
+  padding-top: var(--space-2);
 }
 
 .pid__value {
@@ -2030,15 +2042,19 @@
 
 .pid__note {
   font-size: var(--fs-13);
-  color: var(--ink-3);
+  color: var(--ink-2);
 }
 
-/* The board row puts its silhouette beside the value rather than under it. */
+/* The board row puts its silhouette beside the value rather than under it,
+   and stays unboxed — it is one wide fact, not a fifth cell in the set. */
 .pid__board .pid__cell {
   display: grid;
   grid-template-columns: auto 1fr auto;
   align-items: center;
   gap: 4px 16px;
+  padding: 0;
+  background: none;
+  border: 0;
 }
 
 .pid__board .pid__key {
@@ -2048,6 +2064,7 @@
 .pid__board .pid__val {
   grid-row: 1;
   margin: 0;
+  padding-top: 0;
 }
 
 .pid__boardfig {
@@ -2119,8 +2136,8 @@
 .pid__edit,
 .told__edit {
   position: absolute;
-  top: -4px;
-  right: -4px;
+  top: 4px;
+  right: 4px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -2135,6 +2152,13 @@
 
 .told__edit {
   position: static;
+}
+
+/* The board row has no padding to sit inside, so its pencil keeps the old
+   overhang. */
+.pid__board .pid__edit {
+  top: -4px;
+  right: -4px;
 }
 
 .pid__cell:hover .pid__edit,
@@ -2335,10 +2359,17 @@
   letter-spacing: var(--ls-display);
 }
 
+/* The note is a sentence fragment of 40-60 characters in a ~300px column, so
+   it lands on two or three lines and the browser's greedy break regularly left
+   the last one a single word. `balance` evens the lines instead, which keeps
+   the copy dynamic — it reads from CATEGORY_NOTE and changes with the
+   recommendation — rather than fixing the break by hand. */
 .dirn__note {
   margin-top: 7px;
+  max-width: 34ch;
   font-size: var(--fs-15);
   line-height: var(--lh-body);
+  text-wrap: balance;
   color: var(--ink-2);
 }
 
@@ -2408,15 +2439,29 @@
 @media (max-width: 620px) {
   .pid__grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--space-3) var(--space-4);
+  }
+
+  /* Avatar + name + the level pair need 395px and have 287px. The text
+     column carries min-width: 0, so it was the one that shrank — to zero —
+     and "Daniel" and "Israel" were painted straight over "SURFING
+     Intermediate". The level pair takes its own row instead, indented to the
+     text column so the card still reads as two aligned columns. */
+  .pid__id {
+    flex-wrap: wrap;
   }
 
   .pid__level {
+    flex-basis: 100%;
     gap: var(--space-2);
+    margin-top: var(--space-2);
+    margin-left: calc(46px + 13px);
+    justify-content: flex-start;
+    text-align: left;
   }
 
   .pid__glyph {
     width: 46px;
+    margin-left: auto;
   }
 
   /* The always-visible pencil sat on top of the two longest values. On touch
@@ -2425,6 +2470,15 @@
      overlap, which is how this was missed the first time. */
   .pid__cell {
     padding-right: 28px;
+  }
+
+  /* Values sit under their label again rather than at the cell floor. At
+     desktop every label is one line, so a shared value baseline is free; at
+     two columns "IN THE WATER" takes two lines and "WEIGHT" one, and pushing
+     the value down then opened a hole in the middle of the cell. Spare space
+     below the value reads as padding, spare space above it reads as a bug. */
+  .pid__val {
+    margin-top: 0;
   }
 
   .pid__edit {

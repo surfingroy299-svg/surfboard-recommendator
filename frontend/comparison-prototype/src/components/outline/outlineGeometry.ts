@@ -66,6 +66,37 @@ export interface OutlineSpec {
   path: string
   /** Rendered length and width in viewBox units. */
   px: { L: number; W: number }
+  /**
+   * A window onto just the tail, for the small tail glyphs.
+   *
+   * `x0` / `yHalf` are a point that lies exactly ON the rail, so a viewBox
+   * starting there has the rails meeting its corners rather than floating
+   * inside it. `x1` is where the drawn tail actually ends, which is PAST the
+   * measured length `L` by an amount that depends on the tail shape — see
+   * `tailOverhang`.
+   */
+  tailBox: { x0: number; yHalf: number; x1: number }
+}
+
+/**
+ * How far past the measured length `L` a tail's curve actually reaches.
+ *
+ * A cubic whose two control points share an x peaks at three quarters of the
+ * distance to that x, which is where the round and squash numbers come from.
+ * The swallow's leading quadratic peaks at t = 0.4545, giving 0.0455 — the
+ * notch means a swallow is the SHORTEST of the three, not the longest.
+ */
+function tailOverhang(tailHalf: number, tail: TailKind): number {
+  switch (tail) {
+    case 'swallow':
+      return tailHalf * 0.0455
+    case 'squash':
+      return tailHalf * 0.195
+    case 'pin':
+      return tailHalf * 1.125
+    default:
+      return tailHalf * 0.645
+  }
 }
 
 export function buildOutline(lengthFt: number, widthIn: number, tail: TailKind, category = 'shortboard'): OutlineSpec {
@@ -96,7 +127,22 @@ export function buildOutline(lengthFt: number, widthIn: number, tail: TailKind, 
     'Z',
   ].join(' ')
 
-  return { lengthFt, widthIn, tail, path, px: { L, W } }
+  // A point on the wide-point-to-tail cubic, evaluated directly from the
+  // Bernstein basis — no curve solving, and the result is guaranteed to lie on
+  // the rail rather than near it. 0.62 is far enough back that both rails are
+  // visibly converging and close enough that the tail, not the rail, is the
+  // subject of the crop.
+  const t = 0.62
+  const u = 1 - t
+  const on = (a: number, b: number, c: number, d: number) =>
+    u * u * u * a + 3 * u * u * t * b + 3 * u * t * t * c + t * t * t * d
+  const tailBox = {
+    x0: on(wideX, L * 0.79, L * 0.93, L),
+    yHalf: on(half, half * 0.93, tailHalf * 1.12, tailHalf),
+    x1: L + tailOverhang(tailHalf, tail),
+  }
+
+  return { lengthFt, widthIn, tail, path, px: { L, W }, tailBox }
 }
 
 function tailEdge(L: number, tailHalf: number, tail: TailKind): string {

@@ -67,7 +67,7 @@ export function ProfileStage() {
                 Find my boards
               </button>
             </div>
-            <Calibration derived={derived} invitation={reading.invitation} />
+            <Calibration derived={derived} />
           </aside>
         </div>
 

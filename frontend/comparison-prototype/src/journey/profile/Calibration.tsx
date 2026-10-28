@@ -29,11 +29,13 @@ import { Icon } from '../../components/ui/Icon'
  * pushes the input below the fold the moment a conversation starts. Pinned
  * above, it stays reachable at any transcript length.
  *
- * `invitation` replaces the static lede when the reading supplies one: it
- * names the specific claim this profile is least sure of, where the lede only
- * promises a response.
+ * There is no subtitle. The heading asks the question, the placeholder shows
+ * the three shapes an answer can take and the chips are working corrections,
+ * so a line explaining the panel only repeated what the controls under it
+ * already demonstrate. `reading.invitation` used to fill it; it is still
+ * produced by `interpret.ts` and is simply not displayed.
  */
-export function Calibration({ derived, invitation }: { derived: Derived; invitation?: string }) {
+export function Calibration({ derived }: { derived: Derived }) {
   const { state, dispatch } = useJourney()
   const announce = useAnnounce()
   const [draft, setDraft] = useState('')
@@ -104,12 +106,9 @@ export function Calibration({ derived, invitation }: { derived: Derived; invitat
 
   return (
     <section className="calib" aria-labelledby="calib-title">
-      <div className="calib__head">
-        <h2 id="calib-title" className="calib__title">
-          Not quite right?
-        </h2>
-        <p className="calib__lede">{invitation ?? 'Tell me what I got wrong, and I’ll take another look.'}</p>
-      </div>
+      <h2 id="calib-title" className="calib__title">
+        Not quite right?
+      </h2>
 
       <form className="calib__form" onSubmit={onSubmit}>
         <label className="visually-hidden" htmlFor="calib-input">
