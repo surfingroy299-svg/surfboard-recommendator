@@ -50,14 +50,13 @@ export function ProfileStage() {
             <WhatYouTold answers={state.answers} onEdit={edit} />
           </div>
 
-          {/* The recommendation, the way to argue with it, and the way
-              forward — in that order, in a column that stays on screen. The
-              CTA is pinned here rather than in the page footer because the
-              footer's position depends on how tall the reading happens to be;
-              pinned, it is reachable at any viewport height. */}
+          {/* The recommendation, then the action it leads to, then the way to
+              argue with it. The CTA sits between them rather than after both:
+              below calibration it falls past the fold on a 900px screen, and
+              sticking it there floats it over the very input it is meant to
+              sit beside. Here it is always in view and occludes nothing. */}
           <aside className="profile__side">
             <BoardDirection derived={derived} reading={reading} />
-            <Calibration derived={derived} invitation={reading.invitation} />
             <div className="profile__go">
               <button
                 type="button"
@@ -68,6 +67,7 @@ export function ProfileStage() {
                 Find my boards
               </button>
             </div>
+            <Calibration derived={derived} invitation={reading.invitation} />
           </aside>
         </div>
 

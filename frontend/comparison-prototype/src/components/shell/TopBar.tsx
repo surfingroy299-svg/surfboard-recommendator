@@ -1,24 +1,10 @@
 import { useComparison } from '../../state/comparisonState'
 import { useJourney } from '../../journey/journeyState'
 import { CATEGORY_LABEL } from '../../logic/categoryContext'
+import { LEVEL_SHORT, levelKey } from '../../logic/levelVocabulary'
 import type { StateId } from '../../data/types'
 import { StateNav } from './StateNav'
 import { Icon } from '../ui/Icon'
-
-const BAND_LABEL: Record<string, string> = {
-  'beginner/lower': 'Beginner',
-  'beginner/mid': 'Beginner',
-  'beginner/upper': 'Improving beginner',
-  'intermediate/lower': 'Early intermediate',
-  'intermediate/mid': 'Mid-intermediate',
-  'intermediate/upper': 'Upper intermediate',
-  'advanced/lower': 'Advanced',
-  'advanced/mid': 'Advanced',
-  'advanced/upper': 'Advanced',
-  'pro/lower': 'Pro',
-  'pro/mid': 'Pro',
-  'pro/upper': 'Pro',
-}
 
 export function TopBar({ activeState, onNavigate }: { activeState: StateId; onNavigate: (s: StateId) => void }) {
   const { state } = useComparison()
@@ -26,7 +12,7 @@ export function TopBar({ activeState, onNavigate }: { activeState: StateId; onNa
   const saved = state.savedBoardIds.length
 
   const level = derived.profile.axes.actual_surfing_level.state
-  const band = BAND_LABEL[`${level.band}/${level.sub_level}`] ?? 'Intermediate'
+  const band = LEVEL_SHORT[levelKey(level.band, level.sub_level)]
   const zone = derived.size ? `${derived.size.target_volume.min}–${derived.size.target_volume.max} L` : null
 
   return (

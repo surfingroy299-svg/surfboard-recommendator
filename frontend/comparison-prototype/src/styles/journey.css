@@ -109,7 +109,10 @@
 .onboarding__q {
   margin: 14px 0 0;
   font-family: var(--font-display);
-  font-size: var(--fs-display);
+  /* Was --fs-display (44px), which made the question the largest type in the
+     product — larger than the recommendation it exists to produce. The
+     journey's headings used to shrink as you progressed; now they hold. */
+  font-size: var(--fs-lede);
   font-weight: 400;
   line-height: var(--lh-display);
   letter-spacing: var(--ls-display);
@@ -728,35 +731,6 @@
 
 /* Board direction + size zone */
 
-.profile__side {
-  position: sticky;
-  top: 32px;
-  display: flex;
-  flex-direction: column;
-  gap: 28px;
-}
-
-.direction__name {
-  margin-top: 10px;
-  font-family: var(--font-display);
-  font-size: var(--fs-22);
-  line-height: var(--lh-display);
-}
-
-.direction__note {
-  margin-top: 6px;
-  font-size: var(--fs-13);
-  color: var(--ink-3);
-  line-height: var(--lh-body);
-}
-
-.direction__caveat {
-  margin-top: 8px;
-  font-size: var(--fs-12);
-  color: var(--ink-3);
-  line-height: var(--lh-body);
-}
-
 .zone {
   padding-top: 22px;
   border-top: 1px solid var(--rule);
@@ -871,9 +845,9 @@
 }
 
 .calib__lede {
-  margin-top: 4px;
+  margin-top: var(--space-1);
   font-size: var(--fs-15);
-  color: var(--ink-2);
+  color: var(--tide-ink);
 }
 
 .calib__chips {
@@ -1045,7 +1019,8 @@
   font-family: var(--font-display);
   font-size: var(--fs-display-sm);
   font-weight: 400;
-  color: var(--ink-2);
+  line-height: var(--lh-display);
+  color: var(--ink);
 }
 
 /* ── Prototype controls: deliberately outside the product surface */
@@ -1835,12 +1810,6 @@
   }
 }
 
-/* The reading's invitation now opens the correction panel, where it has
-   somewhere to go. */
-.calib__lede {
-  color: var(--tide-ink);
-}
-
 /* An exchange, not a status line: what you said, then what changed — and the
    turns before that, which the old version deleted. Capped in height so a long
    conversation scrolls inside the panel instead of pushing the page down. */
@@ -2333,23 +2302,16 @@
 }
 
 /*
- * The CTA sticks to the bottom of the viewport for as long as the column is
- * on screen, so it is reachable at any viewport height without the column
- * having to be capped — and without the page footer's position (which depends
- * on how tall the reading happens to be) deciding whether it is visible.
+ * Placed, not pinned.
+ *
+ * Sticking it to the viewport bottom kept it visible but floated it over the
+ * calibration input directly beneath — the one control it is supposed to sit
+ * beside. Sitting it between the recommendation and the correction box keeps
+ * it inside the fold at 800px and above while occluding nothing.
  */
-.profile__go {
-  position: sticky;
-  bottom: var(--space-5);
-  z-index: 1;
-  padding-top: var(--space-2);
-}
-
 .profile__gobtn {
   width: 100%;
   justify-content: center;
-  /* It floats over the card above it while stuck, so it needs its own ground. */
-  box-shadow: 0 6px 20px -10px rgba(21, 23, 26, 0.55);
 }
 
 /* The transcript is bounded again now the column is not. */
@@ -2435,6 +2397,43 @@
   color: var(--tide);
 }
 
+/*
+ * Phone only — and declared AFTER the base .pid__grid rule it overrides.
+ * Same specificity, so source order decides; the first attempt sat 900 lines
+ * earlier and the base quietly won.
+ *
+ * At tablet width the aside unstacks and the main column gets WIDER, so the
+ * four tracks still fit there and collapsing them wasted the room.
+ */
+@media (max-width: 620px) {
+  .pid__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-3) var(--space-4);
+  }
+
+  .pid__level {
+    gap: var(--space-2);
+  }
+
+  .pid__glyph {
+    width: 46px;
+  }
+
+  /* The always-visible pencil sat on top of the two longest values. On touch
+     it cannot reveal on hover, so the cell reserves a gutter at least as wide
+     as the 24px button and the pencil sits inside it — 20px left a 2px
+     overlap, which is how this was missed the first time. */
+  .pid__cell {
+    padding-right: 28px;
+  }
+
+  .pid__edit {
+    top: 50%;
+    right: 0;
+    margin-top: -12px;
+  }
+}
+
 @media (max-width: 920px) {
   .told {
     grid-template-columns: minmax(0, 1fr);
@@ -2458,29 +2457,12 @@
 
   .profile__go {
     order: 2;
-    margin-top: var(--space-2);
   }
 
   /* Edit affordances reveal on hover, which a touch screen does not have. */
   .pid__edit,
   .told__edit {
     opacity: 1;
-  }
-
-  /* Four columns resolve to ~56px on a phone, which is narrower than the
-     values. Two give each fact a readable measure and still keep the card
-     shorter than the six-row ledger it replaced. */
-  .pid__grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 14px 16px;
-  }
-
-  .pid__level {
-    gap: 7px;
-  }
-
-  .pid__glyph {
-    width: 46px;
   }
 
   /* The board row's three columns do not fit beside a 86px silhouette. */

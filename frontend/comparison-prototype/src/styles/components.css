@@ -164,7 +164,7 @@
 
 .board__name {
   font-family: var(--font-display);
-  font-weight: 500;
+  font-weight: 400;
   font-size: var(--fs-display);
   line-height: var(--lh-display);
   letter-spacing: var(--ls-display);
@@ -1045,6 +1045,7 @@
   font-family: var(--font-display);
   font-size: var(--fs-22);
   font-weight: 500;
+  line-height: var(--lh-display);
   letter-spacing: var(--ls-display);
 }
 
@@ -1144,7 +1145,7 @@
 .inspect__title {
   margin-top: 6px;
   font-family: var(--font-display);
-  font-weight: 500;
+  font-weight: 400;
   font-size: var(--fs-display);
   line-height: var(--lh-display);
   letter-spacing: var(--ls-display);
@@ -1399,6 +1400,7 @@
   font-family: var(--font-display);
   font-weight: 500;
   font-size: var(--fs-22);
+  line-height: var(--lh-display);
   letter-spacing: var(--ls-display);
 }
 
